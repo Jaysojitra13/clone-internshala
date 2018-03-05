@@ -1,0 +1,44 @@
+  {% load socialaccount %}
+<html>
+<head>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<h1>Welcome to Interner</h1>
+
+{% if user.is_authenticated %}
+<p>Welcome {{ user.username }} !!!</p>
+
+<a href="{% url 'account_logout' %}">Log Out</a>
+<a href="{% url 'intern:personal-detail' %}">Personal Details</a>
+{% else %}
+
+<div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Sign up
+    <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li><a href="{% url 'check-user' 'intern' %}">SignUp as Intern</a></li>
+      <li><a href="{% url 'check-user' 'company' %}">SignUp as Company</a></li>
+    </ul>
+  </div>
+<br>    
+
+
+
+<div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Log In
+    <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li><a href="{% url 'check-login' 'intern' %}">LogIn as Intern</a></li>
+      <li><a href="{% url 'check-login' 'company' %}">LogIn as Company</a></li>
+    </ul>
+  </div>
+
+
+{% endif %}
+</body>
+</html>

@@ -1,0 +1,80 @@
+<html>
+<body>
+<div id="second">
+{% for post in post_detail%}
+ 
+<div style="margin:10px;background-color:#f1f1f1;padding: 10px;" >
+	<div>
+
+		<h3>{{ post.domain }}<h3>
+
+		</div>
+		<div >
+
+			<table class="table">
+				<thead style="font-weight: bolder;">
+					<tr>
+						<td> Start date</td>
+						<td> Duration</td>
+						<td> stipend</td>
+						<td> Apply By</td>
+
+					</tr>
+				</thead>
+				<tr>
+					<td> {{ post.start_date|date}}</td>
+					<td> {{ post.time_duration }} </td>
+					<td> {{ post.stipend }}/- </td>
+					<td> {{ post.apply_by|date }} </td>
+
+				</tr>
+			</table>
+
+		</div>
+		<div class="panel-group" id="accordion">
+			<div class="panel panel-default" style="background-color: #f1f1f1;border:0;">
+				<h4 class="panel-title" >
+					<a data-toggle="collapse" data-parent="#accordion" href="#collapse{{post.id}}">View Details</a>
+				</h4>
+
+				<div id="collapse{{post.id}}" class="panel-collapse collapse out">
+					<div class="panel-body">
+						{% for i in post.company_id|company_details %}	
+						<table class="table">
+							<thead>
+								<tr>
+									<td>Organization Name</td>
+									<td> HR Name</td>
+									<td> HR Email-ID</td>
+									<td> Website</td>
+									<td> Location</td>
+									<td> Contact Number</td>
+								</tr>
+							</thead>
+							<tr>
+								<td>{{i.company_name}}</td>
+								<td>{{i.hr_fname}}{{i.hr_lname}}</td>
+								<td>{{i.hr_email}}</td>
+								<td>{{i.website_url}}</td>
+								<td>{{i.location}}</td>
+								<td>{{i.contact_number}}</td>
+							</tr>
+						</table>	
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<div calss="row" style="float:right;">
+			<a href="{% url 'intern:internpost-connection'	id1=i.company_id id2=post.id %}"">
+				<button >Apply</button>
+			</a>
+		</div>
+		{% endfor %}
+		<hr>
+				</div>
+				{% endfor %}
+				</div>
+				</body>
+				</html>

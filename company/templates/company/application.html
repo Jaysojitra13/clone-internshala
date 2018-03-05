@@ -1,0 +1,235 @@
+{% load company %}
+<html>
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+</head>
+<body>
+	<h2> List of all Applicants</h2>
+	<table id="tb" class="table table-cndensed">
+		<thead>
+			<tr>
+				<td> Name</td>
+				<td> Applied for</td>
+				<td> View Application</td>
+			</tr>
+		</thead>
+		{% for i in applicants %}
+		
+		
+		{% for k in i.postdetails_id|post_name%}
+		
+		<tr id="trr">
+			{% for j in i.internprofile_id|intern_name %}
+			<td>{{ j.name }}</td> 
+
+			<td >{{ k.domain }}</td>
+			<td>
+
+				<button class="btn btn-info" data-toggle="modal" data-target="#ModalApp{{j.id}}"> View Applcation</button>
+
+				<div class="modal fade" id="ModalApp{{j.id}}" role="dialog">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title">Details of {{ j.name }}</h4>
+							</div>
+							<div class="modal-body">
+								<h4 style="font-weight: bold;">Personal details:</h4>
+								<table class="table">
+									<thead style="font-weight: bold;">
+										<tr>
+											<td>Email-ID</td>
+											<td>contact Number</td>
+											<td>Current City</td>
+											<td>2<sup>nd</sup> City</td>
+										</tr>
+									</thead>
+									<tr>
+										<td> {{j.email}}</td>
+										<td> {{j.contact_number}}</td>
+										<td> {{j.current_city}}</td>
+										<td> {{j.second_city}}</td>
+									</tr>
+								</table>
+								{%endfor%}
+								<br>
+								<h4 style="font-weight: bold;">Academic details:</h4>
+								<table class="table">
+									<thead style="font-weight: bolder;">
+										<tr>
+											<td> 10<sup>th</sup> schoolname</td>
+											<td> 10<sup>th</sup> Percentage</td>
+											<td> 12<sup>th</sup> schoolname </td>
+											<td> 12<sup>th</sup> Percentage</td>
+											<td> College</td>
+											<td> Current year</td>
+											<td> Current Cpi</td>
+										</tr>
+									</thead>
+									<tr>
+										{% for l in i.internprofile_id|academic_detail%}
+										<td> {{l.schoolname_10}}</td>
+										<td>{{l.percentage_10}}%</td>
+										<td> {{l.schoolname_12}}</td>
+										<td>{{l.percentage_12}}%</td>
+										<td>{{l.college_name}}</td>
+										<td>{{l.current_year}}</td>
+										<td> {{l.cpi}}</td>	
+									</tr>
+									{% endfor %}
+								</table>
+
+								<h4 style="font-weight: bold;">Project details:</h4>
+								<table class="table">
+									
+									<thead style="font-weight: bolder;">
+										<tr>
+											<td> Project Title </td>
+											<td> Description</td>
+											<td> Link</td>
+										</tr>
+									</thead>
+									{% for m in i.internprofile_id|project_detail%}
+									<tr>
+										<td> {{m.title}}</td>
+										<td> {{m.description}}</td>
+										<td> {{m.project_link}}</td>
+									</tr>
+									{% endfor %}
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</td>
+			{% if k.id|upc_details == "Accepted"%}
+			<td id="td{{k.id}}"> 
+				
+				<button id="btn-inprogress{{k.id}}" class="btn btn-info disabled" > Inprogress</button>
+			</td>
+			<td id="td-confirm{{k.id}}">
+				<button id="btn-message{{k.id}}" class="btn btn-info" data-toggle="modal" data-target="#ModalReg{{k.id}}" > Message </button>
+			</td>
+
+			<td>
+				<button id="btn-reject{{k.id}}" class="btn btn-info">Reject</button>
+			</td>
+			<td id="td3">
+				<button id="btn-confirm{{k.id}}" class="btn btn-info ">Confirm</button>
+			</td>
+
+
+			
+			{% else %}
+			<td >
+				<button id="btn-accept{{k.id}}" class="btn btn-info" > Accept</button>
+			</td>
+			<td id="td-msg{{k.id}}">
+				
+			</td>
+			<td >
+				<button id="btn-reject{{k.id}}" class="btn btn-info">Reject</button>
+			</td>
+			<td id="td-confirm{{k.id}}">
+				
+			</td>
+			
+			{% endif %}
+		</tr>
+		<script>
+
+			$("#btn-accept{{k.id}}").on("click", function() {
+				$(this).prop("disabled", true);  
+				$(this).html('InProcess');	
+				$("#btn-confirm{{k.id}}").show();
+				$.ajax({
+					url: '/company/messages/',
+					type: 'GET',
+					data: { 
+						'idd': {{k.id}},
+					},
+					success: function(data) {
+						
+						$("#btn-accept{{k.id}}").html("Inprogrss")
+						/*$("#td-msg{{k.id}}").append('<button id="btn-message{{k.id}}" class="btn btn-info ">Message</button>');*/
+						$("#td-confirm{{k.id}}").append('<button id="btn-confirm{{k.id}}" class="btn btn-info ">Confirm</button>');
+						$("#td-msg{{k.id}}").append('<button id="btn-message{{k.id}}" class="btn btn-info" data-toggle="modal" data-target="#ModalReg{{k.id}}"> Message </button>');	
+
+					}
+
+				})	
+			});
+		</script>
+		<div class="modal fade" id="ModalReg{{k.id}}" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+
+						<button type="button" class="close" data-dismiss="modal">&times;{{ k.id }}</button>
+
+						<h4 class="modal-title">Leave a message here for further process </h4>
+					</div>
+					<div class="modal-body">
+
+						<textarea id="msg{{k.id}}" name="paragraph_text" cols="50" rows="10" maxlength="255"></textarea>
+					</div>
+
+					<div class="modal-footer">
+
+						<button  id="btn1"  class="btn btn-default " data-dismiss="modal" onclick="myFunction({{k.id}})">Send {{ k.id}}	</button> 
+					</div>
+				</div>	
+			</div>	
+		</div>
+		{% endfor %}
+		{% endfor %}
+
+
+
+	</table>
+	<div class="pagination">
+    <span class="step-links">
+        {% if applicants.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ applicants.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ applicants.number }} of {{ applicants.paginator.num_pages }}.
+        </span>
+
+        {% if applicants.has_next %}
+            <a href="?page={{ applicants.next_page_number }}">next</a>
+            <a href="?page={{ applicants.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+</body>
+
+</html>
+
+
+<script type="text/javascript">
+
+	function myFunction(id) {
+		var x = "#msg"+id;
+		$.ajax({
+			url: '/company/savemsg/',
+			type:'GET',
+			data: {
+				'message' : $(x).val(),
+				'post_id' : id,
+
+			},
+
+		})
+
+	}
+
+
+</script>

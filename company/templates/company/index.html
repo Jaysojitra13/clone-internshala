@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+{% if user.is_authenticated %}
+<h2>Welcome {{ user.username }} !!!</h2>
+{% endif %}
+<div class="dropdown">
+<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">POST
+<span class="caret"></span>
+</button>
+    <ul class="dropdown-menu">
+      <li><a href="{% url 'company:post-detail'%}">Create New Post</a></li>
+      <li><a href="{% url 'company:existing-post'%}">Existing Post</a></li>
+      <li><a href="">History</a></li>
+    </ul>
+  </div>
+<br>
+
+<a href="{% url 'company:applications'%}">
+<button class="btn btn-primary" type="button" >Applications
+</button>
+</a>
+<br>
+<br>
+
+<form action="" method="post">
+<button class="btn btn-primary" type="button" data-toggle="dropdown">confirmed Interns
+</button>
+</form>
+<br>
+
+
+
+
+</body>
+</html>

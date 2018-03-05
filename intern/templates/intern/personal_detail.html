@@ -1,0 +1,23 @@
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+
+<h2> Personal Details</h2>
+{{ request.user.id}}
+<form action="" method="post">
+	{% csrf_token %}
+<table>
+	
+	{% crispy form %}
+	<!-- {{  form }} -->
+</table>	
+	<input type="submit" name="submit">
+</form>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+
+	<!-- <h2>NO post</h2> -->
+
+{% if post_list %}
+<div class="container">
+<h1> List of Existing posts</h1>	
+
+ <table class="table table-condensed">
+ <thead>
+ 	<tr>
+ 		<th> Profile </th>
+ 		<th> Technology </th>
+ 		<th> No. of Interns </th>
+ 		<th> Time duration(In Month) </th>
+ 		<th> Stipend(per month) </th>
+ 		<th> Start Date </th>
+ 		<th> Application DeadLine </th>
+ 		<th> Type of Internship </th>
+ 	</tr>
+ 	{% for i in post_list%}
+
+ 	<tr>
+ 		<td> {{ i.domain }} </td>
+ 		<td> {{ i.technology }} </td>
+ 		<td> {{ i.numberof_interns }} </td>
+ 		<td> {{ i.time_duration }} </td>
+ 		<td> {{ i.stipend }}/- </td>
+ 		<td> {{ i.start_date|date }} </td>
+ 		<td> {{ i.apply_by|date }} </td>
+ 		<td> {{ i.typeof_internship }} </td>
+ 	</tr>
+ 	{% endfor %}
+ </thead>
+ 
+ {% else %}
+ 	<h2> No posts are available</h2>
+ {% endif %}
+ </table>
+</div>
+</body>
+</html>
