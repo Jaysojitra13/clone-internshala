@@ -21,6 +21,8 @@ from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf.urls import *
 from django.db.models.query import QuerySet
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 
 import json
 def InternProfileView(request):
@@ -194,8 +196,10 @@ class HomeView(TemplateView):
 		page = self.request.GET.get('page')
 		IP = InternProfile.objects.get(user = self.request.user)
 		context = super().get_context_data(**kwargs)
-		PD = PersonalDetails.objects.filter(internprofile_id = IP.user_id)
-		
+		PD = PersonalDetails.objects.get(internprofile_id = IP.user_id).id
+		context['PD'] = PD
+		AD = AcademicDetails.objects.get(internprofile_id = IP.user_id).id
+		context['AD'] = AD
 		upc= UserPostConnection.objects.filter(internprofile_id = IP.user_id)
 		context['upc'] = upc
 		paginator = Paginator(upc, 2)
@@ -211,11 +215,11 @@ def CheckUser(request, type):
 
 	if type == "intern":
 		request.session['user'] = 'intern'
-		return HttpResponseRedirect('/accounts/signup')
+		return HttpResponseRedirect('/accounts/signup/')
 
 	elif type == "company":
 		request.session['user'] = 'company'
-		return HttpResponseRedirect('/accounts/signup')
+		return HttpResponseRedirect('/accounts/signup/')
 
 
 		
@@ -232,17 +236,17 @@ class MySignUpView(SignupView):
 		if data == 'company':
 			self.user.is_company = True
 			self.user.save()
-		return HttpResponseRedirect('/accounts/login')
+		return HttpResponseRedirect('/accounts/login/')
 
 	
 def CheckLogin(request, type):
 	if type == "intern":
 		request.session['user'] = 'intern'
-		return HttpResponseRedirect('/accounts/login')
+		return HttpResponseRedirect('/accounts/login/')
 
 	elif type == "company":
 		request.session['user'] = 'company'
-		return HttpResponseRedirect('/accounts/login')
+		return HttpResponseRedirect('/accounts/login/')
 
 
 class MyLogInView(LoginView):
@@ -252,9 +256,9 @@ class MyLogInView(LoginView):
 		
 		print('login', data)
 		if data == 'company':
-			return HttpResponseRedirect('/company/contactdetail')
+			return HttpResponseRedirect('/company/contactdetail/')
 		elif data == 'intern':
-			return HttpResponseRedirect('/intern/personaldetail')
+			return HttpResponseRedirect('/intern/personaldetail/')
 
 	def post(self, request):
 		print('login')
@@ -268,14 +272,14 @@ class MyLogInView(LoginView):
 				for i in CD:
 					if i.company_id == self.request.user.id:
 						return HttpResponseRedirect('/company/index/')
-				return HttpResponseRedirect('/company/contactdetail')
+				return HttpResponseRedirect('/company/contactdetail/')
 			else:
 				for i in PD:
 					for j in AD:
 						if i.internprofile_id == self.request.user.id:
-							return HttpResponseRedirect('/intern/index')
-				return HttpResponseRedirect('/intern/personaldetail')
-		return HttpResponseRedirect('/accounts/login')
+							return HttpResponseRedirect('/intern/index/')
+				return HttpResponseRedirect('/intern/personaldetail/')
+		return HttpResponseRedirect('/accounts/login/')
 
 
 class InternshipDetailView(TemplateView):

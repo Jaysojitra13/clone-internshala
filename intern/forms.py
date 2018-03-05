@@ -46,7 +46,7 @@ class PersonalDetailsForm(forms.ModelForm):
 class AcademicDetailsForm(forms.ModelForm):
 	class Meta:
 		model = AcademicDetails 
-		fields = ['schoolname_10','percentage_10','schoolname_12','percentage_12', 'college_name','current_year','cpi']
+		fields = ['schoolname_10','percentage_10','marksheet_10','schoolname_12','percentage_12','marksheet_12', 'college_name','current_year','cpi','marksheet_clg']
 		def __init__(self, *args, **kwargs):
 			super(PersonalDetailsForm, self).__init__(*args, **kwargs)
 			self.helper.form_method = 'POST'

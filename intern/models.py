@@ -48,10 +48,13 @@ class AcademicDetails(models.Model):
 	internprofile = models.OneToOneField(InternProfile, on_delete=models.CASCADE)
 	schoolname_10 = models.CharField(max_length=30)
 	percentage_10 = models.FloatField()
+	marksheet_10 = models.FileField()
 	schoolname_12 = models.CharField(max_length=30)
 	percentage_12 = models.FloatField()
+	marksheet_12 = models.FileField()
 	college_name = models.CharField(max_length=50)
 	current_year = models.IntegerField()
+	marksheet_clg = models.FileField()
 	cpi = models.FloatField()
 
 class ProjectDetails(models.Model):

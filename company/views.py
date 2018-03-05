@@ -72,8 +72,10 @@ class ApplicationView(TemplateView):
 		IP = InternProfile.objects.get(user = self.request.user)
 		context = super().get_context_data(**kwargs)
 		applicants = UserPostConnection.objects.filter(company_id = IP.user_id)
+		context['MEDIA_URL'] =  settings.MEDIA_URL
+		context['MEDIA_ROOT'] =  settings.MEDIA_ROOT
 		context['applicants'] = applicants
-		paginator = Paginator(applicants, 2)
+		paginator = Paginator(applicants, 5)
 		context['applicants'] = paginator.get_page(page)
 		return context
 

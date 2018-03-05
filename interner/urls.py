@@ -25,16 +25,17 @@ urlpatterns = [
     url(r'^checkuser/(?P<type>\w+)/$', views.CheckUser, name='check-user'),
     url(r'^checklogin/(?P<type>\w+)/$', views.CheckLogin, name='check-login'),
     url(r'^accounts/signup/$', views.MySignUpView.as_view(), name='check-signupuser'),
-     url(r'^accounts/login/$', views.MyLogInView.as_view(), name='check-loginuser'),
-    path('admin/', admin.site.urls),
-    path('intern/', include('intern.urls')),
-    path('company/', include('company.urls')),
-    re_path(r'^accounts/', include('allauth.urls')),
-    path('', views.Home.as_view(), name='home'),
+    url(r'^accounts/login/$', views.MyLogInView.as_view(), name='check-loginuser'),
+    url(r'^admin/', admin.site.urls),
+    url(r'^intern/', include('intern.urls')),
+    url(r'^company/', include('company.urls')),
+    url(r'^accounts/', include('allauth.urls')),
+    url(r'^$', views.Home.as_view(), name='home'),
     
 
 
 ] 
-
+ 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
