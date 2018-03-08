@@ -23,26 +23,28 @@ class PersonalDetailsForm(forms.ModelForm):
 	email = forms.CharField(label="Email ID")
 	contact_number = forms.RegexField(label="Mobile Number",regex=r'^\+?1?\d{9,15}$',error_messages = {'invalid':"Phone number must be entered in the format: '9999999999'. Up to 10 digits allowed."})
 	second_city = forms.CharField(label="2 city")
-	class Meta:
-		model = PersonalDetails
-		fields = ['name','email','contact_number','current_city','second_city']
-		def __init__(self, *args, **kwargs):
+	def __init__(self, *args, **kwargs):
 			super(PersonalDetailsForm, self).__init__(*args, **kwargs)
+			self.helper = FormHelper()
 			self.helper.form_method = 'POST'
-			self.helper.form_class = 'form-inline'
-			self.helper.label_class = 'col-md-3' 
-			self.helper.field_class = 'form-control'
+			self.helper.form_class = 'form-horizontal'
+			self.helper.label_class = 'col-md-2' 
+			self.helper.field_class = 'col-md-8'
 			self.helper.layout = Layout(
-				Field('name', css_class='input-md'),
-				Field('email', css_class='input-md'),
-				Field('conatact_number', css_class='input-md'),
-				Field('current_city', css_class='input-md'),
-				Field('second_city', css_class='input-md'),
+				Field('name'),
+				Field('email'),
+				Field('conatact_number'),
+				Field('current_city'),
+				Field('second_city'),
 				
 			)
 			
 			super(PersonalDetailsForm, self).__init__(*args, **kwargs)
-	
+	class Meta:
+		model = PersonalDetails
+		fields = ['name','email','contact_number','current_city','second_city']
+		
+			
 class AcademicDetailsForm(forms.ModelForm):
 	class Meta:
 		model = AcademicDetails 
@@ -54,13 +56,16 @@ class AcademicDetailsForm(forms.ModelForm):
 			self.helper.label_class = 'control-label col-sm-5'
 			self.helper.field_class = 'form-control'
 			self.helper.layout = Layout(
-				Field('schoolname_10', css_class='input-sm'),
-				Field('percentage_10', css_class='input-sm'),
-				Field('schoolname_12', css_class='input-sm'),
-				Field('schoolname_12', css_class='input-sm'),
-				Field('college_name', css_class='input-sm'),
-				Field('current_year', css_class='input-sm'),
-				Field('cpi', css_class='input-sm'),
+				Field('schoolname_10'),
+				Field('percentage_10'),
+				Field('marksheet_10'),
+				Field('schoolname_12'),
+				Field('schoolname_12'),
+				Field('marksheet_12'),
+				Field('college_name'),
+				Field('current_year'),
+				Field('cpi'),
+				Field('marksheet_clg'),
 				
 			)
 			

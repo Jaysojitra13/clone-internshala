@@ -83,10 +83,12 @@ class MessageView(TemplateView):
 		
 	
 	def get(self, request, *args, **kwargs):
-		
 		idd = request.GET.get('idd')
+		upc_id = request.GET.get('upc_id')
+		company_id = request.GET.get('company_id')
+		obj = UserPostConnection.objects.get(id=upc_id,postdetails_id = idd)
 		
-		obj = UserPostConnection.objects.get(postdetails_id = idd)
+		print(obj)
 		obj.status = "Accepted"
 		obj.save()
 		return HttpResponseRedirect('/company/applications')
@@ -102,3 +104,17 @@ class SaveMsg(TemplateView):
 		obj1.messages = data
 		obj1.save()
 		return HttpResponseRedirect('/company/applications')
+
+class ViewDetails(TemplateView):
+	template_name = 'company/viewdetail.html'
+
+	def get_context_data(self, 	**kwargs):
+		
+		context = super().get_context_data(**kwargs)
+		pk = kwargs['id']
+		IP = InternProfile.objects.get(user = self.request.user)
+		context = super().get_context_data(**kwargs)
+		applicants = UserPostConnection.objects.filter(company_id = IP.user_id)
+		context['pk'] = pk
+		context['applicants'] = applicants
+		return context

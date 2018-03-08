@@ -1,14 +1,20 @@
+{% extends 'company/index.html'%}
 {% load company %}
 {% load static %}
-<html>
+
+
+{% block content %}
+<!-- <html>
 <head>
+	
 	<link rel="stylesheet" type="text/css" href="{% static 'intern/demo.css' %}" />
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	
 </head>
-<body>
+<body> -->
+	
 
 	<h2 > List of all Applicants</h2>
 	<table id="tb" class="table table-cndensed">
@@ -30,8 +36,8 @@
 
 			<td >{{ k.domain }}</td>
 			<td>
-
-				<button class="btn btn-info" data-toggle="modal" data-target="#ModalApp{{j.id}}"> View Applcation</button>
+				<a href="{% url 'company:view-details' id=i.internprofile_id%}"><button class="btn btn-info" >View Application</button></a>
+				<!-- <button class="btn btn-info" data-toggle="modal" data-target="#ModalApp{{j.id}}"> View Applcation</button>
 
 				<div class="modal fade" id="ModalApp{{j.id}}" role="dialog">
 					<div class="modal-dialog modal-lg">
@@ -113,37 +119,40 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 			</td>
-			{% if k.id|upc_details == "Accepted"%}
-			<td id="td{{k.id}}"> 
+			{% if i.id|upc_detailss == "Accepted"%}
+
+			<td id="td{{k.id}}{{i.id}}"> 
 				
 				<button id="btn-inprogress{{k.id}}" class="btn btn-info disabled" > Inprogress</button>
 			</td>
-			<td id="td-confirm{{k.id}}">
-				<button id="btn-message{{k.id}}" class="btn btn-info" data-toggle="modal" data-target="#ModalReg{{k.id}}" > Message </button>
+			<td id="td-msg{{k.id}}{{i.id}}">
+
+				<button id="btn-message{{k.id}}{{i.id}}" class="btn btn-info" data-toggle="modal" data-target="#ModalReg{{k.id}}{{i.id}}" > Message </button>
 			</td>
 
 			<td>
-				<button id="btn-reject{{k.id}}" class="btn btn-info">Reject</button>
+				<button id="btn-reject{{k.id}}{{i.id}}" class="btn btn-info">Reject</button>
 			</td>
-			<td id="td3">
-				<button id="btn-confirm{{k.id}}" class="btn btn-info ">Confirm</button>
+			<td id="td-confirm{{k.id}}{{i.id}}">
+				<button id="btn-confirm{{k.id}}{{i.id}}" class="btn btn-info ">Confirm</button>
 			</td>
 
 
 			
 			{% else %}
 			<td >
-				<button id="btn-accept{{k.id}}" class="btn btn-info" > Accept</button>
+
+				<button id="btn-accept{{k.id}}{{i.id}}" class="btn btn-info" > Accept</button>
 			</td>
-			<td id="td-msg{{k.id}}">
+			<td id="td-msg{{k.id}}{{i.id}}">
 				
 			</td>
 			<td >
-				<button id="btn-reject{{k.id}}" class="btn btn-info">Reject</button>
+				<button id="btn-reject{{k.id}}{{i.id}}" class="btn btn-info">Reject</button>
 			</td>
-			<td id="td-confirm{{k.id}}">
+			<td id="td-confirm{{k.id}}{{i.id}}">
 				
 			</td>
 			
@@ -151,7 +160,7 @@
 		</tr>
 		<script>
 
-			$("#btn-accept{{k.id}}").on("click", function() {
+			$("#btn-accept{{k.id}}{{i.id}}").on("click", function() {
 				$(this).prop("disabled", true);  
 				$(this).html('InProcess');	
 				$("#btn-confirm{{k.id}}").show();
@@ -160,20 +169,22 @@
 					type: 'GET',
 					data: { 
 						'idd': {{k.id}},
+						'upc_id': {{i.id}},
+
 					},
 					success: function(data) {
 						
-						$("#btn-accept{{k.id}}").html("Inprogrss")
+						$("#btn-accept{{k.id}}{{i.id}}").html("Inprogrss")
 						/*$("#td-msg{{k.id}}").append('<button id="btn-message{{k.id}}" class="btn btn-info ">Message</button>');*/
-						$("#td-confirm{{k.id}}").append('<button id="btn-confirm{{k.id}}" class="btn btn-info ">Confirm</button>');
-						$("#td-msg{{k.id}}").append('<button id="btn-message{{k.id}}" class="btn btn-info" data-toggle="modal" data-target="#ModalReg{{k.id}}"> Message </button>');	
+						$("#td-confirm{{k.id}}{{i.id}}").append('<button id="btn-confirm{{k.id}}{{i.id}}" class="btn btn-info ">Confirm</button>');
+						$("#td-msg{{k.id}}{{i.id}}").append('<button id="btn-message{{k.id}}{{i.id}}" class="btn btn-info" data-toggle="modal" data-target="#ModalReg{{k.id}}{{i.id}}"> Message </button>');	
 
 					}
 
 				})	
 			});
 		</script>
-		<div class="modal fade" id="ModalReg{{k.id}}" role="dialog">
+		<div class="modal fade" id="ModalReg{{k.id}}{{i.id}}" role="dialog">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -184,12 +195,12 @@
 					</div>
 					<div class="modal-body">
 
-						<textarea id="msg{{k.id}}" name="paragraph_text" cols="50" rows="10" maxlength="255"></textarea>
+						<textarea id="msg{{k.id}}{{i.id}}" name="paragraph_text" cols="50" rows="10" maxlength="255"></textarea>
 					</div>
 
 					<div class="modal-footer">
 
-						<button  id="btn1"  class="btn btn-default " data-dismiss="modal" onclick="myFunction({{k.id}})">Send {{ k.id}}	</button> 
+						<button  id="btn1"  class="btn btn-default " data-dismiss="modal" onclick="myFunction({{k.id}},{{i.id}})">Send {{ k.id}}	</button> 
 					</div>
 				</div>	
 			</div>	
@@ -224,16 +235,16 @@
 			{% endif %}
 		</span>
 	</div>
-
+<!-- 
 </body>
 
-</html>
+</html> -->
 
 
 <script type="text/javascript">
 
-	function myFunction(id) {
-		var x = "#msg"+id;
+	function myFunction(id,id2) {
+		var x = "#msg"+id +id2;
 		$.ajax({
 			url: '/company/savemsg/',
 			type:'GET',
@@ -249,6 +260,6 @@
 
 
 </script>
-
+{% endblock %}
 
 

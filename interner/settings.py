@@ -67,7 +67,7 @@ ROOT_URLCONF = 'interner.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [[str(ROOT_DIR.path('interner/intern/templates/'))]],
+        'DIRS': [str(ROOT_DIR.path('interner/intern/templates/')),str(ROOT_DIR.path('interner/intern/templates/account/'))],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -155,8 +155,8 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
    str(ROOT_DIR.path('interner/intern/static')),
+   str(ROOT_DIR.path('interner/company/static'))
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-print(MEDIA_ROOT, MEDIA_URL)

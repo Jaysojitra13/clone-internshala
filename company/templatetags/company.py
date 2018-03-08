@@ -28,3 +28,8 @@ def project_detail(value):
 def upc_details(value):
 	q4 = UserPostConnection.objects.get(postdetails_id = value)
 	return q4.status
+
+@register.filter(name="upc_detailss")
+def upc_detailss(value):
+	q4 = UserPostConnection.objects.get(id = value)
+	return q4.status

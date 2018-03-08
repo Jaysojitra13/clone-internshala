@@ -202,7 +202,7 @@ class HomeView(TemplateView):
 		context['AD'] = AD
 		upc= UserPostConnection.objects.filter(internprofile_id = IP.user_id)
 		context['upc'] = upc
-		paginator = Paginator(upc, 2)
+		paginator = Paginator(upc, 3)
 		context['upc'] = paginator.get_page(page)
 		return context
 
@@ -271,7 +271,7 @@ class MyLogInView(LoginView):
 			if user.is_company:
 				for i in CD:
 					if i.company_id == self.request.user.id:
-						return HttpResponseRedirect('/company/index/')
+						return HttpResponseRedirect('/company/applications/')
 				return HttpResponseRedirect('/company/contactdetail/')
 			else:
 				for i in PD:
