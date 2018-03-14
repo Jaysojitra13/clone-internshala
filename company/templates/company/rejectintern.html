@@ -1,0 +1,37 @@
+{% extends 'company/listintern.html'%}
+{% load company%}
+{% load static%}
+<link rel="stylesheet" type="text/css" href="{% static 'company/confirmintern.css'%}">
+{% block intern %}
+
+
+<table class="table">
+	<thead>
+		<tr>
+			<td> Name </td>
+			<td> Email-id</td>
+			<td> Contact Number</td>
+		</tr>
+	</thead>
+		{% for i in upc %}
+			{% for j in i.internprofile_id|intern_name%}
+			<tr class="well tr1">
+				<td>{{j.name}}</td>
+				<td>{{j.email}}</td>
+				<td>{{j.contact_number}}</td>
+				
+			</tr>
+		{% endfor %}
+		{% endfor %}
+</table>
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

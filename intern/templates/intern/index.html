@@ -1,6 +1,7 @@
+{% extends 'intern/base.html'%}
 {% load intern %}
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
@@ -8,8 +9,8 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-
-  <nav class="navbar navbar-default">
+ -->
+  <!-- <nav class="navbar navbar-default">
     <div class="container-fluid">
       <ul class="nav navbar-nav">
       
@@ -31,8 +32,8 @@
       </ul>
       
     </div>
-  </nav> 
-
+  </nav>  -->
+  {% block content %}
   <h2> List of Internships in which you have applied</h2>
   
   <table class="table table-condensed">
@@ -52,7 +53,7 @@
       <td> {{i.status}}</td>
       <td>
 
-        <button id="btn-msg{{j.id}}" class="btn btn-notify" data-toggle="modal" data-target="#ModalMes{{j.id}}"> Message {{j.id}}</button>
+        <button id="btn-msg{{j.id}}" class="btn btn-notify" data-toggle="modal" data-target="#ModalMes{{j.id}}"> Message</button>
         
 
         <span id="badge{{j.id}}" class="badge" style="position: relative; bottom:10px; left:-10px;">{% if j.id|messages_count > 0 %}{{j.id|messages_count}}{%endif%}</span>
@@ -73,9 +74,9 @@
             <h4 class="modal-title">Messages From Company </h4>
           </div>
           <div class="modal-body">
-           <ol> 
+           <ol style="list-style-type: none"> 
             {% for k in j.id|messages %}
-            <li>{{k.messages}}</li>
+            <li>{{k.message_date}}:- &nbsp;{{k.messages}}</li>
             {% endfor %}
           </ol>
         </div>
@@ -123,6 +124,7 @@
     </span>
 </div>
 
-</body>
+<!-- </body>
 
-</html>
+</html> -->
+{% endblock %}

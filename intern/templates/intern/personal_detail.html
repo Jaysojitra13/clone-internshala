@@ -19,8 +19,10 @@
 	
 	<!-- {% crispy form %} -->
 	{{  form|crispy }}
+	
 	<input class="btn btn-info right" type="submit" name="submit">
 </form>
+<a href="{% url 'intern:index'%}"><button class="btn btn-info left">skip</button></a>
 </div>
 </body>
 </html>

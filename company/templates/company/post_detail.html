@@ -17,11 +17,11 @@
 <form action="" method="post">
 {% csrf_token %}
  
-	{% crispy form %}
+	{{ form|crispy }}
 
-<input class="btn btn-primary right" type='submit' value='submit'>
+<input class="btn btn-primary right" type="submit" value="submit">
 </form>
 <br><br>
 </div>
 </body>
-</html>
+</html> 

@@ -15,6 +15,7 @@ from django.views.generic import TemplateView
 from django.views import generic
 from django.urls import reverse_lazy
 from allauth.account.views import * 
+from allauth.socialaccount.models import * 
 from django.contrib.auth import authenticate
 from django.http import JsonResponse
 from django.core import serializers
@@ -23,7 +24,8 @@ from django.conf.urls import *
 from django.db.models.query import QuerySet
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-
+from django.views.generic.detail import SingleObjectMixin
+import datetime
 import json
 def InternProfileView(request):
 	
@@ -67,45 +69,16 @@ class Home(TemplateView):
 	
 	template_name = 'intern/home.html'
 
+
+
 	def dispatch(self, request, *args, **kwargs):
 		# if 'company' in request.session:
 		# 	print('not there')	
+		# super(Home, self).dispatch(request, *args, **kwargs)
 		return super(Home, self).dispatch(request, *args, **kwargs)
-# def PersonalDetailView(request):
 
-# 	if request.method == 'POST':
-# 		IP = InternProfile.objects.get(user = request.user)
-# 		print(IP)
+		
 
-# 		personaldetail_form  = PersonalDetailsForm(request.POST, instance = IP)
-
-# 		#print(personaldetail_form.data)
-# 		if personaldetail_form.is_valid():
-			
-			
-# 			PF = personaldetail_form.save(commit=False)
-# 			PF.save()
-# 			pd = PersonalDetails()
-# 			pd.internprofile = IP
-# 			pd.name = personaldetail_form.cleaned_data.get('name')
-# 			pd.email = personaldetail_form.cleaned_data.get('email')
-# 			pd.contact_number = personaldetail_form.cleaned_data.get('contact_number')
-# 			pd.current_city = personaldetail_form.cleaned_data.get('current_city')
-# 			pd.second_city = personaldetail_form.cleaned_data.get('second_city')
-			
-# 			pd.save()
-# 			#print(InternPersonalDetails.internprofile)
-# 			#print(personaldetail_form.data)
-# 			#PF.save()
-# 			# return redirect('')
-# 		else:
-# 			#print('-2-32-2--3')
-# 			messages.error(request,("correct erroe=rs"))
-# 	else:
-# 		personaldetail_form = PersonalDetailsForm(request.POST)
-# 	return render(request, 'intern/personal_detail.html',{
-# 			'personaldetail_form': personaldetail_form,
-# 		})
 
 class PersonalDetailView(CreateView):
 
@@ -132,23 +105,22 @@ class UpdatePersonalDetailView(UpdateView):
 	template_name  = 'intern/personal_detail.html'
 	success_url = reverse_lazy('intern:index')	
 	print('hh')
-	# success_url =reverse_lazy('intern:academic-detail')
-	# print("hrllo")
 	# def get(self, request, *args, **kwargs):
-	# 	print("hello")
+
 	# 	print(kwargs['pk'])
-	# 	return HttpResponseRedirect('/intern/personaldetail/')
-	# def post(self, request, *args, **kwargs):
-	# 	personaldetail_form  = PersonalDetailsForm(request.POST)
-	# 	user = PersonalDetails.objects.get(internprofile_id=kwargs['id'])
-	# 	import code; code.interact(local=dict(globals(), **locals()))
-	# 	# user.name = personaldetail_form.cleaned_data['name']
-	# 	# user.email = personaldetail_form.cleaned_data['email']
-	# 	# user.contact_number = personaldetail_form.cleaned_data['contact_number']
-	# 	# user.current_city = personaldetail_form.cleaned_data['current_city']
-	# 	# user.second_city = personaldetail_form.cleaned_data['second_city']
-	# 	# user.save()
+	# 	if kwargs['pk'] == None:
+	# 		return HttpResponseRedirect('/intern/index/')
+	# 	else:
+	# 		return HttpResponseRedirect('/intern/updatepersonaldetail/'+ kwargs['pk']+'')
 	# 	return HttpResponseRedirect('/intern/index/')
+	def dispatch(self, *args, **kwargs):
+		#or put some logic here
+		print(kwargs['pk'])
+		if kwargs['pk'] == '':
+			return HttpResponseRedirect('/intern/personaldetail/')
+		
+		return super(UpdatePersonalDetailView, self).dispatch(*args, **kwargs)
+	
 	
 
 class AcademicDetailView(CreateView):
@@ -171,7 +143,13 @@ class UpdateAcademicDetailView(UpdateView):
 	template_name = 'intern/academic_detail.html'
 	success_url = reverse_lazy('intern:index')
 
-
+	def dispatch(self, *args, **kwargs):
+		#or put some logic here
+		print(kwargs['pk'])
+		if kwargs['pk'] == '':
+			return HttpResponseRedirect('/intern/academicdetail/')
+		
+		return super(UpdateAcademicDetailView, self).dispatch(*args, **kwargs)
 
 class ProjectDetailView(CreateView):
 	model = ProjectDetails
@@ -196,16 +174,19 @@ class HomeView(TemplateView):
 		page = self.request.GET.get('page')
 		IP = InternProfile.objects.get(user = self.request.user)
 		context = super().get_context_data(**kwargs)
-		PD = PersonalDetails.objects.get(internprofile_id = IP.user_id).id
-		context['PD'] = PD
-		AD = AcademicDetails.objects.get(internprofile_id = IP.user_id).id
-		context['AD'] = AD
+		if AcademicDetails.objects.filter(internprofile_id = self.request.user.id).exists():
+			context['AD'] = AcademicDetails.objects.get(internprofile_id = self.request.user.id).pk
+
+		if PersonalDetails.objects.filter(internprofile_id = self.request.user.id).exists():
+			context['PD'] = PersonalDetails.objects.get(internprofile_id = self.request.user.id).pk
+	
 		upc= UserPostConnection.objects.filter(internprofile_id = IP.user_id)
 		context['upc'] = upc
-		paginator = Paginator(upc, 3)
+		paginator = Paginator(upc, 5)
 		context['upc'] = paginator.get_page(page)
 		return context
 
+	
 	# def get_absolute_url(self): 
 	# 	return reverse("intern/index.html")
 
@@ -232,10 +213,12 @@ class MySignUpView(SignupView):
 		data = self.request.session.get('user')
 		print(data)
 		
-		self.user = form.save(self.request)
+		self.user = form.save(self.request)		
+
 		if data == 'company':
 			self.user.is_company = True
 			self.user.save()
+			
 		return HttpResponseRedirect('/accounts/login/')
 
 	
@@ -258,12 +241,12 @@ class MyLogInView(LoginView):
 		if data == 'company':
 			return HttpResponseRedirect('/company/contactdetail/')
 		elif data == 'intern':
-			return HttpResponseRedirect('/intern/personaldetail/')
+			return HttpResponseRedirect('/intern/index/')
 
 	def post(self, request):
 		print('login')
 		PD = PersonalDetails.objects.all()
-		AD = AcademicDetails.objects.all()
+		AD = AcademicDetails.objects.all()		
 		CD = ContactDetails.objects.all()
 		user = authenticate(username=self.request.POST.get('login'),password=self.request.POST.get('password'))
 		login(request, user)
@@ -274,10 +257,9 @@ class MyLogInView(LoginView):
 						return HttpResponseRedirect('/company/applications/')
 				return HttpResponseRedirect('/company/contactdetail/')
 			else:
-				for i in PD:
-					for j in AD:
-						if i.internprofile_id == self.request.user.id:
-							return HttpResponseRedirect('/intern/index/')
+				for i in PD:					
+					if i.internprofile_id == self.request.user.id:
+						return HttpResponseRedirect('/intern/index/')
 				return HttpResponseRedirect('/intern/personaldetail/')
 		return HttpResponseRedirect('/accounts/login/')
 
@@ -293,87 +275,87 @@ class InternshipDetailView(TemplateView):
 	# 	return JsonResponse(data)
 	
 	def get_context_data(self, **kwargs):
+			data = dict()
+
 		
 	
-		
-	
-		city = self.request.GET.get('city')
-		tech = self.request.GET.get('tech')
-		stipend =  self.request.GET.get('stipend')
-		duration =  self.request.GET.get('duration')
-		typ = self.request.GET.get('typ')
-		page = self.request.GET.get('page')
-		# print(duration)
-		# print(stipend)
-		# print(tech)	
-		# print(city)
-		# print(typ)
-		data = dict()
-		
-		# if 'tech' in self.request.session:
-		# 	del self.request.session['tech']
-		# elif 'stipend' in self.request.session:
-		# 	del self.request.session['stipend']
-		# elif 'duration' in self.request.session:
-		# 	del self.request.session['duration']
-		# else:
-		# 	pass
-		
-		tmp = ['tech','duration', 'stipend','city','typ']
-		p = PostDetails.objects.all()
-		
-		for i in tmp:
-			if i == 'tech': 
-				if self.request.GET.get('tech') != '' and self.request.GET.get('tech') != None:
-					self.request.session['tech'] = self.request.GET.get('tech')
-					p = p.filter(technology=self.request.GET.get('tech'))
-				else:
-					if 'tech' in self.request.session:
-						del self.request.session['tech']
-				
+			city = self.request.GET.get('city')
+			tech = self.request.GET.get('tech')
+			stipend =  self.request.GET.get('stipend')
+			duration =  self.request.GET.get('duration')
+			typ = self.request.GET.get('typ')
+			page = self.request.GET.get('page')
+			# print(duration)
+			# print(stipend)
+			# print(tech)	
+			# print(city)
+			# print(typ)
 			
-			if i == 'duration':
-				if self.request.GET.get('duration') != '' and self.request.GET.get('duration') != None:
-					self.request.session['duration'] = self.request.GET.get('duration')					
-					p = p.filter(time_duration=self.request.GET.get('duration'))
-				else:
-					if 'duration' in self.request.session:
-						del self.request.session['duration']
-						
+			
+			# if 'tech' in self.request.session:
+			# 	del self.request.session['tech']
+			# elif 'stipend' in self.request.session:
+			# 	del self.request.session['stipend']
+			# elif 'duration' in self.request.session:
+			# 	del self.request.session['duration']
+			# else:
+			# 	pass
+			
+			tmp = ['tech','duration', 'stipend','city','typ']
+			p = PostDetails.objects.all()
+			
+			for i in tmp:
+				if i == 'tech': 
+					if self.request.GET.get('tech') != '' and self.request.GET.get('tech') != None:
+						self.request.session['tech'] = self.request.GET.get('tech')
+						p = p.filter(technology=self.request.GET.get('tech'))
+					else:
+						if 'tech' in self.request.session:
+							del self.request.session['tech']
+					
+				
+				if i == 'duration':
+					if self.request.GET.get('duration') != '' and self.request.GET.get('duration') != None:
+						self.request.session['duration'] = self.request.GET.get('duration')					
+						p = p.filter(time_duration=self.request.GET.get('duration'))
+					else:
+						if 'duration' in self.request.session:
+							del self.request.session['duration']
+							
 
-			if i == 'stipend':
-				if self.request.GET.get('stipend') != '' and  self.request.GET.get('stipend') != None:
-					self.request.session['stipend'] = self.request.GET.get('stipend')
-					p = p.filter(stipend__gt=0)
-				else:
-					if 'stipend' in self.request.session:
-						del self.request.session['stipend']
-						
+				if i == 'stipend':
+					if self.request.GET.get('stipend') != '' and  self.request.GET.get('stipend') != None:
+						self.request.session['stipend'] = self.request.GET.get('stipend')
+						p = p.filter(stipend__gt=0)
+					else:
+						if 'stipend' in self.request.session:
+							del self.request.session['stipend']
+							
 
-			if i == 'city':
-				contact = ContactDetails.objects.filter(location=self.request.GET.get('city'))
-				post = PostDetails.objects.all()
-				if self.request.GET.get('city') != '' and self.request.GET.get('city') != None:
-					self.request.session['city'] = self.request.GET.get('city')
-					for i in contact:
-						for j in post:
-							p = p.filter(company_id = i.company_id)
-				else:
-					if 'city' in self.request.session:
-						del self.request.session['city']
+				if i == 'city':
+					contact = ContactDetails.objects.filter(location=self.request.GET.get('city'))
+					post = PostDetails.objects.all()
+					if self.request.GET.get('city') != '' and self.request.GET.get('city') != None:
+						self.request.session['city'] = self.request.GET.get('city')
+						for i in contact:
+							for j in post:
+								p = p.filter(company_id = i.company_id)
+					else:
+						if 'city' in self.request.session:
+							del self.request.session['city']
 
-			if i== 'typ':
-				if self.request.GET.get('typ') != '' and self.request.GET.get('typ') != None:
-					self.request.session['typ'] = self.request.GET.get('typ')
-					p = p.filter(typeof_internship=self.request.GET.get('typ'))
-				else:
-					if 'typ' in self.request.session:
-						del self.request.session['typ']	
+				if i== 'typ':
+					if self.request.GET.get('typ') != '' and self.request.GET.get('typ') != None:
+						self.request.session['typ'] = self.request.GET.get('typ')
+						p = p.filter(typeof_internship=self.request.GET.get('typ'))
+					else:
+						if 'typ' in self.request.session:
+							del self.request.session['typ']	
 
-		data['data']=p
-		paginator = Paginator(p, 3)
-		data['data'] = paginator.get_page(page)
-		return data
+			data['data']=p
+			paginator = Paginator(p, 3)
+			data['data'] = paginator.get_page(page)
+			return data
 		
 		# import code; code.interact(local=dict(globals(), **locals()))
 		# p =PostDetails.objects.all()
@@ -533,14 +515,38 @@ class InternshipDetailView(TemplateView):
 
 	
 
-def InternPostConnection(request, id1, id2):
+class InternPostConnection(SingleObjectMixin, TemplateView):
 	
-	obj = UserPostConnection()
-	obj.company_id = CompanyProfile.objects.get(user = id1).pk
-	obj.internprofile_id = request.user.id
-	obj.postdetails_id = PostDetails.objects.get(id = id2).id
-	obj.save()
-	return HttpResponseRedirect('/intern/internship')
+	def get(self, request, *args, **kwargs):
+		
+		self.object = self.request.user
+		print(self.object.id)
+
+		if self.object.id != None:
+			id1 = kwargs['company_id']
+			id2 = kwargs['post_id']
+			if PersonalDetails.objects.filter(internprofile_id= self.object.id).exists() == False:
+				
+				return HttpResponseRedirect('/intern/personaldetail/')	
+
+			if UserPostConnection.objects.filter(company_id=id1, internprofile_id= self.object.id,postdetails_id=id2).exists():
+				return HttpResponseRedirect('/intern/internship/')
+			else:
+				id1 = kwargs['company_id']
+				id2 = kwargs['post_id']
+				obj = UserPostConnection()
+				
+				obj.company_id = CompanyProfile.objects.get(user = id1).pk
+				obj.internprofile_id = request.user.id
+				obj.postdetails_id = PostDetails.objects.get(id = id2).id
+				obj.applied_date = datetime.datetime.now().date()
+				obj.statusupdate_date = datetime.datetime.now().date()
+				obj.save()
+				return HttpResponseRedirect('/intern/internship')
+		else:
+
+			return HttpResponseRedirect('/accounts/login/')
+		
 
 # class InternshipDataView(TemplateView):
 # 	template_name = 'intern/internship_data.html'

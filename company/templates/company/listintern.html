@@ -1,0 +1,15 @@
+{% extends 'company/index.html'%}
+{% load company %}
+{% load static %}
+{% load intern%}
+
+
+
+{% block content %}
+<ul class="nav nav-tabs">
+    <li><a href="{% url 'company:confirm-intern' pk=request.user.id%}">Confirmed Interns</a></li>
+    <li><a href="{% url 'company:reject-intern' pk=request.user.id%}">Rejected Interns</a></li>
+  </ul>
+  {% block intern %}
+  {%  endblock %}
+{% endblock%}

@@ -1,0 +1,32 @@
+{% extends 'company/index.html'%}
+{% load company %}
+{% load static %}
+{% load intern%}
+
+{% block navbar %}
+
+<a href="{% url 'company:post-detail'%}"><button class="btn btn-primary" type="button">Create New Post</button></a>
+<li>
+<div class="dropdown">
+	<button class="btn btn-primary dropdown-toggle drop" type="button" data-toggle="dropdown">Question Bank
+		<span class="caret"></span></button>
+		<ul class="dropdown-menu">
+		{% for i in post_list%}
+			<li><a href="#">{{i.technology}}</a></li>
+		{% endfor %}
+		</ul>
+	</div>
+</li>
+
+	{% endblock %}
+
+	{% block content %}
+
+	<ul class="nav nav-tabs">
+		<li><a href="{% url 'company:all-post' %}">All Posts</a></li>
+		<li><a href="{% url 'company:existing-post' %}">Existing</a></li>
+		<li><a href="{% url 'company:past-post'%}">History</a></li>
+	</ul>
+	{% block existingpost %}
+	{%  endblock %}
+	{% endblock%}

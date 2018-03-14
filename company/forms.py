@@ -43,7 +43,13 @@ class ContactDetailsForm(forms.ModelForm):
 			)
 			super(PersonalDetailsForm, self).__init__(*args, **kwargs)
 
+TECHNOLOGY_CHOICES = (('',''),('Java','Java'),('Test','Test'),('node','node'),('Python','Python'),('Android','Android'),('Ruby','Ruby'),('Ruby','Ruby'),('BD','BD'),('BI','BI'),('UX/UI design','UX/UI design'))
+TYPE_CHOICES = (('',''),('Full Time','Full Time'),('Half Time','Half Time'),('Work From Home','Work From Home'))
+
+
 class PostDetailsForm(forms.ModelForm):
+	technology = forms.ChoiceField(choices = TECHNOLOGY_CHOICES, widget=forms.Select(attrs={'class':'regDropDown'}))
+	typeof_internship = forms.ChoiceField(choices = TYPE_CHOICES, widget=forms.Select(attrs={'class':'regDropDown'}))
 	time_duration = forms.CharField(label='Time duration (In month)')
 	apply_by = forms.CharField(label='Last date to apply')
 	stipend = forms.CharField(label='Stipend (per month)', required=False)	

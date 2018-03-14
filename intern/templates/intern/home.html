@@ -1,61 +1,71 @@
-  {% load socialaccount %}
+    {% load socialaccount %}
   {% load static %}
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="{% static 'intern/homepage.css' %}" />
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
-	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</head>
-<body>
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-      <ul class="nav navbar-nav">
-      <li>
-<h1 class="titlefont">Practicum</h1>
-</li>
-</ul>
-<ul class="nav navbar-nav navbar-right">
-{% if user.is_authenticated %}
-<li class="box">
-<p>{{ user.username }}</p>
-</li>
-<li>
-<a href="{% url 'account_logout' %}"><button class="btn btn-primary">Log Out</button></a>
-</li>
+  <html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="{% static 'intern/homepage.css' %}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-{% else %}
-<li style="padding-right: 10px;padding-top: 10px;">
-    <div class="dropdown">
-    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"> Sign up
-    <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu signup">
-      <li><a href="{% url 'check-user' 'intern' %}">SignUp as Intern</a></li>
-      <li><a href="{% url 'check-user' 'company' %}">SignUp as Company</a></li>
-    </ul>
-  </div>
-<br>    
-</li>
+  </head>
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <ul class="nav navbar-nav">
+          <li>
+            <h1 class="titlefont">Practicum</h1>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
 
-<li style="padding-top: 10px;">
-<div class="dropdown">
-    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Log In
-    <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu">
-      <li><a href="{% url 'check-login' 'intern' %}">LogIn as Intern</a></li>
-      <li><a href="{% url 'check-login' 'company' %}">LogIn as Company</a></li>
-    </ul>
-  </div>
-</li>
-</ul>
-</div>
-</nav>
+          {% if user.is_authenticated %}
+          <li class="box">
+            <p>{{ user.username }}</p>
+          </li>
+          <li>
+            <a href="{% url 'account_logout' %}"><button class="btn btn-primary">Log Out</button></a>
+          </li>
 
-  
+          {% else %}
+          <li>
+           <a href="{% url 'intern:internship-detail' %}"><button class="btn btn-primary internbtn" >Internship</button></a>
+         </li>
+         <li style="padding-right: 10px;padding-top: 10px;">
+          <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"> Sign up
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu signup">
+              <li><a href="{% url 'check-user' 'intern' %}">SignUp as Intern</a></li>
+              <li><a href="{% url 'check-user' 'company' %}">SignUp as Company</a></li>
+            </ul>
+          </div>
+          <br>    
+        </li>
 
-{% endif %}
+        <li style="padding-top: 10px;">
+          <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Log In
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="{% url 'check-login' 'intern' %}">LogIn as Intern</a></li>
+              <li><a href="{% url 'check-login' 'company' %}">LogIn as Company</a></li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  {% block content %}
+
+  {% endblock %}
+
+  {% endif %}
+
 
 
 </body>

@@ -1,6 +1,13 @@
+
+{% if request.user.id == None%}
+{% include 'intern/home.html' %}
+{% endif %}
+{% if request.user.id != None%}
+{% include 'intern/base.html'%}
+{% endif %}
 {% load static%}
-{% include 'intern/base.html' %}
 {% load intern %}
+
 <!-- <script>
 					$('#btn-search').on("click",function(){
 						$.ajax({
@@ -15,7 +22,8 @@
 						})
 					});
 				</script> -->
-				<!DOCTYPE>
+
+				<!-- <!DOCTYPE>
 				<html>
 				<head>
 
@@ -28,8 +36,8 @@
 
 				</head>
 				<body>
-
-
+ -->
+ 					{% block content %}
 
 
 					<div id="con" class="container">
@@ -175,7 +183,7 @@
 								</div>
 
 								<div calss="row" style="float:right;">
-									<a href="{% url 'intern:internpost-connection'	id1=i.company_id id2=post.id %}"">
+									<a href="{% url 'intern:internpost-connection'	company_id=i.company_id post_id=post.id %}">
 										<button >Apply</button>
 									</a>
 								</div>
@@ -187,7 +195,7 @@
 
 						</div>
 					</div>	
-				</body>
+				<!-- </body> -->
 				<script>
 					/*$('[id="city"],[id="tech"]').on('change',function(e)	{
 
@@ -255,4 +263,5 @@
 						{% endif %}
 					</span>
 				</div>
-				</html> 
+				<!-- </html>  -->
+				{% endblock %}

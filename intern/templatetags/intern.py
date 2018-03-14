@@ -35,8 +35,14 @@ def messages(value):
 def messages_count(value):
 	q3 = Messages.objects.filter(postdetails_id=value,is_read=False).count()
 	return q3
+
 @register.filter(name="pesonal_detail")
 def personal_detail(value):
+	PD_id = PersonalDetails.objects.get(internprofile_id=value)
+	return PD_id.id
+
+@register.filter(name="pesonal_detailid")
+def personal_detailid(value):
 	PD_id = PersonalDetails.objects.get(internprofile_id=value)
 	return PD_id.id
 # @register.filter(name="is_read")

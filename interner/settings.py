@@ -98,7 +98,7 @@ SITE_ID = 1
 SOCIAL_AUTH_GOOGLE_ALLAUTH_KEY = '909809979825-89d7r3lfj9atsgqj4dklklg80rinskco.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_ALLAUTH_SECRET = 'ggCEjOHsmxRy7D3eQ1QwiTjg'
 
-LOGIN_REDIRECT_URL = '/intern/personaldetail/'
+LOGIN_REDIRECT_URL = '/intern/index/'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
@@ -114,7 +114,17 @@ DATABASES = {
     }
 }
 
-
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
@@ -155,7 +165,8 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
    str(ROOT_DIR.path('interner/intern/static')),
-   str(ROOT_DIR.path('interner/company/static'))
+   str(ROOT_DIR.path('interner/company/static')),
+
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

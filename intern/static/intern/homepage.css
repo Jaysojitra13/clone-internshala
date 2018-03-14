@@ -2,7 +2,7 @@
     color: #fff;
     background-color: #428bca;
     border-color: #357ebd;
-    margin-top: 15px;
+    margin-top: 25px;
     padding: 15px;
 }
 
@@ -20,4 +20,9 @@
     height: 35px;
     border: 2px solid green;
     border-radius: 5px;
-    }
+}
+
+.internbtn {
+    padding: 15px;
+    margin-top: 20px;
+}

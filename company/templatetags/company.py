@@ -6,30 +6,31 @@ register = template.Library()
 
 @register.filter(name="intern_name") 
 def intern_name(value):
-	q = PersonalDetails.objects.filter(internprofile_id = value)
-	return q
+	personalDetail = PersonalDetails.objects.filter(internprofile_id = value)
+	return personalDetail
 
 @register.filter(name="post_name")
 def post_name(value):
-	q1 = PostDetails.objects.filter(id = value)
-	return q1
+	postDetail = PostDetails.objects.filter(id = value)
+	return postDetail
 
 @register.filter(name="academic_detail")
 def academic_detail(value):
-	q2 = AcademicDetails.objects.filter(internprofile_id = value)
-	return q2
+	academicDetail = AcademicDetails.objects.filter(internprofile_id = value)
+	return academicDetail
 
 @register.filter(name="project_detail")
 def project_detail(value):
-	q3 = ProjectDetails.objects.filter(internprofile_id = value)
-	return q3
+	projectDetail = ProjectDetails.objects.filter(internprofile_id = value)
+	return projectDetail
 
 @register.filter(name="upc_details")
 def upc_details(value):
-	q4 = UserPostConnection.objects.get(postdetails_id = value)
-	return q4.status
+	upc_post = UserPostConnection.objects.get(postdetails_id = value)
+	return upc_post.status
 
 @register.filter(name="upc_detailss")
 def upc_detailss(value):
 	q4 = UserPostConnection.objects.get(id = value)
 	return q4.status
+

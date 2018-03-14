@@ -1,3 +1,10 @@
 .drop {
 	margin-top: 15px;
 }
+
+.carett {
+	color: #FFF;
+}
+.show-inputbtns .input-buttons {
+    display: inline-block;
+}

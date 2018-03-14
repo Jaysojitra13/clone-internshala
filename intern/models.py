@@ -6,6 +6,8 @@ from django.contrib import messages
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import UserManager, AbstractBaseUser
 from django.contrib.auth.decorators import login_required
+import company
+
 # Create your models here.
 
 
@@ -26,15 +28,28 @@ class InternProfile(models.Model):
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
-	print('****', created)
+	print('is_intern ===================',instance.is_company)
 	
-	InternProfile.objects.get_or_create(user = instance)
-	
+	# InternProfile.objects.get_or_create(user = instance)
+	# if instance.is_company == False:
+	# 	print('create if called')
+	# 	# InternProfile.objects.get_or_create(user = instance)
+	# else:
+	# 	print('create else called')
+		# company.models.CompanyProfile.objects.get_or_create(user = instance)
+
+
+
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-	# data= request.session.get('user')
-	# print("@nd",data)
-	instance.intern_profile.save()
+
+	if instance.is_company == "True" :
+		print('save if called')
+		company.models.CompanyProfile.objects.get_or_create(user = instance)
+	else:
+		print('save else is called')
+		InternProfile.objects.get_or_create(user = instance)
+		
 
 class PersonalDetails(models.Model):
 	internprofile = models.OneToOneField(InternProfile, on_delete=models.CASCADE, related_name='personal_details')

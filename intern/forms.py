@@ -33,7 +33,7 @@ class PersonalDetailsForm(forms.ModelForm):
 			self.helper.layout = Layout(
 				Field('name'),
 				Field('email'),
-				Field('conatact_number'),
+				Field('contact_number'),
 				Field('current_city'),
 				Field('second_city'),
 				
@@ -97,7 +97,7 @@ class InternSignUpForm(UserCreationForm):
 		model = User
 
 	def save(self):
-		user = super().save(commit=False)
+		user = super().save()
 		print('VALID')
 		user.is_company = True
 

@@ -2,10 +2,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+<link rel="stylesheet" type="text/css" href="{% static 'company/confirmintern.css'%}">
 <link rel="stylesheet" type="text/css" href="{% static 'company/index.css'%}">
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
 	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  
 </head>
 <body>
 <nav class="navbar navbar-default">
@@ -20,18 +23,21 @@
 </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-<div class="dropdown">
-<button class="btn btn-primary dropdown-toggle drop" type="button" data-toggle="dropdown">POST
-<span class="caret" style="color: white;"></span>
-</button>
-    <ul class="dropdown-menu">
-      <li><a href="{% url 'company:post-detail'%}">Create New Post</a></li>
-      <li><a href="{% url 'company:existing-post'%}">Existing Post</a></li>
-      <li><a href="">History</a></li>
-    </ul>
-  </div>
-  </li>
 
+<a href="{% url 'company:all-post'%}"><button class="btn btn-primary" type="button" >POST
+
+</button></a>
+   <!--  <ul class="dropdown-menu">
+      <li><a href="{% url 'company:post-detail'%}">Create New Post</a></li>
+      <li><a href="{% url 'company:existing-post'%}">All posts</a></li>
+   
+    </ul> -->
+ 
+  </li>
+<li>
+  {%  block navbar%}
+  {% endblock %}
+</li> 
 <li>
 <a href="{% url 'company:applications'%}">
 <button class="btn btn-primary" type="button" >Applications
@@ -40,10 +46,10 @@
 </li>
 
 <li>
-<form action="" method="post">
-<button class="btn btn-primary drop" type="button" data-toggle="dropdown">confirmed Interns
-</button>
-</form>
+
+<a href="{% url 'company:confirm-intern' pk=request.user.id%}"><button class="btn btn-primary " type="button" >Interns</button></a>
+
+
 </li>
 <li>
 	<a href="{% url 'account_logout'%}">

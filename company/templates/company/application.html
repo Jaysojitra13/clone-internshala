@@ -1,11 +1,14 @@
 {% extends 'company/index.html'%}
 {% load company %}
 {% load static %}
-
+{% load intern%}
 
 {% block content %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <!-- <html>
-<head>
+<head> 
 	
 	<link rel="stylesheet" type="text/css" href="{% static 'intern/demo.css' %}" />
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -14,114 +17,113 @@
 	
 </head>
 <body> -->
-	
-
+<div class='maincontainer'>
 	<h2 > List of all Applicants</h2>
-	<table id="tb" class="table table-cndensed">
-		<thead>
-			<tr>
-				<td> Name</td>
-				<td> Applied for</td>
-				<td> View Application</td>
-			</tr>
-		</thead>
-		{% for i in applicants %}
-		
-		
-		{% for k in i.postdetails_id|post_name%}
-		
-		<tr id="trr">
-			{% for j in i.internprofile_id|intern_name %}
-			<td>{{ j.name }}</td> 
+	<div id="con" class="container">
+		<div class="col-md-2" > 
 
-			<td >{{ k.domain }}</td>
-			<td>
-				<a href="{% url 'company:view-details' id=i.internprofile_id%}"><button class="btn btn-info" >View Application</button></a>
-				<!-- <button class="btn btn-info" data-toggle="modal" data-target="#ModalApp{{j.id}}"> View Applcation</button>
+			<form id="HRFilter" method="get" >
+				<h4>Technology</h4>
+				<select id="domain" name="domain"  class='form-control'>
+					{% if request.session.domain %}
+					<option value="{{request.session.domain}}">{{request.session.domain}}</option>
+					<option value="">NO Technology</option>
+					{% else %}
+					<option value="">Select Technology</option>
+					{% endif %}
 
-				<div class="modal fade" id="ModalApp{{j.id}}" role="dialog">
-					<div class="modal-dialog modal-lg">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal">&times;</button>
-								<h4 class="modal-title">Details of {{ j.name }}</h4>
-							</div>
-							<div class="modal-body">
-								<h4 style="font-weight: bold;">Personal details:</h4>
-								<table class="table">
-									<thead style="font-weight: bold;">
-										<tr>
-											<td>Email-ID</td>
-											<td>contact Number</td>
-											<td>Current City</td>
-											<td>2<sup>nd</sup> City</td>
-										</tr>
-									</thead>
-									<tr>
-										<td> {{j.email}}</td>
-										<td> {{j.contact_number}}</td>
-										<td> {{j.current_city}}</td>
-										<td> {{j.second_city}}</td>
-									</tr>
-								</table>
-								{%endfor%}
-								<br>
-								<h4 style="font-weight: bold;">Academic details:</h4>
-								<table class="table">
-									<thead style="font-weight: bolder;">
-										<tr>
-											<td> 10<sup>th</sup> schoolname</td>
-											<td> 10<sup>th</sup> Percentage</td>
-											<td> 10<sup>th</sup> Result</td>
-											<td> 12<sup>th</sup> schoolname </td>
-											<td> 12<sup>th</sup> Percentage</td>
-											<td> 12<sup>th</sup> Result</td>
-											<td> College</td>
-											<td> Current year</td>
-											<td> Current Cpi</td>
-											<td> College Result</td>
-										</tr>
-									</thead>
-									<tr>
-										{% for l in i.internprofile_id|academic_detail%}
-										<td> {{l.schoolname_10}}</td>
-										<td>{{l.percentage_10}}%</td>
-										<td><img src="/media/{{l.marksheet_10}}" height="40" width="40"></td>
-										<td> {{l.schoolname_12}}</td>
-										<td>{{l.percentage_12}}%</td>
-										<td><img src="/media/{{l.marksheet_12}}" height="40" width="40"></td>
-										<td>{{l.college_name}}</td>
-										<td>{{l.current_year}}</td>
-										<td> {{l.cpi}}</td>	
-										<td><img src="/media/{{l.marksheet_clg}}" height="40" width="40"></td>
-									</tr>
-									{% endfor %}
-								</table>
+					
+					{% for j in data|tech_name %}
+					<option value="{{ j.domain }}">{{j.domain}}</option>
+					{% endfor %}
+				</select>
+				<br>
+				<h4>Date</h4>
 
-								<h4 style="font-weight: bold;">Project details:</h4>
-								<table class="table">
-									
-									<thead style="font-weight: bolder;">
-										<tr>
-											<td> Project Title </td>
-											<td> Description</td>
-											<td> Link</td>
-										</tr>
-									</thead>
-									{% for m in i.internprofile_id|project_detail%}
-									<tr>
-										<td> {{m.title}}</td>
-										<td> {{m.description}}</td>
-										<td> {{m.project_link}}</td>
-									</tr>
-									{% endfor %}
-								</table>
-							</div>
-						</div>
-					</div>
-				</div> -->
+				<div class="form-row show-inputbtns ">
+					<input class="form-control" type="date" name="date"/>
+
+				</div>
+
+				<br>
+				<input id="sub" type="submit" >
+			</form>
+
+			<!-- <script>
+				function sortbydate(){
+					var table, rows, switching, i, x, y, shouldSwitch;
+					table = document.getElementById("tb");
+					switching = true;
+					while (switching) {
+						rows = table.getElementsByTagName("TR");
+						for (i = 1; i < (rows.length - 1); i++) {
+							shouldSwitch = false;
+							x = rows[i].getElementsByTagName("TD")[0];
+							y = rows[i + 1].getElementsByTagName("TD")[0];
+							if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+								shouldSwitch= true;
+								break;
+							}
+						}
+						if (shouldSwitch) {
+							rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+							switching = true;
+						}
+					}
+
+				}
+			</script> -->
+
+		</div>
+
+
+
+		<div id="abc" class="col-md-10">
+			<script>
+				$('#sub').on('click',function(){
+
+					$('#HRFilter').submit(function(){
+
+						$.ajax({
+							url:'/company/applications/',
+							type: 'GET',
+							data: $('#HRFilter').serialize(),
+							success:function(response){
+								console.log("OK")
+							},
+						});
+					});
+				});
+			</script>
+			<table id="tb" class="table table-cndensed">
+				<thead>
+					<tr>
+						<td id="applied_date"> Applied Date<span><a id="date" onclick="sortbydate()">
+							<span class="glyphicon glyphicon-triangle-bottom"></span>
+						</a></span></td>
+						<td> Name</td>
+						<td> Applied for</td>
+						<td> View Application</td>
+					</tr>
+				</thead>
+				{% for i in applicants %}
+
+
+				{% for k in i.postdetails_id|post_name%}
+				{% if i.id|upc_detailss == "Rejected"%}
+
+				{% else %}
+				<tr id="trr{{k.id}}{{i.id}}">
+					<td> {{i.applied_date}}</td>
+					{% for j in i.internprofile_id|intern_name %}
+					<td>{{ j.name }}</td> 
+
+					<td >{{ k.domain }}</td>
+					<td>
+						<a href="{% url 'company:view-details' id=i.internprofile_id%}"><button class="btn btn-info" >View Application</button></a>
+					{% endfor %}
 			</td>
-			{% if i.id|upc_detailss == "Accepted"%}
+			{% if i.id|upc_detailss == "Accepted" or i.id|upc_detailss == "InProcess" or i.id|upc_detailss == "Confirmed" %}
 
 			<td id="td{{k.id}}{{i.id}}"> 
 				
@@ -133,63 +135,42 @@
 			</td>
 
 			<td>
-				<button id="btn-reject{{k.id}}{{i.id}}" class="btn btn-info">Reject</button>
+				<button id="btn-reject{{k.id}}{{i.id}}" class="btn btn-info" data-toggle="modal" data-target="#ModalRegReject{{k.id}}{{i.id}}">Reject</button>
 			</td>
 			<td id="td-confirm{{k.id}}{{i.id}}">
-				<button id="btn-confirm{{k.id}}{{i.id}}" class="btn btn-info ">Confirm</button>
+				<button id="btn-confirm{{k.id}}{{i.id}}" class="btn btn-info " onclick="buttonConfirm({{k.id}},{{i.id}})">Confirm</button>
 			</td>
-
+			<td id="td-test{{k.id}}{{i.id}}">
+				<button id="btn-test{{k.id}}{{i.id}}" class="btn btn-info " onclick="buttontest({{k.id}},{{i.id}})">Test</button>
+			</td>
 
 			
 			{% else %}
 			<td >
 
-				<button id="btn-accept{{k.id}}{{i.id}}" class="btn btn-info" > Accept</button>
+				<button id="btn-accept{{k.id}}{{i.id}}" class="btn btn-info" onclick="internship({{k.id}},{{i.id}})"> Accept</button>
 			</td>
 			<td id="td-msg{{k.id}}{{i.id}}">
 				
 			</td>
 			<td >
-				<button id="btn-reject{{k.id}}{{i.id}}" class="btn btn-info">Reject</button>
+				<button id="btn-reject{{k.id}}{{i.id}}" class="btn btn-info" data-toggle="modal" data-target="#ModalRegReject{{k.id}}{{i.id}}">Reject</button>
 			</td>
 			<td id="td-confirm{{k.id}}{{i.id}}">
 				
 			</td>
-			
+			<td id="td-test{{k.id}}{{i.id}}">
+
+			</td>
 			{% endif %}
 		</tr>
-		<script>
 
-			$("#btn-accept{{k.id}}{{i.id}}").on("click", function() {
-				$(this).prop("disabled", true);  
-				$(this).html('InProcess');	
-				$("#btn-confirm{{k.id}}").show();
-				$.ajax({
-					url: '/company/messages/',
-					type: 'GET',
-					data: { 
-						'idd': {{k.id}},
-						'upc_id': {{i.id}},
-
-					},
-					success: function(data) {
-						
-						$("#btn-accept{{k.id}}{{i.id}}").html("Inprogrss")
-						/*$("#td-msg{{k.id}}").append('<button id="btn-message{{k.id}}" class="btn btn-info ">Message</button>');*/
-						$("#td-confirm{{k.id}}{{i.id}}").append('<button id="btn-confirm{{k.id}}{{i.id}}" class="btn btn-info ">Confirm</button>');
-						$("#td-msg{{k.id}}{{i.id}}").append('<button id="btn-message{{k.id}}{{i.id}}" class="btn btn-info" data-toggle="modal" data-target="#ModalReg{{k.id}}{{i.id}}"> Message </button>');	
-
-					}
-
-				})	
-			});
-		</script>
 		<div class="modal fade" id="ModalReg{{k.id}}{{i.id}}" role="dialog">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
 
-						<button type="button" class="close" data-dismiss="modal">&times;{{ k.id }}</button>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
 
 						<h4 class="modal-title">Leave a message here for further process </h4>
 					</div>
@@ -200,20 +181,39 @@
 
 					<div class="modal-footer">
 
-						<button  id="btn1"  class="btn btn-default " data-dismiss="modal" onclick="myFunction({{k.id}},{{i.id}})">Send {{ k.id}}	</button> 
+						<button  id="btn1"  class="btn btn-default " data-dismiss="modal" onclick="myFunction({{k.id}},{{i.id}})">Send</button> 
+					</div>
+				</div>	
+			</div>	
+		</div>
+
+		<div class="modal fade" id="ModalRegReject{{k.id}}{{i.id}}" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+
+						<h4 class="modal-title">Reason to Reject candidate</h4>
+					</div>
+					<div class="modal-body">
+
+						<textarea id="rjct{{k.id}}{{i.id}}" name="paragraph_text" cols="50" rows="10" maxlength="255"></textarea>
+					</div>
+
+					<div class="modal-footer">
+
+						<button  id="btn1"  class="btn btn-default " data-dismiss="modal" onclick="buttonReject({{k.id}},{{i.id}})">Send</button> 
 					</div>
 				</div>	
 			</div>	
 		</div>
 		
-		{% for p in i.internprofile_id|academic_detail%}
-
-
 		
-
+		{% endif %}
 		{% endfor %}
 		{% endfor %}
-		{% endfor %}
+		
 
 
 
@@ -235,6 +235,8 @@
 			{% endif %}
 		</span>
 	</div>
+</div>
+</div>	
 <!-- 
 </body>
 
@@ -251,15 +253,97 @@
 			data: {
 				'message' : $(x).val(),
 				'post_id' : id,
+				'upc_id' : id2,
 
 			},
 
 		})
 
 	}
+	function internship(id1,id2){
+		var btnaccept = "#btn-accept"+id1+id2;
+		var btnconfirm = "#btn-confirm"+id1+id2;
+		var btnreject = "#btn-reject"+id1+id2;
+		var btnmessage = "#btn-message"+id1+id2;
+		var tdconfirm = "#td-confirm"+id1+id2;
+		var tdmsg = "#td-msg"+id1+id2;
+		var modalreg = "#ModalReg"+id1+id2;
+		var tdtest = "#td-test"+id1+id2;
+		$(btnaccept).replaceWith
+		('<button id="btn-inprogress" class="btn btn-info disabled" > Inprogress</button>');  
+		$(btnaccept).html('InProcess')
+		$.ajax({
+			url: '/company/accept/',
+			type: 'GET',
+			data: { 
+				'idd': id1,
+				'upc_id': id2,
 
+			},
+			success: function(data) {
+				$(btnaccept).html("Inprogrss")
+				$(tdconfirm ).append('<button id="btn-confirm'+id1+id2+'" class="btn btn-info " onclick="buttonConfirm('+id1+','+id2+')">Confirm</button>');
+				$(tdmsg).append('<button id=btn-message'+ id1+id2+' class="btn btn-info" data-toggle="modal" data-target=#ModalReg'+id1+id2+'> Message </button>');
+				$(tdtest).append('<button id="btn-test{{k.id}}{{i.id}}" class="btn btn-info " onclick="buttontest({{k.id}},{{i.id}})">Test</button>');
+			}
 
+		});
+
+	}
+
+	function buttonReject(id1,id2){
+		var tr = "#trr"+id1+id2;
+		var y = "#rjct"+id1+id2;
+		$.ajax({
+			url:'/company/reject/',
+			type:'GET',
+			data: {
+				'rejectMsg' : $(y).val(),
+				'idd': id1,
+				'upc_id': id2,
+			},
+			success: function(response){
+				$(tr).replaceWith('<tr id=tr> </tr>');
+			}
+		});
+	}
+
+	function buttonConfirm(id1,id2){
+		var btnconfirm = "#btn-confirm"+id1+id2;
+		$.ajax({
+			url:'/company/confirm/',
+			type:'GET',
+			data: {
+				'idd': id1,
+				'upc_id': id2,
+			},
+			success: function(response){
+				console.log("OK");
+			}
+		});
+	}
+
+	
 </script>
+
+<script>
+ 	function sortbydate(){
+		$.ajax({
+			url:'/company/applications/',
+			type:'GET',
+			data: {
+				'ddid': 1,
+				
+			},
+			success: function(response){
+				$('.maincontainer').replaceWith(response);
+				$('.navbar')[1].remove();
+			}
+		});
+	}
+</script>
+
+</div>
 {% endblock %}
 
 
