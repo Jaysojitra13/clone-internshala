@@ -74,18 +74,31 @@ class PostDetailsForm(forms.ModelForm):
 				
 			)
 			super(PersonalDetailsForm, self).__init__(*args, **kwargs)
-class CompanySignUpForm(UserCreationForm):
-	class Meta(UserCreationForm.Meta):
-		model = User
 
-	def save(self):
-		user = super().save(commit=False)
+class QuestionForm(forms.ModelForm):
+	text = forms.CharField(label="Question")
+	class Meta:
+		model = Questions
+		fields = ['text']
 		
-		user.is_copmany = True
-		user.save()
-		internprofile = InternProfile.objects.create(user=user)
-		#internprofile.interests.add(*self.cleaned_data.get('interests'))
-		return user	
+class AnswerForm(forms.ModelForm):
+	text = forms.CharField(label="Answer")
+	class Meta:
+		model = Answers
+		fields = ['text']
+
+# class CompanySignUpForm(UserCreationForm):
+# 	class Meta(UserCreationForm.Meta):
+# 		model = User
+
+# 	def save(self):
+# 		user = super().save(commit=False)
+		
+# 		user.is_copmany = True
+# 		user.save()
+# 		internprofile = InternProfile.objects.create(user=user)
+# 		#internprofile.interests.add(*self.cleaned_data.get('interests'))
+# 		return user	
  
 
  	

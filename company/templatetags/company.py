@@ -34,3 +34,7 @@ def upc_detailss(value):
 	q4 = UserPostConnection.objects.get(id = value)
 	return q4.status
 
+@register.filter(name="post_nameee")
+def post_name(value):
+	postDetail = PostDetails.objects.filter(company_id = value)
+	return postDetail

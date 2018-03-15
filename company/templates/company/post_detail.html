@@ -1,6 +1,7 @@
+{% extends 'company/index.html'%}
 {% load crispy_forms_tags %}
 {% load static%}
-<!DOCTYPE>
+<!-- <!DOCTYPE>
 <html>
 <html>
 <head>
@@ -9,8 +10,9 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body>
-
+<body> -->
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'company/newpost.css' %}" />
 <h2 style="text-align: center;">Create New Post</h2>
 <div class="container center_div">
 
@@ -23,5 +25,6 @@
 </form>
 <br><br>
 </div>
-</body>
-</html> 
+{% endblock %}
+<!-- </body>
+</html>  -->

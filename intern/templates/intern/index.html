@@ -57,11 +57,10 @@
         
 
         <span id="badge{{j.id}}" class="badge" style="position: relative; bottom:10px; left:-10px;">{% if j.id|messages_count > 0 %}{{j.id|messages_count}}{%endif%}</span>
-
-        
-        
-        
       </td>
+      {% if i.status == "Accepted" or i.status == "InProcess" or i.status == "Confirmed"%}
+      <td> <a href="#"><button class="btn btn-info" type="button">Test</button></a></td>
+      {%  endif %}
     </tr>
     {% endif %}
     <div class="modal fade" id="ModalMes{{j.id}}" role="dialog">

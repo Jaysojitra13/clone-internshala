@@ -180,7 +180,7 @@ class HomeView(TemplateView):
 		if PersonalDetails.objects.filter(internprofile_id = self.request.user.id).exists():
 			context['PD'] = PersonalDetails.objects.get(internprofile_id = self.request.user.id).pk
 	
-		upc= UserPostConnection.objects.filter(internprofile_id = IP.user_id)
+		upc= UserPostConnection.objects.filter(internprofile_id = IP.user_id).order_by('-id')
 		context['upc'] = upc
 		paginator = Paginator(upc, 5)
 		context['upc'] = paginator.get_page(page)
@@ -546,14 +546,7 @@ class InternPostConnection(SingleObjectMixin, TemplateView):
 		else:
 
 			return HttpResponseRedirect('/accounts/login/')
-		
-
-# class InternshipDataView(TemplateView):
-# 	template_name = 'intern/internship_data.html'
-
-# 	def get(self, request):
-# 		print('h')
-# 		return HttpResponseRedirect('/intern/internship/')
+	
 
 def FilterView(request):
 	if request.method == 'GET':
@@ -567,7 +560,5 @@ def ReadMessages(request,id):
 	
 	for upc in upc_details:
 		Messages.objects.filter(postdetails_id=upc.postdetails_id).update(is_read="True")
-
-
 
 	return HttpResponse(status = 200)

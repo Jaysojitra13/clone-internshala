@@ -12,10 +12,10 @@
 
 	<!-- <h2>NO post</h2> -->
 {% block existingpost %}
-{% if post_list %}
+{% if post %}
 <div class="container">
 <h1> List of Existing posts</h1>	
-{{post}}
+
  <table class="table">
  <thead>
  	<tr>
@@ -29,7 +29,7 @@
  		<th> Type of Internship </th>
  		<th> Status</th>
  	</tr>
- 	{% for i in post_list%}
+ 	{% for i in post%}
 
  	<tr>
  		<td> {{ i.domain }} </td>

@@ -14,6 +14,7 @@ from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.urls import reverse_lazy
 from django.core.paginator import Paginator
+from django.forms.formsets import formset_factory
 import datetime
 # Create your views here.
 
@@ -24,9 +25,9 @@ class ContactDetailsView(CreateView):
 	success_url = reverse_lazy('company:index')
 	def form_valid(self, form):
 		print('CD')
-		CP = CompanyProfile.objects.get(user = self.request.user)
+		company_profile = CompanyProfile.objects.get(user = self.request.user)
 		PF = form.save(commit=False)
-		PF.company = CP
+		PF.company = company_profile
 		PF.save()
 		return super(ContactDetailsView, self).form_valid(form)
 
@@ -37,9 +38,10 @@ class PostDetailsView(CreateView):
 	success_url = reverse_lazy('company:all-post')
 	def form_valid(self, form):
 		print('CPD')
-		CP = CompanyProfile.objects.get(user = self.request.user)
+		company_profile = CompanyProfile.objects.get(user = self.request.user)
 		PF = form.save(commit=False)
-		PF.company = CP
+		PF.company = company_profile
+		PF.save()
 		return super(PostDetailsView, self).form_valid(form)
 
 
@@ -49,41 +51,34 @@ class Index(TemplateView):
 
 	
 
-class ExistingPost(ListView):
-	template_name = 'company/existingpost.html'
-	context_object_name = 'post_list'
 
-	def get_queryset(self):
-		CP = CompanyProfile.objects.get(user = self.request.user)
-		#PD = PostDetails.objects.filter(company_id = CP.user_id)
-		return PostDetails.objects.filter(company_id = CP.user_id, status="live")
-
-
-	# def get_context_data(self, **kwargs):
-	# 	CP = CompanyProfile.objects.get(user = self.request.user)
-	# 	PD = PostDetails.objects.filter(company_id = CP.user_id)
-
-	# 	context['company'] = CompanyProfile.objects.get(user_id = CP.user_id)
-	# 	context['post'] = PostDetails.objects.get(company_id = CP.user_id)
-	# 	return context
 
 class ApplicationView(TemplateView):
 	template_name = 'company/application.html'
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		applied_date = self.request.GET.get('ddid')
-		print(applied_date)
+		applied_datedesc = self.request.GET.get('token_datedesc')
+		applied_dateasc = self.request.GET.get('token2_dateasc')
+		name_desc = self.request.GET.get('token_namedesc')
+		name_asc = self.request.GET.get('token2_nameasc')
 		page = self.request.GET.get('page')
 		domain = self.request.GET.get('domain')
 		date = self.request.GET.get('date')
 		post = PostDetails.objects.filter(domain=domain)
 		#	import code; code.interact(local=dict(globals(), **locals()))	
-		CP = CompanyProfile.objects.get(user = self.request.user)
-		if applied_date == '1':
-			applicants = UserPostConnection.objects.filter(company_id = CP.user_id).order_by(	'-applied_date')	
+		company_profile = CompanyProfile.objects.get(user = self.request.user)
+
+		if applied_dateasc == '2':
+			applicants = UserPostConnection.objects.filter(company_id = company_profile.user_id).order_by('applied_date')
+		elif applied_datedesc == '1':
+			applicants = UserPostConnection.objects.filter(company_id = company_profile.user_id).order_by('-applied_date')
+		elif self.request.GET.get('token_namedesc') == "1":
+			applicants = UserPostConnection.objects.filter(company_id = company_profile.user_id).order_by('-internprofile__personal_details__name')
+		elif self.request.GET.get('token2_nameasc') == "2":
+			applicants = UserPostConnection.objects.filter(company_id = company_profile.user_id).order_by('internprofile__personal_details__name')
 		else:
-			applicants = UserPostConnection.objects.filter(company_id = CP.user_id).order_by('-id')
+			applicants = UserPostConnection.objects.filter(company_id = company_profile.user_id).order_by('id')
 
 		tmp = ['domain','date']
 
@@ -107,8 +102,7 @@ class ApplicationView(TemplateView):
 						del self.request.session['date']
 					
 			
-		# context['MEDIA_URL'] =  settings.MEDIA_URL
-		# context['MEDIA_ROOT'] =  settings.MEDIA_ROOT
+	
 		context['applicants'] = applicants
 		paginator = Paginator(applicants, 50)
 		context['applicants'] = paginator.get_page(page)
@@ -197,30 +191,52 @@ class ConfirmInternView(TemplateView):
 		return context
 
 class PostView(TemplateView):
-	template_name = 'company/post.html'
+	template_name = 'company/existingpost.html'
 
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data()
+		context['post_listt']  = PostDetails.objects.filter(company_id = self.request.user.id)
+		return context
 
+class ExistingPost(TemplateView):
+	template_name = 'company/existingpost.html'
 
-class AllPostView(ListView):
+	
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		CP = CompanyProfile.objects.get(user = self.request.user)
+		PD = PostDetails.objects.filter(company_id = CP.user_id)
+
+		context['company'] = CompanyProfile.objects.filter(user_id = CP.user_id)
+		context['post'] = PostDetails.objects.filter(company_id = CP.user_id, status="live")
+		return context
+
+class AllPostView(TemplateView):
 	template_name = 'company/allpost.html'
-	context_object_name = 'post_list'
 
-	def get_queryset(self):
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
 		CP = CompanyProfile.objects.get(user = self.request.user)
-		print('ALLpost views')
-		#PD = PostDetails.objects.filter(company_id = CP.user_id)
-		return PostDetails.objects.filter(company_id = CP.user_id)
+		PD = PostDetails.objects.filter(company_id = CP.user_id)
+
+		context['company'] = CompanyProfile.objects.filter(user_id = CP.user_id)
+		context['post'] = PostDetails.objects.filter(company_id = CP.user_id)
+		return context
 
 
-class PastPostView(ListView):
+class PastPostView(TemplateView):
 	template_name = 'company/pastpost.html'
-	context_object_name = 'post_list'
 
-	def get_queryset(self):
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
 		CP = CompanyProfile.objects.get(user = self.request.user)
-		print('ALLpost views')
-		#PD = PostDetails.objects.filter(company_id = CP.user_id)
-		return PostDetails.objects.filter(company_id = CP.user_id, status="end")
+		PD = PostDetails.objects.filter(company_id = CP.user_id)
+
+		context['company'] = CompanyProfile.objects.filter(user_id = CP.user_id)
+		context['post'] = PostDetails.objects.filter(company_id = CP.user_id,status="end")
+		return context	
 
 class ListofInternView(TemplateView):
 	template_name = 'company/listintern.html'
@@ -234,3 +250,27 @@ class RejectInternView(TemplateView):
 		company_id = kwargs['pk']
 		context['upc'] = UserPostConnection.objects.filter(company_id= kwargs['pk'],status="Rejected") 
 		return context
+
+def AddQuestionView(request):
+		
+
+
+	ChoiceFormSet = formset_factory(AnswerForm,validate_min=True)
+	CP = CompanyProfile.objects.get(user = request.user)
+	company =  CompanyProfile.objects.filter(user_id = CP.user_id)
+	if request.method == 'POST':
+		form = QuestionForm(request.POST)
+		formset = ChoiceFormSet(request.POST)
+
+		if all([form.is_valid(),formset.is_valid()]):
+			question = form.save()
+			for inline_form in formset:
+				choice = inline_form.save(commit=False)
+				choice.questions = question
+				choice.save()
+			return render(request, 'company/test.html',{})
+	else:
+		form = QuestionForm()
+		formset = ChoiceFormSet()
+
+	return render(request,'company/test.html',{ 'form': form, 'formset' : formset,'company': company })

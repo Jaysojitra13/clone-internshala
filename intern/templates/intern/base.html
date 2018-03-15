@@ -5,11 +5,12 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="{% static 'intern/personaldetail.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'intern/academicdetail.css' %}" />
-          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'intern/projectdetail.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'intern/academicdetail.css' %}" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
 
@@ -19,25 +20,25 @@
         <li>
           <a href="{% url 'intern:index'%}">Dashboard</a>
         </li>
-       <li> 
+        <li> 
          <div class="dropdown">
-      <button class="btn  dropdown-toggle" type="button" data-toggle="dropdown" style="margin-top: 8px;border: none;background-color: #f8f8f8;color: #777;">Update Profile
-    <span class="caret"></span></button>
-    <ul class="dropdown-menu">
-      <li><a href="{%url 'intern:updatepersonal-detail' pk=PD%}">Personal Detail</a></li>
-      <li><a href="{% url 'intern:updateacademic-detail' pk=AD%}">Academic Detail</a></li>
-      <li><a href="{% url 'intern:project-detail' %}">Project Detail</a></li>
-    </ul>
-  </div>  
-  </li>
+          <button class="btn  dropdown-toggle" type="button" data-toggle="dropdown" style="margin-top: 8px;border: none;background-color: #f8f8f8;color: #777;">Update Profile
+            <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href="{%url 'intern:updatepersonal-detail' pk=PD%}">Personal Detail</a></li>
+              <li><a href="{% url 'intern:updateacademic-detail' pk=AD%}">Academic Detail</a></li>
+              <li><a href="{% url 'intern:project-detail' %}">Project Detail</a></li>
+            </ul>
+          </div>  
+        </li>
         <li><a href="{% url 'intern:internship-detail'%}">Internship</a></li>
         <li><a href="{% url 'account_logout' %}">Log Out</a></li>
       </ul>
     </div>
   </nav> 
-    {% block content %}
+  {% block content %}
 
-    {% endblock %}
+  {% endblock %}
 
-  </body>
-  </html> 
+</body>
+</html> 

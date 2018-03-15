@@ -1,6 +1,7 @@
+{% extends 'intern/base.html'%}
 {% load crispy_forms_tags %}
 {% load static%}
-<!DOCTYPE >
+<!-- <!DOCTYPE >
 <html>
 <head>
 	<link rel="stylesheet" type="text/css" href="{% static 'intern/academicdetail.css' %}" />
@@ -8,8 +9,9 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body>
-
+<body> -->
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'intern/academicdetail.css' %}" />
 <h2 style="text-align: center;">Academic Details</h2>
 <div class="container center_div" >
 <form action="" method="post" enctype="multipart/form-data">
@@ -19,5 +21,6 @@
 	<br><br>
 </form>
 </div>
-</body>
-</html>
+{% endblock %}
+<!-- </body>
+</html> -->

@@ -1,0 +1,18 @@
+{% extends 'company/post.html'%}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load company %}
+{% load static %}
+{% load intern%}
+
+{% block content %}
+<div class="main">
+<form method="post">
+{% csrf_token %}
+
+	{{ form|crispy }}<br>
+	{{ formset|crispy }}<br>
+<input type="submit" name="submit">
+</form>
+</div>
+{% endblock %}

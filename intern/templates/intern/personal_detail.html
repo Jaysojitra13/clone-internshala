@@ -1,6 +1,7 @@
+{% extends 'intern/base.html'%}
 {% load crispy_forms_tags %}
 {% load static%}
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html> 
 <head>
 <link rel="stylesheet" type="text/css" href="{% static 'intern/personaldetail.css' %}" />
@@ -9,8 +10,9 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-
-
+ -->
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'intern/personaldetail.css' %}" />
 <h2 style="text-align: center;"> Personal Details</h2>
 <div class="container center_div" >
 <form action="" method="post">
@@ -24,5 +26,6 @@
 </form>
 <a href="{% url 'intern:index'%}"><button class="btn btn-info left">skip</button></a>
 </div>
-</body>
-</html>
+{% endblock%}
+<!-- </body>
+</html> -->

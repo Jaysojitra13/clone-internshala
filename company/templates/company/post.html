@@ -2,31 +2,50 @@
 {% load company %}
 {% load static %}
 {% load intern%}
+{% load intern%}
+{% block sidenav %}
 
-{% block navbar %}
 
-<a href="{% url 'company:post-detail'%}"><button class="btn btn-primary" type="button">Create New Post</button></a>
-<li>
+
 <div class="dropdown">
-	<button class="btn btn-primary dropdown-toggle drop" type="button" data-toggle="dropdown">Question Bank
-		<span class="caret"></span></button>
-		<ul class="dropdown-menu">
-		{% for i in post_list%}
-			<li><a href="#">{{i.technology}}</a></li>
-		{% endfor %}
+	<a class="dropdown-toggle" data-toggle="dropdown">Question Bank
+		<span class="caret"></span></a>
+		<ul class="dropdown-menu" style="list-style-type: none" >
+
+			{% for i in company%}
+
+			{% for j in i.user_id|post_nameee%}
+			<li><a href="{% url 'company:test' %}">{{j.technology}}</a></li>
+			{% endfor %}
+			{% endfor %}
+
+			
+			
+			
+			
+			
 		</ul>
 	</div>
-</li>
 
+	
 	{% endblock %}
 
-	{% block content %}
 
-	<ul class="nav nav-tabs">
-		<li><a href="{% url 'company:all-post' %}">All Posts</a></li>
-		<li><a href="{% url 'company:existing-post' %}">Existing</a></li>
-		<li><a href="{% url 'company:past-post'%}">History</a></li>
-	</ul>
-	{% block existingpost %}
-	{%  endblock %}
-	{% endblock%}
+
+	{% block content %}
+	<div class="main">
+		<ul class="nav nav-tabs">
+			<li id="id1" onclick="color()"><a href="{% url 'company:all-post' %}">All Posts</a></li>
+			<li><a href="{% url 'company:existing-post' %}">Existing</a></li>
+			<li><a href="{% url 'company:past-post'%}">History</a></li>
+			<li style="float: right;background-color: #f1f1f1;"><a href="{% url 'company:post-detail'%}">Create New Post</a>
+			</li>
+		</ul>
+	</div>
+	
+	<div class="main"> 
+		{% block existingpost %}
+		{%  endblock %}
+	</div>
+
+	{% endblock%}	

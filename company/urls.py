@@ -21,6 +21,8 @@ urlpatterns = [
 	url(r'^confirmintern/(?P<pk>\d+)/$',views.ConfirmInternView.as_view(),name='confirm-intern'),
 	url(r'^rejectintern/(?P<pk>\d+)/$',views.RejectInternView.as_view(),name='reject-intern'),
 	url(r'^listintern/',views.ListofInternView.as_view(),name='list-intern'),
+	url(r'^test/',views.AddQuestionView,name='test'),
+
 
 	#re_path('link/(?P<type>\d+)$',views.ExistingPost.as_view(),name='existing-post'),
 ] 

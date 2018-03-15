@@ -66,3 +66,11 @@ class Messages(models.Model):
 	messages = models.TextField(max_length=500)
 	is_read = models.BooleanField(default= False)
 	message_date = models.DateField(default=datetime.datetime.now().date())
+
+class Questions(models.Model):
+	text = models.CharField(max_length=50)
+
+class Answers(models.Model):
+	questions = models.ForeignKey(Questions, on_delete=models.CASCADE)
+	text = models.CharField(max_length=20)
+	is_correct = models.BooleanField(default=True)

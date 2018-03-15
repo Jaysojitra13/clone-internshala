@@ -1,15 +1,16 @@
+{% extends 'company/index.html'%}
 {% load crispy_forms_tags %}
 {% load static %}
-<!DOCTYPE>
-<html>
+<!-- <!DOCTYPE>
+<html> 
 <head>
 	<link rel="stylesheet" type="text/css" href="{% static 'company/contactdetail.css' %}" />
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body>
-
+<body> -->
+{% block content %}
 <h2 style="text-align: center;"> Contact Details</h2>
 <div class="container center_div">
 <form action="" method="post">
@@ -18,5 +19,6 @@
 <input class="btn btn-primary right" type='submit' value='submit'>
 </form>
 </div>
-</body>
-</html>
+{% endblock %}
+<!-- </body>
+</html> -->
