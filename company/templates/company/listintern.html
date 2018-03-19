@@ -8,9 +8,10 @@
 {% block content %}
 <div class="main">
 <ul class="nav nav-tabs">
-    <li><a href="{% url 'company:confirm-intern' pk=request.user.id%}">Confirmed Interns</a></li>
-    <li><a href="{% url 'company:reject-intern' pk=request.user.id%}">Rejected Interns</a></li>
+    <li id="confirm" class="active"><a href="{% url 'company:confirm-intern' pk=request.user.id%}">Confirmed Interns</a></li>
+    <li id="reject"><a href="{% url 'company:reject-intern' pk=request.user.id%}">Rejected Interns</a></li>
   </ul>
+  
  </div>
  <div class="main">
   {% block intern %}

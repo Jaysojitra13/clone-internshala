@@ -1,9 +1,10 @@
-#import code; code.interact(local=dict(globals(), **locals()))
+# import code; code.interact(local=dict(globals(), **locals()))
 from django.views import View
-from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, redirect
+from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, redirect, render_to_response
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import *
+from django.template.loader import render_to_string
 from intern.views import *
 from intern.models import *
 from company.forms import *
@@ -16,7 +17,12 @@ from django.urls import reverse_lazy
 from django.core.paginator import Paginator
 from django.forms.formsets import formset_factory
 import datetime
+from django.http import JsonResponse
+from django.forms.models import model_to_dict
+from django.core import serializers
+
 # Create your views here.
+
 
 class ContactDetailsView(CreateView):
 	model = ContactDetails
@@ -64,7 +70,9 @@ class ApplicationView(TemplateView):
 		name_asc = self.request.GET.get('token2_nameasc')
 		page = self.request.GET.get('page')
 		domain = self.request.GET.get('domain')
+		print('domain',self.request.GET.get('domain'))
 		date = self.request.GET.get('date')
+		print('date',self.request.GET.get('date'))
 		post = PostDetails.objects.filter(domain=domain)
 		#	import code; code.interact(local=dict(globals(), **locals()))	
 		company_profile = CompanyProfile.objects.get(user = self.request.user)
@@ -80,27 +88,36 @@ class ApplicationView(TemplateView):
 		else:
 			applicants = UserPostConnection.objects.filter(company_id = company_profile.user_id).order_by('id')
 
-		tmp = ['domain','date']
+		# tmp = ['domain','date']
 
-		for i in tmp:
-			if i == 'domain':
-				if self.request.GET.get('domain') != '' and self.request.GET.get('domain') != None:
-					self.request.session['domain'] = self.request.GET.get('domain')
-					for j in post:
+		# for i in tmp:
+		# 	if i == 'domain':
+		# 		if self.request.GET.get('domain') != '' and self.request.GET.get('domain') != None:
+		# 			self.request.session['domain'] = self.request.GET.get('domain')
+		# 			for j in post:
+		# 				applicants = applicants.filter(postdetails_id = j.id).order_by('-applied_date')
 						
-						applicants = applicants.filter(postdetails_id = j.id).order_by('-applied_date')
-						
-				else:
-					if 'domain' in self.request.session:
-						del self.request.session['domain']
+		# 		else:
+		# 			if 'domain' in self.request.session:
+		# 				del self.request.session['domain']
 
-			if i == 'date':
-				if self.request.GET.get('date') != '' and self.request.GET.get('date') != None:
-					applicants = applicants.filter(applied_date = self.request.GET.get('date'))
-				else:
-					if 'date' in self.request.session:
-						del self.request.session['date']
+		# 	if i == 'date':
+		# 		if self.request.GET.get('date') != '' and self.request.GET.get('date') != None:
+		# 			self.request.session['date'] = self.request.GET.get('date')
+		# 			applicants = applicants.filter(applied_date = self.request.GET.get('date'))
+		# 		else:
+		# 			if 'date' in self.request.session:
+		# 				del self.request.session['date']
 					
+		if domain == '' and date != '':	
+			applicants = applicants.filter(applied_date = self.request.GET.get('date'))
+		elif domain != '' and date == '':
+			for j in post:
+				applicants = applicants.filter(postdetails_id = j.id).order_by('-applied_date')
+		elif domain != '' and date != '':
+			for j in post:
+				applicants = applicants.filter(applied_date = self.request.GET.get('date'),postdetails_id = j.id).order_by('-applied_date')
+		
 			
 	
 		context['applicants'] = applicants
@@ -121,7 +138,9 @@ class MessageView(TemplateView):
 		obj.status = "Accepted"
 		obj.statusupdate_date = datetime.datetime.now().date()
 		obj.save()
-		return HttpResponseRedirect('/company/applications')
+
+		response = JsonResponse({'post_id':request.GET.get('idd'), 'upc_id': request.GET.get('upc_id')}, safe = False)
+		return response
 	
 class SaveMsg(TemplateView):
 
@@ -251,26 +270,79 @@ class RejectInternView(TemplateView):
 		context['upc'] = UserPostConnection.objects.filter(company_id= kwargs['pk'],status="Rejected") 
 		return context
 
-def AddQuestionView(request):
-		
+class GenerateQuestionView(TemplateView):
+	template_name = 'company/test.html'
 
+	def get_context_data(self, 	**kwargs):
+		context = super().get_context_data(**kwargs)
+		context['technology'] = Technology.objects.all()
+		return context 
 
-	ChoiceFormSet = formset_factory(AnswerForm,validate_min=True)
-	CP = CompanyProfile.objects.get(user = request.user)
-	company =  CompanyProfile.objects.filter(user_id = CP.user_id)
-	if request.method == 'POST':
-		form = QuestionForm(request.POST)
-		formset = ChoiceFormSet(request.POST)
+	def post(self, request, *args, **kwargs):
+		return HttpResponseRedirect('/company/addquestion/')
 
-		if all([form.is_valid(),formset.is_valid()]):
-			question = form.save()
-			for inline_form in formset:
-				choice = inline_form.save(commit=False)
-				choice.questions = question
-				choice.save()
-			return render(request, 'company/test.html',{})
-	else:
-		form = QuestionForm()
-		formset = ChoiceFormSet()
+class ListofQuestionView(TemplateView):
+	template_name = 'company/addquestion.html'
 
-	return render(request,'company/test.html',{ 'form': form, 'formset' : formset,'company': company })
+	def get_context_data(self, 	**kwargs):
+		context = super().get_context_data(**kwargs)
+		context['technology'] = Technology.objects.all()
+		tech = Technology.objects.get(technology_name = kwargs['type'])
+		context['type'] = kwargs['type']
+		context['questions'] = Question.objects.filter(technology_id = tech.pk)
+
+		return context
+
+	def post(self,request, *args, **kwargs):
+		try:
+			question = request.POST.get('question')
+			answer = request.POST.get('answer')
+			print("before IF")
+			if request.POST.get('question') != "" and request.POST.get('answer') != "":
+
+				tech = Technology.objects.get(technology_name = kwargs['type'])
+				print("TEchnology is",tech)
+				obj1 = Answers_HR()
+				obj = Question()
+				obj.text = question
+				obj.company_id = request.user.id
+				obj.technology_id = tech.pk
+				obj.save()
+
+				
+				obj1.question_id = obj.pk
+				obj1.text = answer
+				obj1.save()
+
+				response = JsonResponse({'foo': obj},safe =False)
+				
+				return response
+		except Exception as e:
+			print(e)
+
+class GenerateTestView(TemplateView):
+	template_name = "company/generateTest.html"
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		idd = kwargs['id']
+		# print(idd)
+		upc = UserPostConnection.objects.get(id=kwargs['id']).postdetails_id
+		post = PostDetails.objects.get(id = upc).technology
+		tech = Technology.objects.get(technology_name = post)
+		context['questions'] = Question.objects.filter(company_id = self.request.user.id, technology_id= tech)
+		print(post)
+		context['upc_id'] = kwargs['id']
+		# print(upc)
+		return context
+
+class CreateTestView(TemplateView):
+	template_name = "company/createtest.html"
+
+	def get(self, request, *args, **kwargs):
+		id = kwargs['id']
+		print(id)
+		question = Question.objects.filter(company_id = kwargs['id'])
+		test = Test()
+
+		return HttpResponseRedirect('/company/applications/')

@@ -34,8 +34,6 @@
   </div>
 </nav>
 
-  {% block content%}
-  {% endblock %}
 
 <div class="sidenav">
  <a href="{% url 'company:applications'%}">
@@ -43,10 +41,16 @@
 
 </a>
 <a href="{% url 'company:all-post'%}">Requirements   </a>
-{% block sidenav %}
-{% endblock %}
+<a href="{% url 'company:test' %}">Question Bank
 
 <a href="{% url 'company:confirm-intern' pk=request.user.id%}">Interns</a>
-</div> 
+</div>
+
+
+
+  {% block content%}
+  {% endblock %}
+
+
 </body>
 </html>

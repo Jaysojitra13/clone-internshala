@@ -1,0 +1,71 @@
+{% extends 'company/index.html'%}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load company %}
+{% load static %}
+{% load intern%}
+
+
+{% block content %}
+<div class="main">
+	<input id="checkAll" type="checkbox" name="checkbox">&nbsp; Select all questions	<br><br>
+	<div class="checkboxes">
+		{% for i in questions%}
+		{% if questions%}
+		<input class="checkBoxClass" type="checkbox" name="checkboxes" value="{{i.text}}">&nbsp; {{i.text}}<br>
+		{% else%}
+		<h3>No questions available</h3>
+		{% endif %}
+		{% endfor %}	
+	</div>
+	<button id="preview" class="btn btn-info" type="button" style="float: right;" data-toggle="modal" data-target="#myModal">Preview</button>
+	
+	<div id="myModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Selected Questions</h4>
+				</div>
+				<div id="modalBody" class="modal-body">
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Close</button>
+					<a href="{% url 'company:create-test' id=request.user.id%}"><button type="button" class="btn btn-default"  style="float: right;">Generate Test</button></a>
+
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div id="demo">
+		
+	</div>
+
+
+</div>
+<script>
+	$("#checkAll").click(function () {
+		$(".checkBoxClass").prop('checked', $(this).prop('checked'));
+		});
+	
+
+	$(document).ready(function() {
+        $("#preview").click(function(){
+            var favorite = [];
+            $.each($("input[name='checkboxes']:checked"), function(){            
+                favorite.push($(this).val());
+            });
+		document.getElementById("modalBody").innerHTML = favorite.join("<br>");
+      	var x = document.getElementById("demo").innerHTML = window.location.pathname;
+      	debugger;
+        console.log(x);
+        });
+    });
+	
+</script>
+
+
+{% endblock %}

@@ -21,7 +21,10 @@ urlpatterns = [
 	url(r'^confirmintern/(?P<pk>\d+)/$',views.ConfirmInternView.as_view(),name='confirm-intern'),
 	url(r'^rejectintern/(?P<pk>\d+)/$',views.RejectInternView.as_view(),name='reject-intern'),
 	url(r'^listintern/',views.ListofInternView.as_view(),name='list-intern'),
-	url(r'^test/',views.AddQuestionView,name='test'),
+	url(r'^test/',views.GenerateQuestionView.as_view(),name='test'),
+	url(r'^listofquestion/(?P<type>\w+)/$',views.ListofQuestionView.as_view(),name='listofquestion'),
+	url(r'^generatetest/(?P<id>\d+)/$',views.GenerateTestView.as_view(),name='generate-test'),
+	url(r'^createtest/(?P<id>\d+)/$',views.CreateTestView.as_view(),name='create-test'),
 
 
 	#re_path('link/(?P<type>\d+)$',views.ExistingPost.as_view(),name='existing-post'),

@@ -67,10 +67,32 @@ class Messages(models.Model):
 	is_read = models.BooleanField(default= False)
 	message_date = models.DateField(default=datetime.datetime.now().date())
 
-class Questions(models.Model):
+class Technology(models.Model):
+	technology_name = models.CharField(max_length=10)
+
+class Question(models.Model):
+	technology = models.ForeignKey(Technology, on_delete=models.CASCADE)
+	company = models.ForeignKey(CompanyProfile, on_delete=models.CASCADE)		
 	text = models.CharField(max_length=50)
 
-class Answers(models.Model):
-	questions = models.ForeignKey(Questions, on_delete=models.CASCADE)
+class Answers_HR(models.Model):
+	question = models.ForeignKey(Question, on_delete=models.CASCADE)
 	text = models.CharField(max_length=20)
+
+class Answers_intern(models.Model):
+	question = models.ForeignKey(Question, on_delete=models.CASCADE)
+	text = models.CharField(max_length=20)
+	upc = models.ForeignKey(UserPostConnection,on_delete=models.CASCADE)
 	is_correct = models.BooleanField(default=True)
+
+class Test(models.Model):
+	technology = models.OneToOneField(Technology, on_delete=models.CASCADE)
+	creation_date = models.DateField(default=datetime.datetime.now().date())
+
+class QuestionTestMap(models.Model):
+	test = models.ForeignKey(Test, on_delete=models.CASCADE)
+	question = models.ForeignKey(Question, on_delete=models.CASCADE)
+
+class TestApplicationMapping(models.Model):
+	upc = models.ForeignKey(UserPostConnection, on_delete=models.CASCADE)
+	test = models.ForeignKey(Test, on_delete=models.CASCADE)

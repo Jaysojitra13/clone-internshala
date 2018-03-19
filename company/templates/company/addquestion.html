@@ -1,0 +1,110 @@
+{% extends 'company/index.html'%}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load company %}
+{% load static %}
+{% load intern%}
+
+{% block content %}
+
+<div class="main">
+	<ul class="nav nav-tabs">
+		{% for i in technology %}
+		<li><a href="{% url 'company:listofquestion' type=i.technology_name %} ">{{i.technology_name}}</a></li>
+		{% endfor %}
+	</li>
+</ul>
+</div>
+
+
+
+{% block questions %}
+
+<div class="main">
+	<button id="add_question" class="btn btn-info" style="float: right;" data-toggle="modal" data-target="#myModal">Add question</button>
+	<h2>{{type}}</h2>
+
+
+	{% if questions%}
+	{% for i in questions %}
+	<input type="checkbox" name="checkbox">&nbsp; {{i.text}}<br>
+	{% endfor %}	
+	{% else%}
+	<h3>No questions available</h3>
+	{% endif %}
+	
+	
+
+	<div class="modal fade" id="myModal" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Add Question</h4>
+				</div>
+				<div class="modal-body">
+					<form id="formQuesion" class="form-inline" enctype="multipart/form-data"  method="post">
+						{% csrf_token %}
+						<label>Question</label>
+						<input id="question" class="form-control" type="text" name="question">
+						<label> Answer</label>
+						<input id="answer" class="form-control" type="text" name="answer">
+
+
+						<div class="modal-footer">
+							<button id="save" type="button" class="btn btn-info"  data-dismiss="modal" onclick="Save('{{type}}')" style="float: left;">Save</button>
+							<button id="save-cont" type="button" class="btn btn-info" onclick="saveAndContinue('{{type}}')">Save and continue </button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<script>
+		function saveAndContinue(type){
+			// $(document).on('click', '#save-cont', function(e){
+			// 	e.preventDefault();
+
+				console.log("sdaghfsljhkj"+type);
+				$.ajax({
+					type : 'POST',
+					url : '/company/listofquestion/'+type+'/',
+					data: $('#formQuesion').serialize(),
+					success:function(response){
+						$('#question').val('')
+						$('#answer').val('') 
+						
+						console.log(response);
+						console.log("ok");
+					},
+					error: function(response){
+						alert("ERROR");
+						console.log("ERROR");
+					}
+
+
+				});
+			// });
+		}
+
+		function Save(type){
+			$(document).on('click','#save',function(){
+				// e.preventDefault();
+				debugger;
+				$.ajax({
+					type: 'POST',
+					url : '/company/listofquestion/'+type+'/',
+					data : $('#formQuesion').serialize(),					
+					success:function(response){
+						
+						console.log(response);
+					}
+
+				});
+			});
+		}
+	</script>
+</div>
+{% endblock %}
+{% endblock %}

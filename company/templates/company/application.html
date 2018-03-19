@@ -21,250 +21,215 @@
 <body> -->
 	<div class='maincontainer main'>
 		<form id="HRFilter" method="get" class="form-inline	">
-		<div class="form-group">
-					<label>Technology</label>
-					<select class="form-control" id="domain" name="domain"  >
-						{% if request.session.domain %}
-						<option value="{{request.session.domain}}">{{request.session.domain}}</option>
-						<option value="">NO Technology</option>
-						{% else %}
-						<option value="">Select Technology</option>
-						{% endif %}
+			<div class="form-group">
+				<label>Technology</label>
+				<select class="form-control" id="domain" name="domain"  >
+					{% if request.session.domain %}
+					<option value="{{request.session.domain}}">{{request.session.domain}}</option>
+					<option value="">NO Technology</option>
+					{% else %}
+					<option value="">Select Technology</option>
+					{% endif %}
 
 
-						{% for j in data|tech_name %}
-						<option value="{{ j.domain }}">{{j.domain}}</option>
-						{% endfor %}
-					</select>
-				</div>
-				<div class="form-group show-inputbtns">
-					<label>Date</label>
+					{% for j in data|tech_name %}
+					<option value="{{ j.domain }}">{{j.domain}}</option>
+					{% endfor %}
+				</select>
+			</div>
+			<div class="form-group show-inputbtns">
+				<label>Date</label>
+				<input class="form-control" type="date" name="date"/>
 
-					
-						<input class="form-control" type="date" name="date"/>
+			</div>
 
-					</div>
-					
-					 <button type="submit" class="btn btn-default">Submit</button>
+			<button id="sub" type="submit" class="btn btn-default">Submit</button>
 
-				</form>
+		</form>
+		<div id="wait" style="display:none;width:69px;height:89px;border:1px solid black;position:absolute;top:50%;left:50%;padding:2px;"><img src="{% static 'images/11699799.gif'%}" width="64" height="64" /><br>Loading..</div>
+		<script>
+			$('#sub').on('click',function(){
 
-		<div id="con" class="container">
-			
+				$('#HRFilter').submit(function(){
 
-				
-			<!-- <script>
-				function sortbydate(){
-					var table, rows, switching, i, x, y, shouldSwitch;
-					table = document.getElementById("tb");
-					switching = true;
-					while (switching) {
-						rows = table.getElementsByTagName("TR");
-						for (i = 1; i < (rows.length - 1); i++) {
-							shouldSwitch = false;
-							x = rows[i].getElementsByTagName("TD")[0];
-							y = rows[i + 1].getElementsByTagName("TD")[0];
-							if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-								shouldSwitch= true;
-								break;
-							}
-						}
-						if (shouldSwitch) {
-							rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-							switching = true;
-						}
-					}
-
-				}
-			</script> -->
-
-		
-
-
-
-		<div id="abc" class="col-md-10">
-			<script>
-				$('#sub').on('click',function(){
-
-					$('#HRFilter').submit(function(){
-
-						$.ajax({
-							url:'/company/applications/',
-							type: 'GET',
-							data: $('#HRFilter').serialize(),
-							success:function(response){
-								console.log("OK")
-							},
-						});
-					});
-					$(document).ajaxStart(function(){
-						$("#wait").css("display", "block");
-					});
-					$(document).ajaxComplete(function(){
-						$("#wait").css("display", "none");
+					$.ajax({
+						url:'/company/applications/',
+						type: 'GET',
+						data: $('#HRFilter').serialize(),
+						success:function(response){
+							console.log("OK")
+						},
 					});
 				});
-			</script>
-			<table id="tb" class="table table-cndensed">
-				<thead>
-					<tr>
-						<td> Applied Date
-							<span id="date_sortsdesc">
-								<a id="date" onclick="sortbydatedesc()">
+				$(document).ajaxStart(function(){
+					$("#wait").css("display", "block");
+				});
+				$(document).ajaxComplete(function(){
+					$("#wait").css("display", "none");
+				});
+			});
+		</script>
+		<div id="con" class="container">
+			<div id="abc" class="col-md-10">
+				<table id="tb" class="table table-cndensed">
+					<thead>
+						<tr>
+							<td> Applied Date
+								<span id="date_sortsdesc">
+									<a id="date" onclick="sortbydatedesc()">
 
-									<span class="glyphicon glyphicon-triangle-bottom" style="font-size: 12px;"></span> 
-								</a>
-							</span>
-							<span id="date_sortasc">
-								<a id="date" onclick="sortbydateasc()">
+										<span class="glyphicon glyphicon-triangle-bottom" style="font-size: 12px;"></span> 
+									</a>
+								</span>
+								<span id="date_sortasc">
+									<a id="date" onclick="sortbydateasc()">
 
-									<span id="name_icon" class="glyphicon glyphicon-triangle-top" style="font-size: 12px;"></span> 
-								</a>
+										<span id="name_icon" class="glyphicon glyphicon-triangle-top" style="font-size: 12px;"></span> 
+									</a>
+								</span>
+							</td>
+							<td id="name"> Name
+								<span id="name_sortsdesc">
+									<a id="name" onclick="sortbynamedesc()">
+										<span class="glyphicon glyphicon-triangle-bottom" style="font-size: 12px;"></span>
+									</a></span>
+									<span id="name_sortasc">
+										<a id="name" onclick="sortbynameasc()">
+											<span class="glyphicon glyphicon-triangle-top" style="font-size: 12px;"></span>
+										</a>
+									</span>
+								</td>
+								<td> Applied for</td>
+							</tr>
+						</thead>
+						{% for i in applicants %}
+
+
+						{% for k in i.postdetails_id|post_name%}
+						{% if i.id|upc_detailss == "Rejected"%}
+
+						{% else %}
+						<tr id="trr{{k.id}}{{i.id}}">
+							<td> {{i.applied_date}}</td>
+							{% for j in i.internprofile_id|intern_name %}
+							<td><a href="{% url 'company:view-details' id=i.internprofile_id%}">{{ j.name }}</a></td> 
+
+							<td ><a href="{% url 'company:view-details' id=i.internprofile_id%}">{{ k.domain }}</a></td>
+
+							{% endfor %}
+							{% if i.id|upc_detailss == "Accepted" or i.id|upc_detailss == "InProcess" or i.id|upc_detailss == "Confirmed" %}
+
+							<td id="td{{k.id}}{{i.id}}"> 
+
+								<button id="btn-inprogress{{k.id}}" class="btn btn-info disabled" > Inprogress</button>
+							</td>
+							<td id="td-msg{{k.id}}{{i.id}}">
+
+								<button id="btn-message{{k.id}}{{i.id}}" class="btn btn-info" data-toggle="modal" data-target="#ModalReg{{k.id}}{{i.id}}" style="visibility: visible;"> Message </button>
+							</td>
+
+							<td>
+								<button id="btn-reject{{k.id}}{{i.id}}" class="btn btn-info" data-toggle="modal" data-target="#ModalRegReject{{k.id}}{{i.id}}">Reject</button>
+							</td>
+							<td id="td-confirm{{k.id}}{{i.id}}">
+								<button id="btn-confirm{{k.id}}{{i.id}}" class="btn btn-info " onclick="buttonConfirm({{k.id}},{{i.id}})" style="visibility: visible;">Confirm</button>
+							</td>
+							<td id="td-test{{k.id}}{{i.id}}">
+								<a href="{% url 'company:generate-test' id=i.id%}"><button id="btn-test{{k.id}}{{i.id}}" class="btn btn-info " onclick="buttontest({{k.id}},{{i.id}})" style="visibility: visible;">Generate Test</button></a>
+							</td>
+
+
+							{% else %}
+							<td >
+								<button id="btn-accept{{k.id}}{{i.id}}" class="btn btn-info" onclick="internship({{k.id}},{{i.id}})"> Accept</button>
+							</td>
+							<td id="td-msg{{k.id}}{{i.id}}">
+									<button id="btn-message{{k.id}}{{i.id}}" class="btn btn-info" data-toggle="modal" data-target="#ModalReg{{k.id}}{{i.id}}" style="visibility: hidden;"> Message </button>
+							</td>
+							<td >
+								<button id="btn-reject{{k.id}}{{i.id}}" class="btn btn-info" data-toggle="modal" data-target="#ModalRegReject{{k.id}}{{i.id}}">Reject</button>
+							</td>
+							<td id="td-confirm{{k.id}}{{i.id}}">
+									<button id="btn-confirm{{k.id}}{{i.id}}" class="btn btn-info " onclick="buttonConfirm({{k.id}},{{i.id}}) " style="visibility: hidden;">Confirm</button>
+							</td>
+							<td id="td-test{{k.id}}{{i.id}}">
+									<a href="{% url 'company:generate-test' id=i.id%}"><button id="btn-test{{k.id}}{{i.id}}" class="btn btn-info " onclick="buttontest({{k.id}},{{i.id}})" style="visibility: hidden;">Generate Test</button></a>
+							</td>
+							{% endif %}
+						</tr>
+
+						<div class="modal fade" id="ModalReg{{k.id}}{{i.id}}" role="dialog">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+
+										<h4 class="modal-title">Leave a message here for further process </h4>
+									</div>
+									<div class="modal-body">
+
+										<textarea id="msg{{k.id}}{{i.id}}" name="paragraph_text" cols="50" rows="10" maxlength="255"></textarea>
+									</div>
+
+									<div class="modal-footer">
+
+										<button  id="btn1"  class="btn btn-default " data-dismiss="modal" onclick="myFunction({{k.id}},{{i.id}})">Send</button> 
+									</div>
+								</div>	
+							</div>	
+						</div>
+
+						<div class="modal fade" id="ModalRegReject{{k.id}}{{i.id}}" role="dialog">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+
+										<h4 class="modal-title">Reason to Reject candidate</h4>
+									</div>
+									<div class="modal-body">
+
+										<textarea id="rjct{{k.id}}{{i.id}}" name="paragraph_text" cols="50" rows="10" maxlength="255"></textarea>
+									</div>
+
+									<div class="modal-footer">
+
+										<button  id="btn1"  class="btn btn-default " data-dismiss="modal" onclick="buttonReject({{k.id}},{{i.id}})">Send</button> 
+									</div>
+								</div>	
+							</div>	
+						</div>
+
+
+						{% endif %}
+						{% endfor %}
+						{% endfor %}
+
+
+
+
+					</table>
+					<div class="pagination">
+						<span class="step-links">
+							{% if applicants.has_previous %}
+							<a href="?page=1">&laquo; first</a>
+							<a href="?page={{ applicants.previous_page_number }}">previous</a>
+							{% endif %}
+
+							<span class="current">
+								Page {{ applicants.number }} of {{ applicants.paginator.num_pages }}.
 							</span>
-						</td>
-						<td id="name"> Name
-						<span id="name_sortsdesc">
-						<a id="name" onclick="sortbynamedesc()">
-							<span class="glyphicon glyphicon-triangle-bottom" style="font-size: 12px;"></span>
-						</a></span>
-						<span id="name_sortasc">
-						<a id="name" onclick="sortbynameasc()">
-							<span class="glyphicon glyphicon-triangle-top" style="font-size: 12px;"></span>
-						</a>
+
+							{% if applicants.has_next %}
+							<a href="?page={{ applicants.next_page_number }}">next</a>
+							<a href="?page={{ applicants.paginator.num_pages }}">last &raquo;</a>
+							{% endif %}
 						</span>
-					</td>
-					<td> Applied for</td>
-				</tr>
-			</thead>
-			{% for i in applicants %}
-
-
-			{% for k in i.postdetails_id|post_name%}
-			{% if i.id|upc_detailss == "Rejected"%}
-
-			{% else %}
-			<tr id="trr{{k.id}}{{i.id}}">
-				<td> {{i.applied_date}}</td>
-				{% for j in i.internprofile_id|intern_name %}
-				<td><a href="{% url 'company:view-details' id=i.internprofile_id%}">{{ j.name }}</a></td> 
-
-				<td ><a href="{% url 'company:view-details' id=i.internprofile_id%}">{{ k.domain }}</a></td>
-				
-				{% endfor %}
-				{% if i.id|upc_detailss == "Accepted" or i.id|upc_detailss == "InProcess" or i.id|upc_detailss == "Confirmed" %}
-
-				<td id="td{{k.id}}{{i.id}}"> 
-
-					<button id="btn-inprogress{{k.id}}" class="btn btn-info disabled" > Inprogress</button>
-				</td>
-				<td id="td-msg{{k.id}}{{i.id}}">
-
-					<button id="btn-message{{k.id}}{{i.id}}" class="btn btn-info" data-toggle="modal" data-target="#ModalReg{{k.id}}{{i.id}}" > Message </button>
-				</td>
-
-				<td>
-					<button id="btn-reject{{k.id}}{{i.id}}" class="btn btn-info" data-toggle="modal" data-target="#ModalRegReject{{k.id}}{{i.id}}">Reject</button>
-				</td>
-				<td id="td-confirm{{k.id}}{{i.id}}">
-					<button id="btn-confirm{{k.id}}{{i.id}}" class="btn btn-info " onclick="buttonConfirm({{k.id}},{{i.id}})">Confirm</button>
-				</td>
-				<td id="td-test{{k.id}}{{i.id}}">
-					<button id="btn-test{{k.id}}{{i.id}}" class="btn btn-info " onclick="buttontest({{k.id}},{{i.id}})">Result</button>
-				</td>
-
-
-				{% else %}
-				<td >
-
-					<button id="btn-accept{{k.id}}{{i.id}}" class="btn btn-info" onclick="internship({{k.id}},{{i.id}})"> Accept</button>
-				</td>
-				<td id="td-msg{{k.id}}{{i.id}}">
-
-				</td>
-				<td >
-					<button id="btn-reject{{k.id}}{{i.id}}" class="btn btn-info" data-toggle="modal" data-target="#ModalRegReject{{k.id}}{{i.id}}">Reject</button>
-				</td>
-				<td id="td-confirm{{k.id}}{{i.id}}">
-
-				</td>
-				<td id="td-test{{k.id}}{{i.id}}">
-
-				</td>
-				{% endif %}
-			</tr>
-
-			<div class="modal fade" id="ModalReg{{k.id}}{{i.id}}" role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-
-							<h4 class="modal-title">Leave a message here for further process </h4>
-						</div>
-						<div class="modal-body">
-
-							<textarea id="msg{{k.id}}{{i.id}}" name="paragraph_text" cols="50" rows="10" maxlength="255"></textarea>
-						</div>
-
-						<div class="modal-footer">
-
-							<button  id="btn1"  class="btn btn-default " data-dismiss="modal" onclick="myFunction({{k.id}},{{i.id}})">Send</button> 
-						</div>
-					</div>	
-				</div>	
-			</div>
-
-			<div class="modal fade" id="ModalRegReject{{k.id}}{{i.id}}" role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-
-							<h4 class="modal-title">Reason to Reject candidate</h4>
-						</div>
-						<div class="modal-body">
-
-							<textarea id="rjct{{k.id}}{{i.id}}" name="paragraph_text" cols="50" rows="10" maxlength="255"></textarea>
-						</div>
-
-						<div class="modal-footer">
-
-							<button  id="btn1"  class="btn btn-default " data-dismiss="modal" onclick="buttonReject({{k.id}},{{i.id}})">Send</button> 
-						</div>
-					</div>	
-				</div>	
-			</div>
-
-
-			{% endif %}
-			{% endfor %}
-			{% endfor %}
-
-
-			<div id="wait" style="display:none;width:69px;height:89px;border:1px solid black;position:absolute;top:50%;left:50%;padding:2px;"><img src="{% static 'images/11699799.gif'%}" width="64" height="64" /><br>Loading..</div>	
-
-		</table>
-		<div class="pagination">
-			<span class="step-links">
-				{% if applicants.has_previous %}
-				<a href="?page=1">&laquo; first</a>
-				<a href="?page={{ applicants.previous_page_number }}">previous</a>
-				{% endif %}
-
-				<span class="current">
-					Page {{ applicants.number }} of {{ applicants.paginator.num_pages }}.
-				</span>
-
-				{% if applicants.has_next %}
-				<a href="?page={{ applicants.next_page_number }}">next</a>
-				<a href="?page={{ applicants.paginator.num_pages }}">last &raquo;</a>
-				{% endif %}
-			</span>
-		</div>
-	</div>
-</div>	
+					</div>
+				</div>
+			</div>	
 <!-- 
 </body>
 
@@ -297,6 +262,7 @@
 		var tdmsg = "#td-msg"+id1+id2;
 		var modalreg = "#ModalReg"+id1+id2;
 		var tdtest = "#td-test"+id1+id2;
+		var btntest = "#btn-test"+id1+id2;
 		$(btnaccept).replaceWith
 		('<button id="btn-inprogress" class="btn btn-info disabled" > Inprogress</button>');  
 		$(btnaccept).html('InProcess')
@@ -307,12 +273,21 @@
 				'idd': id1,
 				'upc_id': id2,
 
-			},
+			}, 
 			success: function(data) {
+				console.log("Got Response")	
+				console.log(data)			
+				console.log(id2)
+				$(btnconfirm).css('visibility','visible');		
+				$(btnmessage).css('visibility','visible');
+				$(btntest).css('visibility','visible');
+
+/*
 				$(btnaccept).html("Inprogrss")
 				$(tdconfirm ).append('<button id="btn-confirm'+id1+id2+'" class="btn btn-info " onclick="buttonConfirm('+id1+','+id2+')">Confirm</button>');
 				$(tdmsg).append('<button id=btn-message'+ id1+id2+' class="btn btn-info" data-toggle="modal" data-target=#ModalReg'+id1+id2+'> Message </button>');
-				$(tdtest).append('<button id="btn-test{{k.id}}{{i.id}}" class="btn btn-info " onclick="buttontest({{k.id}},{{i.id}})">Result</button>');
+				$(tdtest).append('<a href="{% url "company:generate-test" id=45 %}"><button id="btn-test'+id1+id2+'" class="btn btn-info " onclick="buttontest('+id1+','+id2+')">Generate Test</button></a>');*/
+
 			}
 
 		});
