@@ -70,9 +70,7 @@ class ApplicationView(TemplateView):
 		name_asc = self.request.GET.get('token2_nameasc')
 		page = self.request.GET.get('page')
 		domain = self.request.GET.get('domain')
-		print('domain',self.request.GET.get('domain'))
 		date = self.request.GET.get('date')
-		print('date',self.request.GET.get('date'))
 		post = PostDetails.objects.filter(domain=domain)
 		#	import code; code.interact(local=dict(globals(), **locals()))	
 		company_profile = CompanyProfile.objects.get(user = self.request.user)
@@ -290,7 +288,7 @@ class ListofQuestionView(TemplateView):
 		tech = Technology.objects.get(technology_name = kwargs['type'])
 		context['type'] = kwargs['type']
 		context['questions'] = Question.objects.filter(technology_id = tech.pk)
-
+		context['answers'] = Answers_HR.objects.all()
 		return context
 
 	def post(self,request, *args, **kwargs):
@@ -313,10 +311,10 @@ class ListofQuestionView(TemplateView):
 				obj1.question_id = obj.pk
 				obj1.text = answer
 				obj1.save()
-
-				response = JsonResponse({'foo': obj},safe =False)
+				print("obj is ---------------",obj)
+				response = JsonResponse({'obj_id': obj.id,'obj_text':obj.text,'obj_technologyid':obj.technology_id},safe =False)
 				
-				return response
+				return  response
 		except Exception as e:
 			print(e)
 
@@ -340,9 +338,9 @@ class CreateTestView(TemplateView):
 	template_name = "company/createtest.html"
 
 	def get(self, request, *args, **kwargs):
-		id = kwargs['id']
-		print(id)
-		question = Question.objects.filter(company_id = kwargs['id'])
-		test = Test()
-
+		upc_id = request.GET.get('upc_id')
+		print("upc_id",upc_id)
+		
 		return HttpResponseRedirect('/company/applications/')
+
+	# def get(self, request, *args, **kwargs):

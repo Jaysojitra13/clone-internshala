@@ -24,7 +24,7 @@ urlpatterns = [
 	url(r'^test/',views.GenerateQuestionView.as_view(),name='test'),
 	url(r'^listofquestion/(?P<type>\w+)/$',views.ListofQuestionView.as_view(),name='listofquestion'),
 	url(r'^generatetest/(?P<id>\d+)/$',views.GenerateTestView.as_view(),name='generate-test'),
-	url(r'^createtest/(?P<id>\d+)/$',views.CreateTestView.as_view(),name='create-test'),
+	url(r'^createtest/',views.CreateTestView.as_view(),name='create-test'),
 
 
 	#re_path('link/(?P<type>\d+)$',views.ExistingPost.as_view(),name='existing-post'),

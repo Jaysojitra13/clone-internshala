@@ -23,17 +23,25 @@
 <div class="main">
 	<button id="add_question" class="btn btn-info" style="float: right;" data-toggle="modal" data-target="#myModal">Add question</button>
 	<h2>{{type}}</h2>
-
+<div class="col-md-7">
+<div id="allQuestions">
+<ol>
 
 	{% if questions%}
 	{% for i in questions %}
-	<input type="checkbox" name="checkbox">&nbsp; {{i.text}}<br>
+	{% for j in answers %}
+	{% if i.id == j.question_id%}
+	<li><h5 style="font-weight: bolder;">Question:- {{i.text}}<input id="CB" type="checkbox" name="checkbox" style="float: right;"><br></h5></li>
+	<h5>Ans:- {{j.text}}</h5>
+	{% endif %}
+	{% endfor %}	
 	{% endfor %}	
 	{% else%}
 	<h3>No questions available</h3>
 	{% endif %}
-	
-	
+	</ol>
+</div>	
+</div>
 
 	<div class="modal fade" id="myModal" role="dialog">
 		<div class="modal-dialog">
@@ -53,7 +61,7 @@
 
 						<div class="modal-footer">
 							<button id="save" type="button" class="btn btn-info"  data-dismiss="modal" onclick="Save('{{type}}')" style="float: left;">Save</button>
-							<button id="save-cont" type="button" class="btn btn-info" onclick="saveAndContinue('{{type}}')">Save and continue </button>
+							<button id="save-cont" type="button" class="btn btn-info" onclick="saveAndContinue('{{type}}'); $('#myModal').modal({'backdrop': 'static'});">Save and continue </button>
 						</div>
 					</form>
 				</div>
@@ -74,9 +82,8 @@
 					success:function(response){
 						$('#question').val('')
 						$('#answer').val('') 
-						
 						console.log(response);
-						console.log("ok");
+						$('#allQuestions').append('<input id="CB" type="checkbox" name="checkbox">&nbsp; '+response.obj_text+'<br>');
 					},
 					error: function(response){
 						alert("ERROR");
