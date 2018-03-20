@@ -134,10 +134,16 @@
 							<td id="td-confirm{{k.id}}{{i.id}}">
 								<button id="btn-confirm{{k.id}}{{i.id}}" class="btn btn-info " onclick="buttonConfirm({{k.id}},{{i.id}})" style="visibility: visible;">Confirm</button>
 							</td>
-							<td id="td-test{{k.id}}{{i.id}}">
-								<a href="{% url 'company:generate-test' id=i.id%}"><button id="btn-test{{k.id}}{{i.id}}" class="btn btn-info " onclick="buttontest({{k.id}},{{i.id}})" style="visibility: visible;">Generate Test</button></a>
-							</td>
 
+							{% if i.id|answer_intern %}
+							<td id="td-result{{k.id}}{{i.id}}">
+								<a href="#"><button id="btn-test{{k.id}}{{i.id}}" class="btn btn-info "style="visibility: visible;">Result</button></a>
+							</td>
+							{%else%}
+							<td id="td-test{{k.id}}{{i.id}}">
+								<a href="{% url 'company:generate-test' id=i.id%}"><button id="btn-test{{k.id}}{{i.id}}" class="btn btn-info" onclick="buttontest({{k.id}},{{i.id}})" style="visibility: visible;">Generate Test</button></a>
+							</td>
+							{% endif %}
 
 							{% else %}
 							<td >

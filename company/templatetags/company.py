@@ -38,3 +38,19 @@ def upc_detailss(value):
 def post_name(value):
 	postDetail = PostDetails.objects.filter(company_id = value)
 	return postDetail
+
+
+@register.filter(name="questiontest_mapping")
+def questiontest_mapping(value):
+	qam =  QuestionTestMap.objects.filter(test_id = value)
+	return qam
+
+@register.filter(name="question_text")
+def question_text(value):
+	question =  Question.objects.filter(id = value)
+	return question
+
+@register.filter(name="answer_intern")
+def answer_intern(value):
+	question =  Answers_intern.objects.filter(upc_id = value)
+	return question

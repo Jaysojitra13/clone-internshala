@@ -12,7 +12,8 @@
 <div class="main">
 	
 	<input id="checkAll" type="checkbox" name="checkbox">&nbsp; Select all questions	<br><br>
-	<form id="listOfQuestionsForm" method="get">
+	<form id="listOfQuestionsForm" method="post" action="{% url 'company:create-test' %}">
+		{% csrf_token %}
 		<div class="checkboxes">
 			<input type="hidden" name="upc_id" value={{upc_id}}>
 			{% for i in questions%}
@@ -23,32 +24,30 @@
 			{% endif %}
 			{% endfor %}	
 		</div>
-	</form>
-	<button id="preview" class="btn btn-info" type="button" style="float: right;" data-toggle="modal" data-target="#myModal" onclick="previewQuestion({{upc_id}})">Preview</button>
-	
-	<div id="myModal" class="modal fade" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Selected Questions</h4>
-				</div>
-				<div id="modalBody" class="modal-body">
 
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Close</button>
-					<a href="{% url 'company:create-test' %}"><button type="button" class="btn btn-default"  style="float: right;">Create Test</button></a>
+		<button id="preview" class="btn btn-info" type="button" style="float: right;" data-toggle="modal" data-target="#myModal" onclick="previewQuestion({{upc_id}})">Preview</button>
 
+		<div id="myModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Selected Questions</h4>
+					</div>
+					<div id="modalBody" class="modal-body">
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Close</button>
+						<a href="{% url 'company:create-test' %}"><button type="submit" class="btn btn-default"  style="float: right;">Create Test</button></a>
+
+					</div>
 				</div>
+
 			</div>
-
 		</div>
-	</div>
+	</form>
 
-	<div id="demo">
-		
-	</div>
 
 
 </div>
@@ -71,7 +70,6 @@
 
       	// /var x = document.getElementById("demo").innerHTML = window.location.pathname;
       	// debugger;
-      	$("#listOfQuestionsForm").ajaxSubmit({url: '/company/generatetest/', type: 'get'})
       		// $.ajax({
       		// 	url : '/company/generatetest/'+id +'/',
       		// 	type : "GET",
@@ -81,7 +79,15 @@
       		// 	},
       		// });
       	}
-      
+
+      	// function createTest(){
+      	// 	$("#listOfQuestionsForm").ajaxSubmit({
+      	// 		// url: $('#listOfQuestionsForm').attr('action'), 
+      	// 		// type: 'POST',
+      	// 	});
+
+      	// }
+
       // });
 	// });
 	

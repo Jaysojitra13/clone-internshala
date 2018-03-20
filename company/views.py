@@ -16,7 +16,7 @@ from django.views.generic.list import ListView
 from django.urls import reverse_lazy
 from django.core.paginator import Paginator
 from django.forms.formsets import formset_factory
-import datetime
+import datetime 
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.core import serializers
@@ -312,7 +312,7 @@ class ListofQuestionView(TemplateView):
 				obj1.text = answer
 				obj1.save()
 				print("obj is ---------------",obj)
-				response = JsonResponse({'obj_id': obj.id,'obj_text':obj.text,'obj_technologyid':obj.technology_id},safe =False)
+				response = JsonResponse({'obj_id': obj.id,'obj_text':obj.text,'obj_technologyid':obj.technology_id,'obj1_text':obj1.text},safe =False)
 				
 				return  response
 		except Exception as e:
@@ -334,13 +334,37 @@ class GenerateTestView(TemplateView):
 		# print(upc)
 		return context
 
-class CreateTestView(TemplateView):
-	template_name = "company/createtest.html"
-
-	def get(self, request, *args, **kwargs):
-		upc_id = request.GET.get('upc_id')
-		print("upc_id",upc_id)
-		
-		return HttpResponseRedirect('/company/applications/')
+class CreateTestView(View):
+	# template_name = "company/createtest.html"
 
 	# def get(self, request, *args, **kwargs):
+	# 	upc_id = request.GET.get('upc_id')
+	# 	print("upc_id",upc_id)
+	# 	question_list = request.GET.getlist('checkboxes')
+
+	# 	return HttpResponseRedirect('/company/applications/')
+
+	def post(self, request, *args, **kwargs):
+		upc_id = request.POST.get('upc_id')
+		question_list = request.POST.getlist('checkboxes')
+		post_id = UserPostConnection.objects.get(id = upc_id).postdetails_id
+		tech = PostDetails.objects.get(id = post_id).technology
+		technology = Technology.objects.get(technology_name = tech).id
+		test = Test()
+		test.technology_id = technology
+		test.save()
+		ids = [Question.objects.get(text = question).id for question in question_list]
+		objs = [QuestionTestMap() for i in question_list]
+		for i in range(len(question_list)):
+			objs[i].question_id = ids[i]
+		for i in range(len(question_list)):
+			objs[i].test_id = test.id
+		for i in objs:
+			i.save()
+		tam = TestApplicationMapping()
+		tam.test_id = test.id
+		tam.upc_id = request.POST.get('upc_id')
+		tam.save()
+
+		return HttpResponseRedirect('/company/applications/')
+

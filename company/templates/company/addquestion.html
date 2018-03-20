@@ -25,7 +25,7 @@
 	<h2>{{type}}</h2>
 <div class="col-md-7">
 <div id="allQuestions">
-<ol>
+<ul class="list">
 
 	{% if questions%}
 	{% for i in questions %}
@@ -39,7 +39,7 @@
 	{% else%}
 	<h3>No questions available</h3>
 	{% endif %}
-	</ol>
+	</ul>
 </div>	
 </div>
 
@@ -54,9 +54,9 @@
 					<form id="formQuesion" class="form-inline" enctype="multipart/form-data"  method="post">
 						{% csrf_token %}
 						<label>Question</label>
-						<input id="question" class="form-control" type="text" name="question">
+						<textarea id="question" class="form-control" type="text" name="question"></textarea>
 						<label> Answer</label>
-						<input id="answer" class="form-control" type="text" name="answer">
+						<textarea id="answer" class="form-control" type="text" name="answer"></textarea>
 
 
 						<div class="modal-footer">
@@ -83,7 +83,8 @@
 						$('#question').val('')
 						$('#answer').val('') 
 						console.log(response);
-						$('#allQuestions').append('<input id="CB" type="checkbox" name="checkbox">&nbsp; '+response.obj_text+'<br>');
+						$('#allQuestions').append('<ul>	<li><h5 style="font-weight: bolder;">Question:- ' +response.obj_text+'<input id="CB" type="checkbox" name="checkbox" style="float: right;"><br></h5></li>    <h5>Ans:- '+response.obj1_text+'</h5>                </ul>');
+						// $('#allQuestions').append('<h5>Ans:- '+response.obj1_text+'</h5>');
 					},
 					error: function(response){
 						alert("ERROR");

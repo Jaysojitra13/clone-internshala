@@ -1,6 +1,6 @@
 {% extends 'intern/base.html'%}
 {% load intern %}
-
+{% load company%}
 <!-- <!DOCTYPE html>
 <html>
 <head>
@@ -9,7 +9,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
- -->
+-->
   <!-- <nav class="navbar navbar-default">
     <div class="container-fluid">
       <ul class="nav navbar-nav">
@@ -59,71 +59,98 @@
         <span id="badge{{j.id}}" class="badge" style="position: relative; bottom:10px; left:-10px;">{% if j.id|messages_count > 0 %}{{j.id|messages_count}}{%endif%}</span>
       </td>
       {% if i.status == "Accepted" or i.status == "InProcess" or i.status == "Confirmed"%}
-      <td> <a href="#"><button class="btn btn-info" type="button">Test</button></a></td>
-      {%  endif %}
+      <td><a href="{% url 'intern:give-test' pk=i.pk %}"><button class="btn btn-info" type="button">Give Test </button></td>
+      
     </tr>
-    {% endif %}
-    <div class="modal fade" id="ModalMes{{j.id}}" role="dialog">
+
+    <!-- <div class="modal fade" id="ModalTest{{j.id}}" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-
-            <h4 class="modal-title">Messages From Company </h4>
+            <h4 class="modal-title">Test </h4>
           </div>
           <div class="modal-body">
-           <ol style="list-style-type: none"> 
-            {% for k in j.id|messages %}
-            <li>{{k.message_date}}:- &nbsp;{{k.messages}}</li>
-            {% endfor %}
-          </ol>
-        </div>
+            <form>
+              <ol>
+               {% for test in i.id|testapplication_mapping|questiontest_mapping %}
+               {% for question in test.question_id|question_text%}
+               <li><label style="font-weight: bolder;">Question:-&nbsp;&nbsp;{{question.text}}</label>
+                 <textarea id="answer" class="form-control" type="text" name="answer"></texta</a>rea>
+               </li>
+               {% endfor %}
+               {% endfor %}
+             </ol>
 
-        <div class="modal-footer">
+             <div class="modal-footer">
+             </div>
+           </div>
+         </form>
+       </div>  
+     </div>  
+   </div> -->
 
-          
+   {%  endif %}
+   {% endif %}
+   <div class="modal fade" id="ModalMes{{j.id}}" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+          <h4 class="modal-title">Messages From Company </h4>
         </div>
-      </div>  
-    </div>  
-  </div>
-  <script>
-    $('#btn-msg{{j.id}}').on('click',function(){
-      var x = '#badge'+{{j.id}}
-      $.ajax({
-        url:'/intern/readmessages/'+{{j.id}},
-        type:'GET',
-       
-        success:function(response){
-          console.log(x);
-          $(x).remove();
-         
-        },
-      });
+        <div class="modal-body">
+         <ol style="list-style-type: none"> 
+          {% for k in j.id|messages %}
+          <li>{{k.message_date}}:- &nbsp;{{k.messages}}</li>
+          {% endfor %}
+        </ol>
+      </div>
+      <!--   <div class="modal-footer">
+    </div> -->
+  </div>  
+</div>  
+</div>
+
+
+
+<script>
+  $('#btn-msg{{j.id}}').on('click',function(){
+    var x = '#badge'+{{j.id}}
+    $.ajax({
+      url:'/intern/readmessages/'+{{j.id}},
+      type:'GET',
+
+      success:function(response){
+        $(x).remove();
+      },
     });
-  </script>
-  {%endfor%}
-  {%endfor%}
+  });
+</script>
+{%endfor%}
+{%endfor%}
 </table>
 <div class="pagination">
-    <span class="step-links">
-        {% if upc.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            <a href="?page={{ upc.previous_page_number }}">previous</a>
-        {% endif %}
+  <span class="step-links">
+    {% if upc.has_previous %}
+    <a href="?page=1">&laquo; first</a>
+    <a href="?page={{ upc.previous_page_number }}">previous</a>
+    {% endif %}
 
-        <span class="current">
-            Page {{ upc.number }} of {{ upc.paginator.num_pages }}.
-        </span>
-
-        {% if upc.has_next %}
-            <a href="?page={{ upc.next_page_number }}">next</a>
-            <a href="?page={{ upc.paginator.num_pages }}">last &raquo;</a>
-        {% endif %}
+    <span class="current">
+      Page {{ upc.number }} of {{ upc.paginator.num_pages }}.
     </span>
+
+    {% if upc.has_next %}
+    <a href="?page={{ upc.next_page_number }}">next</a>
+    <a href="?page={{ upc.paginator.num_pages }}">last &raquo;</a>
+    {% endif %}
+  </span>
 </div>
 
 <!-- </body>
 
-</html> -->
-{% endblock %}
+  </html> -->
+  {% endblock %}

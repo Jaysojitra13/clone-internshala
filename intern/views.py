@@ -562,3 +562,42 @@ def ReadMessages(request,id):
 		Messages.objects.filter(postdetails_id=upc.postdetails_id).update(is_read="True")
 
 	return HttpResponse(status = 200)
+
+
+class GiveTestView(TemplateView):
+	template_name = 'intern/give_test.html'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		id = kwargs['pk']
+		tam_test_id = TestApplicationMapping.objects.get(upc_id = kwargs['pk']).test_id
+		qtm = list(QuestionTestMap.objects.filter(test_id = tam_test_id))
+		questions = []
+		for i in range(len(qtm)):
+			if qtm[i].question_id == Question.objects.get(id = qtm[i].question_id).id:
+				questions.append(Question.objects.get(id = qtm[i].question_id))
+
+		# import code; code.interact(local=dict(globals(), **locals()))
+
+		context['questions'] = questions
+		context['upc_id'] = kwargs['pk']
+		return context
+
+class SubmitTestView(View):
+
+	def post(self, request, *args, **kwargs):
+		id = request.POST.get('upc_id')
+		answers_list = request.POST.getlist('answers')
+		objs = [Answers_intern() for i in answers_list]
+		test = TestApplicationMapping.objects.get(upc_id = id).test_id
+		qtm = QuestionTestMap.objects.filter(test_id = test)
+		for i in range(len(answers_list)):
+		    objs[i].text = answers_list[i]
+		    objs[i].question_id = qtm[0].question_id
+		    objs[i].upc_id = id
+		    objs[i].save()
+		import code; code.interact(local=dict(globals(), **locals()))
+		return HttpResponseRedirect('/intern/index/')
+
+
+		

@@ -86,7 +86,7 @@ class Answers_intern(models.Model):
 	is_correct = models.BooleanField(default=True)
 
 class Test(models.Model):
-	technology = models.OneToOneField(Technology, on_delete=models.CASCADE)
+	technology = models.ForeignKey(Technology, on_delete=models.CASCADE)
 	creation_date = models.DateField(default=datetime.datetime.now().date())
 
 class QuestionTestMap(models.Model):

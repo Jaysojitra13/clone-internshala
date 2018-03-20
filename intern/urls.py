@@ -19,6 +19,9 @@ urlpatterns = [
 	url(r'^internship/',views.InternshipDetailView.as_view(), name='internship-detail'),
 	url(r'^internpost/(?P<company_id>\d+)/(?P<post_id>\d+)/$', views.InternPostConnection.as_view(), name='internpost-connection'),
 	url(r'^readmessages/(?P<id>\d+)/$',views.ReadMessages, name='read-messages'),
+	url(r'^givetest/(?P<pk>\d+)/$',views.GiveTestView.as_view(), name='give-test'),
+	url(r'^sumittest/',views.SubmitTestView.as_view(), name='submit-test'),
+
 	#re_path(r'^applied/(?P<type>\w+)/$',views.AppliedInternship.as_view(), name='applied-internship'),
 	
 	#re_path('detail/(?P<pk>[\-\w]+)/$',views.detail_profile, name='account-detail'),
