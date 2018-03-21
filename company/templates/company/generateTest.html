@@ -16,13 +16,13 @@
 		{% csrf_token %}
 		<div class="checkboxes">
 			<input type="hidden" name="upc_id" value={{upc_id}}>
+			{% if questions %}
 			{% for i in questions%}
-			{% if questions%}
 			<input class="checkBoxClass" type="checkbox" data-question_id="{{i.id}}" name="checkboxes" value="{{i.text}}">&nbsp; {{i.text}}<br>
-			{% else%}
-			<h3>No questions available</h3>
-			{% endif %}
 			{% endfor %}	
+			{% else%}
+			<h3>No questions available. First add question to the question Bank</h3>
+			{% endif %}
 		</div>
 
 		<button id="preview" class="btn btn-info" type="button" style="float: right;" data-toggle="modal" data-target="#myModal" onclick="previewQuestion({{upc_id}})">Preview</button>

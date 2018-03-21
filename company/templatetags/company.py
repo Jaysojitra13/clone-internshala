@@ -47,10 +47,42 @@ def questiontest_mapping(value):
 
 @register.filter(name="question_text")
 def question_text(value):
-	question =  Question.objects.filter(id = value)
+	question =  Question.objects.get(id = value)
 	return question
 
 @register.filter(name="answer_intern")
-def answer_intern(value):
+def answer_intern(value,upc_id):
+	answer_intern =  Answers_intern.objects.filter(question_id = value,upc_id = upc_id)
+	return answer_intern
+	
+
+@register.filter(name="answer_internexist")
+def answer_internexist(value):
 	question =  Answers_intern.objects.filter(upc_id = value)
 	return question
+
+@register.filter(name="answer_hr")
+def answer_hr(value):
+	answers_hr =  Answers_HR.objects.filter(question_id = value)
+	return answers_hr	
+
+@register.filter(name="test_appmapping")
+def test_appmapping(value):
+	tap = TestApplicationMapping.objects.get(upc_id = value).result
+	return tap
+
+@register.filter(name="check_answer")
+def check_answer(value):
+	check_answer = Answers_intern.objects.get(id = value).is_correct
+	return check_answer
+
+@register.filter(name="check_teststatus")
+def check_teststatus(value):
+	check_teststatus = TestApplicationMapping.objects.get(upc_id = value)
+	return check_teststatus.teststatus_id
+
+@register.filter(name="check_upcid")
+def check_upcid(value):
+	ans = answer_intern(value)
+	answer_intern = Answers_intern.objects.get(upc_id= value)
+	return answer_intern.upc_id

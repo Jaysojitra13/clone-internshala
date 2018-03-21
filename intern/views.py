@@ -1,5 +1,4 @@
-
-#import code; code.interact(local=dict(globals(), **locals()))
+# import code; code.interact(local=dict(globals(), **locals()))
 from django.views import View
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, redirect, HttpResponse, render_to_response
 from django.contrib.auth.decorators import login_required
@@ -472,49 +471,6 @@ class InternshipDetailView(TemplateView):
 		# 	return data
 
 
-
-
-
-#***********************************************************************************************************************************
-		# context = super().get_context_data(**kwargs)
-		
-		# if city is None and tech is None:
-		# 	print('Both None')
-		# 	context['post'] = PostDetails.objects.all()
-		# 	return context
-		# elif city is '' and tech != None:
-		# 	print('city None')
-		# 	context['post'] = PostDetails.objects.filter(domain=tech)
-		# 	import code; code.interact(local=dict(globals(), **locals()))
-		# 	return context
-		# elif city != None and tech is '':
-		# 	print('tech None')
-		# 	contact = ContactDetails.objects.filter(location=city)
-		# 	post = PostDetails.objects.all()
-		# 	for i in contact:
-		# 		for j in post:
-		# 				context['post'] = PostDetails.objects.filter(company_id = i.company_id)
-		# 				return context
-		# 	context['post'] = PostDetails.objects.all()
-		# 	return context
-		# else:
-		# 	print('both have values')
-		# 	contact = ContactDetails.objects.filter(location=city)
-		# 	post = PostDetails.objects.all()
-		# 	for i in contact:
-		# 		for j in post:
-		# 				context['post'] = PostDetails.objects.filter(company_id = i.company_id)
-		# 				return context
-		# 	context['post'] = PostDetails.objects.all()
-		# 	return context
-	# def get(self, request):
-	# 	print('---')
-	# 	city = request.GET.get('search1')	
-	# 	print(city)
-	# 	return HttpResponseRedirect('/intern/internship/')		
-
-	
-
 class InternPostConnection(SingleObjectMixin, TemplateView):
 	
 	def get(self, request, *args, **kwargs):
@@ -589,15 +545,25 @@ class SubmitTestView(View):
 		id = request.POST.get('upc_id')
 		answers_list = request.POST.getlist('answers')
 		objs = [Answers_intern() for i in answers_list]
-		test = TestApplicationMapping.objects.get(upc_id = id).test_id
-		qtm = QuestionTestMap.objects.filter(test_id = test)
+		test = TestApplicationMapping.objects.get(upc_id = id)
+		test.teststatus_id = 1
+		test.save()
+		qtm = QuestionTestMap.objects.filter(test_id = test.test_id)
 		for i in range(len(answers_list)):
 		    objs[i].text = answers_list[i]
-		    objs[i].question_id = qtm[0].question_id
+		    objs[i].question_id = qtm[i].question_id
 		    objs[i].upc_id = id
 		    objs[i].save()
-		import code; code.interact(local=dict(globals(), **locals()))
+		# import code; code.interact(local=dict(globals(), **locals()))
+
 		return HttpResponseRedirect('/intern/index/')
+
+class ShowResultView(View):
+
+	def get(self, request, *args, **kwargs):
+		id = request.GET.get('upc_id')
+		tam = TestApplicationMapping.objects.get(upc_id = id).result
+		return JsonResponse({'result':tam},safe = False)
 
 
 		

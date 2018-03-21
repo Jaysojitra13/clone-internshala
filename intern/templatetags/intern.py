@@ -46,22 +46,8 @@ def personal_detailid(value):
 	PD_id = PersonalDetails.objects.get(internprofile_id=value)
 	return PD_id.id
 
-# @register.filter(name="is_read")
-# def is_read(value):
-# 	MessageObj = Messages.objects.get(postdetails_id=value)
-# 	return MessageObj.is_read
+@register.filter(name="check_test")
+def check_test(value):
+	check_test = TestApplicationMapping.objects.get(upc_id = value)
+	return check_test.teststatus_id
 
-@register.filter(name="testapplication_mapping")
-def testapplication_mapping(value):
-	qam =  TestApplicationMapping.objects.get(upc_id = value)
-	return qam.test_id
-
-@register.filter(name="questiontest_mapping")
-def questiontest_mapping(value):
-	qam =  QuestionTestMap.objects.filter(test_id = value)
-	return qam
-
-@register.filter(name="question_text")
-def question_text(value):
-	question =  Question.objects.filter(id = value)
-	return question

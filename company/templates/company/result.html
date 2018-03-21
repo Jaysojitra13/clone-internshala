@@ -1,0 +1,99 @@
+{% extends 'company/index.html'%}
+{% load company %}
+{% load static %}
+{% load intern%}
+
+{% block content %}
+<div class="main">
+
+	{% for i in questions%}
+	{% for l in i.id|answer_hr%}
+	{% for j in i.id|answer_intern:upc_id %}
+	{% if j.id|check_answer == True%}
+		<div class="frame{{i.id}}" style="background-color: #f1f1f1;border-style: solid; border-color: green;">
+		<label>Question:- {{i.text}}</label>
+		<h5>Intern's Answer:- {{j.text}} &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;Your answer:- {{l.text}}</h5><br>
+		<button id="right{{i.id}}" type="button" ><i class="fa fa-check"></i></button>
+		<button id="wrong{{i.id}}" type="button"> <i class="fa fa-close"></i></button>
+	</div><br>
+	
+	{% elif j.id|check_answer == False %}
+	
+		<div class="frame{{i.id}}" style="background-color: #f1f1f1;border-style: solid; border-color: red;">
+		<label>Question:- {{i.text}}</label>
+		<h5>Intern's Answer:- {{j.text}} &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;Your answer:- {{l.text}}</h5><br>
+		<button id="right{{i.id}}" type="button" ><i class="fa fa-check"></i></button>
+		<button id="wrong{{i.id}}" type="button"> <i class="fa fa-close"></i></button>
+	</div><br>
+	{% else %}
+	<div class="frame{{i.id}}" style="background-color: #f1f1f1;">
+		<label>Question:- {{i.text}}</label>
+		<h5>Intern's Answer:- {{j.text}} &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;Your answer:- {{l.text}}</h5><br>
+		<button id="right{{i.id}}" type="button" ><i class="fa fa-check"></i></button>
+		<button id="wrong{{i.id}}" type="button"> <i class="fa fa-close"></i></button>
+	</div><br>
+	{% endif %}
+
+	<script>
+		$('#right{{i.id}}').on('click', function(){
+			$('.frame{{i.id}}').css("border-style","groove");
+			$('.frame{{i.id}}').css("border-color","green");
+			$.ajax({
+				url: "/company/checkanswer/",
+				typpe: "GET",
+				data:{
+					'question_id' : {{i.id}},
+					'right' : 'right',
+					'upc_id': {{upc_id}},
+				},
+				success:function(){
+
+				},
+			});
+		});
+
+		$('#wrong{{i.id}}').on('click', function(){
+			$('.frame{{i.id}}').css("border-style","solid");
+			$('.frame{{i.id}}').css("border-color","red");
+			$.ajax({
+				url: "/company/checkanswer/",
+				typpe: "GET",
+				data:{
+					'question_id' : {{i.id}},
+					'wrong': 'wrong',
+					'upc_id': {{upc_id}},
+				},
+			});
+		});
+	</script>
+	{% endfor %}
+	{% endfor%}
+	{% endfor %}
+
+	{% if upc_id|test_appmapping%}
+		<button id="grBtn" type="button" class="btn btn-info">Generate Result</button>&nbsp;&nbsp;&nbsp;&nbsp;	<label style="visibility: visible;">Result is:- <span id="result">{{upc_id|test_appmapping}}</span></label>
+	{% else %}
+	<button id="grBtn" type="button" class="btn btn-info">Generate Result</button>&nbsp;&nbsp;&nbsp;&nbsp;	<label style="visibility: hidden;">Result is:- <span id="result"></span></label>
+	{% endif %}
+	<script>
+		
+	$('#grBtn').on('click',function(){
+		$.ajax({
+			url: "/company/countresult/",
+			type: "GET",
+			data:{
+				'upc_id': {{upc_id}},
+			},
+			success:function(response){
+				console.log(response)
+				$('label').css('visibility','visible');
+				$('#result').html(response.marks);
+			},
+		});
+	});
+
+</script>
+
+
+</div>
+{% endblock%}

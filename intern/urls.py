@@ -21,7 +21,7 @@ urlpatterns = [
 	url(r'^readmessages/(?P<id>\d+)/$',views.ReadMessages, name='read-messages'),
 	url(r'^givetest/(?P<pk>\d+)/$',views.GiveTestView.as_view(), name='give-test'),
 	url(r'^sumittest/',views.SubmitTestView.as_view(), name='submit-test'),
-
+	url(r'^showresult/',views.ShowResultView.as_view(), name='show-result'),
 	#re_path(r'^applied/(?P<type>\w+)/$',views.AppliedInternship.as_view(), name='applied-internship'),
 	
 	#re_path('detail/(?P<pk>[\-\w]+)/$',views.detail_profile, name='account-detail'),

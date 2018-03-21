@@ -1,4 +1,4 @@
-{% extends 'company/index.html'%}
+ {% extends 'company/index.html'%}
 {% load crispy_forms_tags %}
 {% load static %}
 {% load company %}
@@ -32,7 +32,7 @@
 	{% for j in answers %}
 	{% if i.id == j.question_id%}
 	<li><h5 style="font-weight: bolder;">Question:- {{i.text}}<input id="CB" type="checkbox" name="checkbox" style="float: right;"><br></h5></li>
-	<h5>Ans:- {{j.text}}</h5>
+	<div style="width:100%;word-wrap: break-word;">Ans:- {{j.text}}</div>
 	{% endif %}
 	{% endfor %}	
 	{% endfor %}	

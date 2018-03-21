@@ -59,38 +59,15 @@
         <span id="badge{{j.id}}" class="badge" style="position: relative; bottom:10px; left:-10px;">{% if j.id|messages_count > 0 %}{{j.id|messages_count}}{%endif%}</span>
       </td>
       {% if i.status == "Accepted" or i.status == "InProcess" or i.status == "Confirmed"%}
+      {% if i.id|check_test == 0%}
       <td><a href="{% url 'intern:give-test' pk=i.pk %}"><button class="btn btn-info" type="button">Give Test </button></td>
-      
-    </tr>
-
-    <!-- <div class="modal fade" id="ModalTest{{j.id}}" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Test </h4>
-          </div>
-          <div class="modal-body">
-            <form>
-              <ol>
-               {% for test in i.id|testapplication_mapping|questiontest_mapping %}
-               {% for question in test.question_id|question_text%}
-               <li><label style="font-weight: bolder;">Question:-&nbsp;&nbsp;{{question.text}}</label>
-                 <textarea id="answer" class="form-control" type="text" name="answer"></texta</a>rea>
-               </li>
-               {% endfor %}
-               {% endfor %}
-             </ol>
-
-             <div class="modal-footer">
-             </div>
-           </div>
-         </form>
-       </div>  
-     </div>  
-   </div> -->
-
+  {% elif i.id|check_test == 1 %}
+      <td><button class="btn btn-info disabled" type="button">submitted</button></td>
+  {% elif i.id|check_test == 2%}
+      <td><button id="btn-result{{i.id}}" class="btn btn-info" type="button" onclick="showResult('{{i.id}}')">Result</button></td>
+   {% endif %}
    {%  endif %}
+    </tr>
    {% endif %}
    <div class="modal fade" id="ModalMes{{j.id}}" role="dialog">
     <div class="modal-dialog">
@@ -128,10 +105,26 @@
       },
     });
   });
+
 </script>
 {%endfor%}
 {%endfor%}
+<script>
+    function showResult(id){
+      $.ajax({
+        url: '/intern/showresult/',
+        type: 'GET',
+        data: {
+          'upc_id' : id,
+        },
+        success:function(response){
+          alert("Your Result is "+response.result);
+        },
+      });
+  }
+</script>
 </table>
+
 <div class="pagination">
   <span class="step-links">
     {% if upc.has_previous %}

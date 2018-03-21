@@ -73,17 +73,17 @@ class Technology(models.Model):
 class Question(models.Model):
 	technology = models.ForeignKey(Technology, on_delete=models.CASCADE)
 	company = models.ForeignKey(CompanyProfile, on_delete=models.CASCADE)		
-	text = models.CharField(max_length=50)
+	text = models.TextField(max_length=500)
 
 class Answers_HR(models.Model):
 	question = models.ForeignKey(Question, on_delete=models.CASCADE)
-	text = models.CharField(max_length=20)
+	text = models.TextField(max_length=500)
 
 class Answers_intern(models.Model):
 	question = models.ForeignKey(Question, on_delete=models.CASCADE)
-	text = models.CharField(max_length=20)
+	text = models.TextField(max_length=500)
 	upc = models.ForeignKey(UserPostConnection,on_delete=models.CASCADE)
-	is_correct = models.BooleanField(default=True)
+	is_correct = models.BooleanField(default=False)
 
 class Test(models.Model):
 	technology = models.ForeignKey(Technology, on_delete=models.CASCADE)
@@ -93,6 +93,11 @@ class QuestionTestMap(models.Model):
 	test = models.ForeignKey(Test, on_delete=models.CASCADE)
 	question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
+class TestStatus(models.Model):
+	status = models.CharField(max_length=20)
+
 class TestApplicationMapping(models.Model):
 	upc = models.ForeignKey(UserPostConnection, on_delete=models.CASCADE)
 	test = models.ForeignKey(Test, on_delete=models.CASCADE)
+	result = models.FloatField(default=0)
+	teststatus = models.ForeignKey(TestStatus, on_delete=models.CASCADE, default=0)
