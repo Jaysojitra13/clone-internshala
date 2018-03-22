@@ -72,16 +72,16 @@ class ApplicationView(TemplateView):
 		domain = self.request.GET.get('domain')
 		date = self.request.GET.get('date')
 		post = PostDetails.objects.filter(domain=domain)
-		#	import code; code.interact(local=dict(globals(), **locals()))	
 		company_profile = CompanyProfile.objects.get(user = self.request.user)
+			# import code; code.interact(local=dict(globals(), **locals()))	
 
 		if applied_dateasc == '2':
 			applicants = UserPostConnection.objects.filter(company_id = company_profile.user_id).order_by('applied_date')
 		elif applied_datedesc == '1':
 			applicants = UserPostConnection.objects.filter(company_id = company_profile.user_id).order_by('-applied_date')
-		elif self.request.GET.get('token_namedesc') == "1":
+		elif name_desc == "1":
 			applicants = UserPostConnection.objects.filter(company_id = company_profile.user_id).order_by('-internprofile__personal_details__name')
-		elif self.request.GET.get('token2_nameasc') == "2":
+		elif name_asc == "2":
 			applicants = UserPostConnection.objects.filter(company_id = company_profile.user_id).order_by('internprofile__personal_details__name')
 		else:
 			applicants = UserPostConnection.objects.filter(company_id = company_profile.user_id).order_by('id')
@@ -269,7 +269,7 @@ class RejectInternView(TemplateView):
 		return context
 
 class GenerateQuestionView(TemplateView):
-	template_name = 'company/test.html'
+	template_name = 'company/addquestion.html'
 
 	def get_context_data(self, 	**kwargs):
 		context = super().get_context_data(**kwargs)
@@ -287,36 +287,57 @@ class ListofQuestionView(TemplateView):
 		context['technology'] = Technology.objects.all()
 		tech = Technology.objects.get(technology_name = kwargs['type'])
 		context['type'] = kwargs['type']
-		context['questions'] = Question.objects.filter(technology_id = tech.pk)
+		context['questions'] = Question.objects.filter(technology_id = tech.pk).order_by('id')
 		context['answers'] = Answers_HR.objects.all()
 		return context
 
 	def post(self,request, *args, **kwargs):
+
 		try:
 			question = request.POST.get('question')
 			answer = request.POST.get('answer')
-			print("before IF")
-			if request.POST.get('question') != "" and request.POST.get('answer') != "":
+			question_id = request.POST.get('question_id')
 
-				tech = Technology.objects.get(technology_name = kwargs['type'])
-				print("TEchnology is",tech)
-				obj1 = Answers_HR()
-				obj = Question()
-				obj.text = question
-				obj.company_id = request.user.id
-				obj.technology_id = tech.pk
-				obj.save()
+			if question_id:
+				question_obj = Question.objects.get(id = question_id)
+				answer_obj = Answers_HR.objects.get(question_id = question_id)
+				question_obj.text = question
+				question_obj.save()
 
-				
-				obj1.question_id = obj.pk
-				obj1.text = answer
-				obj1.save()
-				print("obj is ---------------",obj)
-				response = JsonResponse({'obj_id': obj.id,'obj_text':obj.text,'obj_technologyid':obj.technology_id,'obj1_text':obj1.text},safe =False)
-				
+				answer_obj.text = answer
+				answer_obj.save()
+				import code; code.interact(local=dict(globals(), **locals()))
+				response = JsonResponse({'obj_id': question_obj.id,'obj_text':question_obj.text,'obj_technologyid':question_obj.technology_id,'obj1_text':answer_obj.text},safe =False)
+					
 				return  response
+			else:
+				print("before IF")
+				if request.POST.get('question') != "" and request.POST.get('answer') != "":
+
+					tech = Technology.objects.get(technology_name = kwargs['type'])
+					print("TEchnology is",tech)
+					obj1 = Answers_HR()
+					obj = Question()
+					obj.text = question
+					obj.company_id = request.user.id
+					obj.technology_id = tech.pk
+					obj.save()
+
+					
+					obj1.question_id = obj.pk
+					obj1.text = answer
+					obj1.save()
+					print("obj is ---------------",obj)
+					response = JsonResponse({'obj_id': obj.id,'obj_text':obj.text,'obj_technologyid':obj.technology_id,'obj1_text':obj1.text},safe =False)
+					
+					return  response
 		except Exception as e:
 			print(e)
+
+	def put(self, *args, **kwargs):
+		
+		return JsonResponse({'status':"OK"}, safe = False)
+		
 
 class GenerateTestView(TemplateView):
 	template_name = "company/generateTest.html"
@@ -331,6 +352,7 @@ class GenerateTestView(TemplateView):
 		context['questions'] = Question.objects.filter(company_id = self.request.user.id, technology_id= tech)
 		print(post)
 		context['upc_id'] = kwargs['id']
+		context['technology'] = tech
 		# print(upc)
 		return context
 
@@ -369,6 +391,9 @@ class CreateTestView(View):
 
 		return HttpResponseRedirect('/company/applications/')
 
+
+
+
 class ResultView(TemplateView):
 	template_name = 'company/result.html'
 
@@ -379,7 +404,7 @@ class ResultView(TemplateView):
 		tam_testid = TestApplicationMapping.objects.get(upc_id = kwargs['id']).test_id
 		qtm = list(QuestionTestMap.objects.filter(test_id = tam_testid))
 		questions = []
-		for i in range(len(qtm)):
+		for i in range(len(qtm)):	
 			if qtm[i].question_id == Question.objects.get(id = qtm[i].question_id).id:
 				questions.append(Question.objects.get(id = qtm[i].question_id))
 		# import code; code.interact(local=dict(globals(), **locals()))
@@ -413,3 +438,16 @@ class CountResultView(View):
 		tap.save()
 		# import code; code.interact(local=dict(globals(), **locals()))
 		return JsonResponse({'marks': marks}, safe=False)
+
+class DeleteOneQuestionView(View):
+	def get(self, request, *args, **kwargs):
+		# import code; code.interact(local=dict(globals(), **locals()))
+		question = Question.objects.get(id = request.GET.get('question_id')).delete()
+		return JsonResponse({'status':"OK"},safe=False)
+
+class DeleteAllQuestionView(View):
+	def get(self, request, *args, **kwargs):
+		question_list = request.GET.getlist('questions')
+		question = Question.objects.all().delete()
+		# import code; code.interact(local=dict(globals(), **locals()))
+		return JsonResponse({'status':"OK"},safe=False)

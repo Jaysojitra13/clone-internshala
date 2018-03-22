@@ -5,24 +5,42 @@
 {% load static %}
 {% load intern%}
 
-
 {% block content %}
+
+ <div class="main">
+ 	<ul class="nav nav-tabs">
+ 		
+ 		<li><a href="{% url 'company:listofquestion' type=technology.technology_name %} ">Add Question for {{technology.technology_name}}</a></li>
+ 		
+ 	</li>
+ </ul>
+</div>
+
+
+{% block questions %}
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
 <script src="http://malsup.github.com/jquery.form.js"></script>
 <div class="main">
-	
 	<input id="checkAll" type="checkbox" name="checkbox">&nbsp; Select all questions	<br><br>
 	<form id="listOfQuestionsForm" method="post" action="{% url 'company:create-test' %}">
 		{% csrf_token %}
-		<div class="checkboxes">
+		<div class="checkboxes" style="width: 70%;">
 			<input type="hidden" name="upc_id" value={{upc_id}}>
-			{% if questions %}
-			{% for i in questions%}
-			<input class="checkBoxClass" type="checkbox" data-question_id="{{i.id}}" name="checkboxes" value="{{i.text}}">&nbsp; {{i.text}}<br>
-			{% endfor %}	
-			{% else%}
-			<h3>No questions available. First add question to the question Bank</h3>
-			{% endif %}
+			<ul class="list">
+				{% if questions %}
+				{% for i in questions%}
+				{% for j in i.id|answer_hr %}
+				<div style="width:100%;word-wrap: break-word;">
+					<li><input class="checkBoxClass" type="checkbox" data-question_id="{{i.id}}" name="checkboxes" value="{{i.text}}" style="float: right;">&nbsp; <label>{{i.text}}</label></li>
+					<label> Ans:-</label> {{j.text}}<br><br>
+				</div>
+
+				{% endfor %}
+				{% endfor %}	
+				{% else%}
+				<h3>No questions available. First add question to the question Bank</h3>
+				{% endif %}
+			</ul>
 		</div>
 
 		<button id="preview" class="btn btn-info" type="button" style="float: right;" data-toggle="modal" data-target="#myModal" onclick="previewQuestion({{upc_id}})">Preview</button>
@@ -56,42 +74,20 @@
 		$(".checkBoxClass").prop('checked', $(this).prop('checked'));
 	});
 	
-	
-	// $(document).ready(function() {
-		// $("#preview").click(function(){
-			function previewQuestion(id){
-
-				var questions = [];
-
-				$.each($("input[name='checkboxes']:checked"), function(){            
-					questions.push($(this).val());
-				});
-				document.getElementById("modalBody").innerHTML = questions.join("<br>");
-
-      	// /var x = document.getElementById("demo").innerHTML = window.location.pathname;
-      	// debugger;
-      		// $.ajax({
-      		// 	url : '/company/generatetest/'+id +'/',
-      		// 	type : "GET",
-      		// 	data: $('#listOfQuestionsForm').serialize(),
-      		// 	success:function(){
-      		// 		console.log("OJOK");
-      		// 	},
-      		// });
-      	}
-
-      	// function createTest(){
-      	// 	$("#listOfQuestionsForm").ajaxSubmit({
-      	// 		// url: $('#listOfQuestionsForm').attr('action'), 
-      	// 		// type: 'POST',
-      	// 	});
-
-      	// }
-
-      // });
-	// });
-	
+	function previewQuestion(id){
+		var questions = [];
+		$.each($("input[name='checkboxes']:checked"), function(){            
+			questions.push($(this).val());
+		});
+		if (questions == ''){
+		document.getElementById("modalBody").innerHTML = "First select questions.";	
+		}
+		else{
+		document.getElementById("modalBody").innerHTML = questions.join("<br>");
+	}
+	}
 </script>
 
 
+{% endblock %}
 {% endblock %}

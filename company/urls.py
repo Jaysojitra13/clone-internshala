@@ -28,6 +28,8 @@ urlpatterns = [
 	url(r'^result/(?P<id>\d+)/$',views.ResultView.as_view(), name='result'),
 	url(r'^checkanswer/',views.CheckAnswerView.as_view(), name='check-answer'),
 	url(r'^countresult/',views.CountResultView.as_view(), name='count-result'),
+	url(r'^deletesinglequestion/',views.DeleteOneQuestionView.as_view(), name='delete-singlequestion'),
+	url(r'^deleteallquesitons/',views.DeleteAllQuestionView.as_view(), name='delete-allquestion'),
 
 	
 

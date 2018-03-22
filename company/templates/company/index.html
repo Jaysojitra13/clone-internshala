@@ -3,9 +3,11 @@
 <html>
 <head>
   <link rel="stylesheet" type="text/css" href="{% static 'company/contactdetail.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'company/addquestion.css' %}" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="{% static 'company/confirmintern.css'%}">
   <link rel="stylesheet" type="text/css" href="{% static 'company/index.css'%}">
+  <link rel="stylesheet" type="text/css" href="{% static 'company/test.css'%}">
   <link rel="stylesheet" type="text/css" href="{% static 'company/sidenav.css'%}">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -19,7 +21,7 @@
 
         {% if user.is_authenticated %}
         <li>
-          <h2>Welcome {{ user.username }}</h2>
+          <h2 style="float: left;">Welcome {{ user.username }}</h2>
         </li>
         {% endif %}
       </ul>
@@ -36,13 +38,9 @@
 
 
 <div class="sidenav">
- <a href="{% url 'company:applications'%}">
-  Applications
-
-</a>
+ <a href="{% url 'company:applications'%}"> Applications</a>
 <a href="{% url 'company:all-post'%}">Requirements   </a>
-<a href="{% url 'company:test' %}">Question Bank
-
+<a href="{% url 'company:listofquestion' type='Python'%}">Question Bank
 <a href="{% url 'company:confirm-intern' pk=request.user.id%}">Interns</a>
 </div>
 

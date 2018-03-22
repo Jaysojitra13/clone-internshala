@@ -86,3 +86,4 @@ def check_upcid(value):
 	ans = answer_intern(value)
 	answer_intern = Answers_intern.objects.get(upc_id= value)
 	return answer_intern.upc_id
+
