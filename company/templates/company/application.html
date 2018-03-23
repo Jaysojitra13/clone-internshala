@@ -1,3 +1,4 @@
+
 {% extends 'company/index.html'%}
 {% load company %}
 {% load static %}
@@ -57,7 +58,6 @@
 						type: 'GET',
 						data: $('#HRFilter').serialize(),
 						success:function(response){
-							console.log("OK")
 						},
 					});
 				});
@@ -76,13 +76,13 @@
 						<tr>
 							<td> Applied Date
 								<span id="date_sortsdesc">
-									<a id="date" onclick="sortbydatedesc()">
+									<a id="date" onclick="sortByDateDesc()">
 
 										<span class="glyphicon glyphicon-triangle-bottom" style="font-size: 12px;"></span> 
 									</a>
 								</span>
 								<span id="date_sortasc">
-									<a id="date" onclick="sortbydateasc()">
+									<a id="date" onclick="sortByDateAsc()">
 
 										<span id="name_icon" class="glyphicon glyphicon-triangle-top" style="font-size: 12px;"></span> 
 									</a>
@@ -90,11 +90,11 @@
 							</td>
 							<td id="name"> Name
 								<span id="name_sortsdesc">
-									<a id="name" onclick="sortbynamedesc()">
+									<a id="name" onclick="sortByNameDesc()">
 										<span class="glyphicon glyphicon-triangle-bottom" style="font-size: 12px;"></span>
 									</a></span>
 									<span id="name_sortasc">
-										<a id="name" onclick="sortbynameasc()">
+										<a id="name" onclick="sortByNameAsc()">
 											<span class="glyphicon glyphicon-triangle-top" style="font-size: 12px;"></span>
 										</a>
 									</span>
@@ -149,13 +149,13 @@
 							</td>
 							{% else%}
 							<td id="td-test{{k.id}}{{i.id}}">
-								<a href="{% url 'company:generate-test' id=i.id%}"><button id="btn-test{{k.id}}{{i.id}}" class="btn btn-info" onclick="buttontest({{k.id}},{{i.id}})" style="visibility: visible;">Generate Test</button></a>
+								<a href="{% url 'company:generate-test' id=i.id%}"><button id="btn-test{{k.id}}{{i.id}}" class="btn btn-info" onclick="buttonTest({{k.id}},{{i.id}})" style="visibility: visible;">Generate Test</button></a>
 							</td>
 							{% endif  %}
 
 							{% else %}
 							<td >
-								<button id="btn-accept{{k.id}}{{i.id}}" class="btn btn-info" onclick="internship({{k.id}},{{i.id}})"> Accept</button>
+								<button id="btn-accept{{k.id}}{{i.id}}" class="btn btn-info" onclick="Internship({{k.id}},{{i.id}})"> Accept</button>
 							</td>
 							<td id="td-msg{{k.id}}{{i.id}}">
 								<button id="btn-message{{k.id}}{{i.id}}" class="btn btn-info" data-toggle="modal" data-target="#ModalReg{{k.id}}{{i.id}}" style="visibility: hidden;"> Message </button>
@@ -172,7 +172,7 @@
 							</td>
 							{% else %}
 							<td id="td-test{{k.id}}{{i.id}}">
-								<a href="{% url 'company:generate-test' id=i.id%}"><button id="btn-test{{k.id}}{{i.id}}" class="btn btn-info " onclick="buttontest({{k.id}},{{i.id}})" style="visibility: hidden;">Generate Test</button></a>
+								<a href="{% url 'company:generate-test' id=i.id%}"><button id="btn-test{{k.id}}{{i.id}}" class="btn btn-info " onclick="buttonTest({{k.id}},{{i.id}})" style="visibility: hidden;">Generate Test</button></a>
 							</td>
 							{% endif %}
 							{% endif %}
@@ -273,7 +273,7 @@
 		})
 
 	}
-	function internship(id1,id2){
+	function Internship(id1,id2){
 		var btnaccept = "#btn-accept"+id1+id2;
 		var btnconfirm = "#btn-confirm"+id1+id2;
 		var btnreject = "#btn-reject"+id1+id2;
@@ -296,9 +296,6 @@
 
 			}, 
 			success: function(data) {
-				console.log("Got Response")	
-				console.log(data)			
-				console.log(id2)
 				$(btnconfirm).css('visibility','visible');		
 				$(btnmessage).css('visibility','visible');
 				$(btntest).css('visibility','visible');
@@ -308,7 +305,7 @@
 				$(btnaccept).html("Inprogrss")
 				$(tdconfirm ).append('<button id="btn-confirm'+id1+id2+'" class="btn btn-info " onclick="buttonConfirm('+id1+','+id2+')">Confirm</button>');
 				$(tdmsg).append('<button id=btn-message'+ id1+id2+' class="btn btn-info" data-toggle="modal" data-target=#ModalReg'+id1+id2+'> Message </button>');
-				$(tdtest).append('<a href="{% url "company:generate-test" id=45 %}"><button id="btn-test'+id1+id2+'" class="btn btn-info " onclick="buttontest('+id1+','+id2+')">Generate Test</button></a>');*/
+				$(tdtest).append('<a href="{% url "company:generate-test" id=45 %}"><button id="btn-test'+id1+id2+'" class="btn btn-info " onclick="buttonTest('+id1+','+id2+')">Generate Test</button></a>');*/
 
 			}
 
@@ -343,12 +340,11 @@
 				'upc_id': id2,
 			},
 			success: function(response){
-				console.log("OK");
 			}
 		});
 	}
 
-	function sortbydatedesc(){
+	function sortByDateDesc(){
 		$.ajax({
 			url:'/company/applications/',
 			type:'GET',
@@ -366,7 +362,7 @@
 		});
 	}
 
-	function sortbydateasc(){
+	function sortByDateAsc(){
 		$.ajax({
 			url:'/company/applications/',
 			type:'GET',
@@ -384,7 +380,7 @@
 		});
 	}
 
-	function sortbynamedesc(){
+	function sortByNameDesc(){
 		$.ajax({
 			url:'/company/applications/',
 			type:'GET',
@@ -398,7 +394,7 @@
 		});
 	}
 
-	function sortbynameasc(){
+	function sortByNameAsc(){
 		$.ajax({
 			url:'/company/applications/',
 			type:'GET',

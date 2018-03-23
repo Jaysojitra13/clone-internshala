@@ -19,25 +19,39 @@
 
 
 {% block questions %}
-
 <div class="main">
-	<input id="checkAll" type="checkbox" name="checkbox">&nbsp; Select all questions <button id="delete" class="btn btn-danger" onclick="deleteAllQuestion()">Delete</button>
+	{% if questions%}
+	<div class="btn-delete">
+		<input id="checkAll" type="checkbox" name="checkbox">&nbsp; Select all questions <button id="delete" class="btn btn-danger" onclick="deleteAllQuestion()">Delete All</button>
+		
+	</div>
+	{% else %}
+	<div class="btn-delete">
+
+		
+	</div>
+	{% endif%}
 	<button id="add_question" class="btn btn-info" style="float: right;" data-toggle="modal" data-target="#myModal">Add question</button>
 	<h2>{{type}}</h2>
-	<div class="col-md-9" style="word-wrap: break-word;">
-		<ul>
-			<div id="allQuestions">
+		
 
-				{% if questions%}
-				{% for i in questions %}
-				{% for j in answers %}
-				{% if i.id == j.question_id%}
-				<li>
-					<input id="CB" class="checkBoxClass" type="checkbox" name="checkboxes" style="float: right;">
-					<h5 style="font-weight: bolder;">Question:- {{i.text}}  
-					</h5> 
-				</li> 
-				<label>Ans:-</label>{{j.text}}<br><br>
+	
+		{% if questions%}
+		<div class="col-md-11 bgcolor" id="allQuestions">
+		{% for i in questions %}
+		{% for j in answers %}
+		{% if i.id == j.question_id%}
+		<div class="row">
+			<div class="col-md-1">
+				<input id="CB" class="checkBoxClass" type="checkbox" name="checkboxes" value="{{i.id}}" style="float: left;">
+			</div>	
+			<div class="col-md-9" style="word-wrap: break-word;" >
+				<label>Question:- {{i.text}}  
+				</label><br>
+
+				<label>Ans:-</label><span>{{j.text}}</span><br>
+			</div>	
+			<div class="col-md-2">
 				<button class="icon-size" id="wrong{{i.id}}" type="button" onclick="deleteQuestion({{i.id}})"> 
 					<i class="fa fa-close">
 					</i>
@@ -46,45 +60,46 @@
 					<i class="fa fa-edit">
 					</i>
 				</button>
-				<br><br>
-				<div class="modal fade" id="updateModal{{i.id}}" role="dialog">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal">&times;</button>
-								<h4 class="modal-title">Add Question</h4>
+			</div>
+		</div>
+		<hr class="hr">
+
+		<div class="modal fade" id="updateModal{{i.id}}" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Update Question</h4>
+					</div>
+					<div class="modal-body">
+						<form id="updateQuestion{{i.id}}" class="form-inline" enctype="multipart/form-data" method="post">
+							{% csrf_token %}
+							<input type="hidden" name="question_id" value={{i.id}}>
+							<label>Question</label>
+							<textarea id="question" class="form-control" type="text" name="question">{{i.text}}</textarea>
+							<label> Answer</label>
+							<textarea id="answer" class="form-control" type="text" name="answer">{{j.text}}</textarea>
+
+
+							<div class="modal-footer">
+								<button id="Save" type="button" class="btn btn-info"  data-dismiss="modal" onclick="Update('{{type}}',{{i.id}})" style="float: right;">Save</button>
+
 							</div>
-							<div class="modal-body">
-								<form id="updateQuestion{{i.id}}" class="form-inline" enctype="multipart/form-data" method="post">
-									{% csrf_token %}
-									<input type="hidden" name="question_id" value={{i.id}}>
-									<label>Question</label>
-									<textarea id="question" class="form-control" type="text" name="question">{{i.text}}</textarea>
-									<label> Answer</label>
-									<textarea id="answer" class="form-control" type="text" name="answer">{{j.text}}</textarea>
-
-
-									<div class="modal-footer">
-										<button id="save" type="button" class="btn btn-info"  data-dismiss="modal" onclick="update('{{type}}',{{i.id}})" style="float: right;">Save</button>
-										
-									</div>
-								</form>
-							</div>
-						</div>
-
+						</form>
 					</div>
 				</div>
-				{% endif %}
-				{% endfor %}	
-				{% endfor %}	
-				{% else%}
-				<h3 id="h3">No questions available</h3>
-				{% endif %}
-			</ul>
-			
+			</div>
+		</div>
+		{% endif %}
+		{% endfor %}	
+		{% endfor %}
 		</div>	
+		{% else%}
+		<h3 id="h3">No questions available</h3>
+		{% endif %}
 
-	</div>
+
+	
 
 	<div class="modal fade" id="myModal" role="dialog">
 		<div class="modal-dialog">
@@ -97,9 +112,9 @@
 					<form id="formQuesion" class="form-inline" enctype="multipart/form-data"  method="post">
 						{% csrf_token %}
 						<label>Question</label>
-						<textarea id="question" class="form-control" type="text" name="question"></textarea>
+						<textarea id="question11" class="form-control" type="text" name="question"></textarea>
 						<label> Answer</label>
-						<textarea id="answer" class="form-control" type="text" name="answer"></textarea>
+						<textarea id="answer11" class="form-control" type="text" name="answer"></textarea>
 
 
 						<div class="modal-footer">
@@ -117,20 +132,20 @@
 			// $(document).on('click', '#save-cont', function(e){
 			// 	e.preventDefault();
 
-			// console.log("sdaghfsljhkj"+type);
 			$.ajax({
 				type : 'POST',
 				url : '/company/listofquestion/'+type+'/',
 				data: $('#formQuesion').serialize(),
 				success:function(response){
-					$('#question').val('');
-					$('#answer').val(''); 
+					$('#question11').val('');
+					$('#answer11').val(''); 
 					$('#h3').remove();
-					$('#allQuestions').append('<li><input id="CB" class="checkBoxClass" type="checkbox" name="checkboxes"style="float: right;"><h5 style="font-weight: bolder;">Question:- '+ response.obj_text+'</h5></li><label>Ans:- </label>'+response.obj1_text+'<br><br><button class="icon-size" id="wrong'+response.obj_id+'" type="button" onclick="deleteQuestion('+response.obj_id+')"><i class="fa fa-close"></i></button>&nbsp;<button class="icon-size" id="edit'+response.obj_id+'" type="button"><i class="fa fa-edit"></i></button><br><br>');
+					$('.btn-delete').html('<input id="checkAll" type="checkbox" name="checkbox">&nbsp; Select all questions <button id="delete" class="btn btn-danger" onclick="deleteAllQuestion()">Delete All</button>');
+
+					$('#allQuestions').append('<div class="row"><div class="col-md-1"><input id="CB" class="checkBoxClass" type="checkbox" name="checkboxes"style="float: right;"></div> <div class="col-md-9"> <label>Question:- '+ response.obj_text+'</label><br><label>Ans:- </label><span>'+response.obj1_text+'</span><br></div><div class="col-md-2"><button class="icon-size" id="wrong'+response.obj_id+'" type="button" onclick="deleteQuestion('+response.obj_id+')"><i class="fa fa-close"></i></button>&nbsp;<button class="icon-size" id="edit'+response.obj_id+'" type="button"><i class="fa fa-edit"></i></button></div></div><hr class="hr">');
 				},
 				error: function(response){
 					alert("ERROR");
-					console.log("ERROR");
 				}
 
 
@@ -141,13 +156,16 @@
 		function Save(type){
 			$(document).on('click','#save',function(){
 				// e.preventDefault();
+				debugger;
 				$.ajax({
 					type: 'POST',
 					url : '/company/listofquestion/'+type+'/',
 					data : $('#formQuesion').serialize(),					
 					success:function(response){
 						$('#h3').remove();
-						$('#allQuestions').append('<li><input id="CB" class="checkBoxClass" type="checkbox" name="checkboxes"style="float: right;"><h5 style="font-weight: bolder;">Question:- '+ response.obj_text+'</h5></li><label>Ans:- </label>'+response.obj1_text+'<br><br><button class="icon-size" id="wrong'+response.obj_id+'" type="button" onclick="deleteQuestion('+response.obj_id+')"><i class="fa fa-close"></i></button><button class="icon-size" id="edit'+response.obj_id+'" type="button"><i class="fa fa-edit"></i></button><br><br>');	
+						location.reload();
+						// $('#btn-delete').html('<input id="checkAll" type="checkbox" name="checkbox">&nbsp; Select all questions <button id="delete" class="btn btn-danger" onclick="deleteAllQuestion()">Delete All</button>');
+						// $('#allQuestions').append('<li><input id="CB" class="checkBoxClass" type="checkbox" name="checkboxes"style="float: right;"><h5 style="font-weight: bolder;">Question:- '+ response.obj_text+'</h5></li><label>Ans:- </label>'+response.obj1_text+'<br><br><button class="icon-size" id="wrong'+response.obj_id+'" type="button" onclick="deleteQuestion('+response.obj_id+')"><i class="fa fa-close"></i>&nbsp;</button><button class="icon-size" id="edit'+response.obj_id+'" type="button"><i class="fa fa-edit"></i></button><br><br>');	
 					}
 
 				});
@@ -156,53 +174,56 @@
 
 
 
-function update(type,id){
-	var x = "#updateQuestion"+id;
-	$.ajax({
-		type: "POST",
-		url:'/company/listofquestion/'+type+'/',
-		data : $(x).serialize(),
+		function Update(type,id){
+			var x = "#updateQuestion"+id;
+			$.ajax({
+				type: "POST",
+				url:'/company/listofquestion/'+type+'/',
+				data : $(x).serialize(),
+				success:function(){
+					location.reload();
+				},
 
 
-	});
-}
+			});
+		}
 
-$("#checkAll").click(function () {
-	$(".checkBoxClass").prop('checked', $(this).prop('checked'));
-});
+		$("#checkAll").click(function () {
+			$(".checkBoxClass").prop('checked', $(this).prop('checked'));
+		});
 
-function deleteAllQuestion(){
-	var questions = [];
-	$.each($("input[name='checkboxes']:checked"), function(){            
-		questions.push($(this).val());
-	});
-	$.ajax({
-		url: '/company/deleteallquesitons/',
-		type: "GET",
-		traditional: true,
-		data:{
-			'questions': questions,
-		},
-		success:function(){
-			location.reload();
-		},
-	});
-}
+		function deleteAllQuestion(){
+			var questions = [];
+			$.each($("input[name='checkboxes']:checked"), function(){            
+				questions.push($(this).val());
+			});
+			$.ajax({
+				url: '/company/deleteallquesitons/',
+				type: "GET",
+				traditional: true,
+				data:{
+					'questions': questions,
+				},
+				success:function(){
+					location.reload();
+				},
+			});
+		}
 
-function deleteQuestion(id){
-	$.ajax({
-		url: '/company/deletesinglequestion/',
-		type: "GET",
-		data:{
-			'question_id' : id,
-		},
-		success:function(){
-			location.reload();
-		},
-	});
+		function deleteQuestion(id){
+			$.ajax({
+				url: '/company/deletesinglequestion/',
+				type: "GET",
+				data:{
+					'question_id' : id,
+				},
+				success:function(){
+					location.reload();
+				},
+			});
 
-}
-</script>
+		}
+	</script>
 </div>
 {% endblock %}
 {% endblock %}

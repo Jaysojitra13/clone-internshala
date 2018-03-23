@@ -5,15 +5,15 @@
 {% load static %}
 {% load intern%}
 
-{% block content %}
+{% block content %} 
 
- <div class="main">
- 	<ul class="nav nav-tabs">
- 		
- 		<li><a href="{% url 'company:listofquestion' type=technology.technology_name %} ">Add Question for {{technology.technology_name}}</a></li>
- 		
- 	</li>
- </ul>
+<div class="main">
+	<ul class="nav nav-tabs">
+		
+		<li><a href="{% url 'company:listofquestion' type=technology.technology_name %} ">Add Question for {{technology.technology_name}}</a></li>
+		
+	</li>
+</ul>
 </div>
 
 
@@ -21,30 +21,39 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
 <script src="http://malsup.github.com/jquery.form.js"></script>
 <div class="main">
-	<input id="checkAll" type="checkbox" name="checkbox">&nbsp; Select all questions	<br><br>
+	{% if questions %}
+	<input id="checkAll" type="checkbox" name="checkbox">&nbsp; Select all questions	
+	<button id="preview" class="btn btn-info" type="button" style="float: right;" data-toggle="modal" data-target="#myModal" onclick="previewQuestion({{upc_id}})">Preview</button>
+	<br><br>
 	<form id="listOfQuestionsForm" method="post" action="{% url 'company:create-test' %}">
 		{% csrf_token %}
-		<div class="checkboxes" style="width: 70%;">
+		<div class="checkboxes">
 			<input type="hidden" name="upc_id" value={{upc_id}}>
-			<ul class="list">
-				{% if questions %}
+			
+			<div class="col-md-11">
+				
 				{% for i in questions%}
 				{% for j in i.id|answer_hr %}
-				<div style="width:100%;word-wrap: break-word;">
-					<li><input class="checkBoxClass" type="checkbox" data-question_id="{{i.id}}" name="checkboxes" value="{{i.text}}" style="float: right;">&nbsp; <label>{{i.text}}</label></li>
-					<label> Ans:-</label> {{j.text}}<br><br>
+				<div class="row">
+					<div class="col-md-1">
+						<input class="checkBoxClass" type="checkbox" data-question_id="{{i.id}}" name="checkboxes" value="{{i.text}}">&nbsp; 
+					</div>
+					<div class="col-md-9">
+						<label>Question:- {{i.text}}</label><br>
+						<label> Ans:-</label> {{j.text}}<br><br>
+					</div>
+					<div class="col-md-2">
+						
+					</div>
 				</div>
-
 				{% endfor %}
 				{% endfor %}	
-				{% else%}
-				<h3>No questions available. First add question to the question Bank</h3>
-				{% endif %}
-			</ul>
+				
+			</div>
+			
 		</div>
 
-		<button id="preview" class="btn btn-info" type="button" style="float: right;" data-toggle="modal" data-target="#myModal" onclick="previewQuestion({{upc_id}})">Preview</button>
-
+		
 		<div id="myModal" class="modal fade" role="dialog">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -66,7 +75,9 @@
 		</div>
 	</form>
 
-
+	{% else%}
+	<h3>No questions available. First add question to the question Bank</h3>
+	{% endif %}
 
 </div>
 <script>
@@ -80,11 +91,11 @@
 			questions.push($(this).val());
 		});
 		if (questions == ''){
-		document.getElementById("modalBody").innerHTML = "First select questions.";	
+			document.getElementById("modalBody").innerHTML = "First select questions.";	
 		}
 		else{
-		document.getElementById("modalBody").innerHTML = questions.join("<br>");
-	}
+			document.getElementById("modalBody").innerHTML = questions.join("<br>");
+		}
 	}
 </script>
 

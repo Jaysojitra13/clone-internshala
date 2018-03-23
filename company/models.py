@@ -63,6 +63,7 @@ class UserPostConnection(models.Model):
 	
 class Messages(models.Model):
 	postdetails = models.ForeignKey(PostDetails, on_delete=models.CASCADE)
+	upc = models.ForeignKey(UserPostConnection, on_delete=models.CASCADE, default=0)
 	messages = models.TextField(max_length=500)
 	is_read = models.BooleanField(default= False)
 	message_date = models.DateField(default=datetime.datetime.now().date())
@@ -75,11 +76,11 @@ class Question(models.Model):
 	company = models.ForeignKey(CompanyProfile, on_delete=models.CASCADE)		
 	text = models.TextField(max_length=500)
 
-class Answers_HR(models.Model):
+class AnswersHR(models.Model):
 	question = models.ForeignKey(Question, on_delete=models.CASCADE)
 	text = models.TextField(max_length=500)
 
-class Answers_intern(models.Model):
+class AnswersIntern(models.Model):
 	question = models.ForeignKey(Question, on_delete=models.CASCADE)
 	text = models.TextField(max_length=500)
 	upc = models.ForeignKey(UserPostConnection,on_delete=models.CASCADE)

@@ -544,7 +544,7 @@ class SubmitTestView(View):
 	def post(self, request, *args, **kwargs):
 		id = request.POST.get('upc_id')
 		answers_list = request.POST.getlist('answers')
-		objs = [Answers_intern() for i in answers_list]
+		objs = [AnswersIntern() for i in answers_list]
 		test = TestApplicationMapping.objects.get(upc_id = id)
 		test.teststatus_id = 1
 		test.save()

@@ -5,27 +5,7 @@
 
 {% block content %}
 <div class="main">
-
-	<!-- <div class="frame" style="background-color: #f1f1f1;border-style: solid; border-color: green;">
-		<div class="questions">
-			<label>Question:- Q1</label>
-
-		</div>
-		<div class="answers">
-			<div class="col-md-6" >
-				<h5>Intern's Answer:- AI 
-				</div>
-				<div class="col-md-6" style="border-left: 5px solid #b3b6b7; height: 80px;">
-					<h5>Your answer:- AHR</h5>
-				</div>
-
-			</div>
-			<div class="button">
-				<button id="right{{i.id}}" type="button" ><i class="fa fa-check"></i></button>
-				<button id="wrong{{i.id}}" type="button"> <i class="fa fa-close"></i></button>
-			</div>
-		</div> -->
-		{{questions}}
+  
 		{% for i in questions%}
 		{% for l in i.id|answer_hr%}
 		{% for j in i.id|answer_intern:upc_id %}
@@ -138,7 +118,6 @@
 									'upc_id': {{upc_id}},
 								},
 								success:function(response){
-									console.log(response)
 									$('label').css('visibility','visible');
 									$('#result').html(response.marks);
 								},

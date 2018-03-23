@@ -240,7 +240,6 @@
 						});
 					});	*/
 					$('#sub').on('click',function(){
-						console.log($('#FF'))
 						$('#FF').submit(function(){
 
 							$.ajax({
@@ -248,7 +247,6 @@
 								type: 'GET',
 								data: $('#FF').serialize(),
 								success:function(response){
-									console.log("OK")
 								},
 							});
 

@@ -45,52 +45,51 @@
       </tr>
     </thead>
     {% for i in upc %}
-    {%for j in i.company_id|post_details %}
+    {% for j in i.company_id|post_details %}
     {% if j.id == i.postdetails_id%}
     <tr>
-      <td> {{j.company_id|company_name }}</td>
-      <td> {{j.domain}}</td>
-      <td> {{i.status}}</td>
+      <td> {{j.company_id|company_name }} </td>
+      <td> {{j.domain}} </td>
+      <td> {{i.status}} </td>
       <td>
 
-        <button id="btn-msg{{j.id}}" class="btn btn-notify" data-toggle="modal" data-target="#ModalMes{{j.id}}"> Message</button>
+        <button id="btn-msg{{j.id}}" class="btn btn-notify" data-toggle="modal" data-target="#ModalMes{{j.id}}"> Message </button>
         
 
-        <span id="badge{{j.id}}" class="badge" style="position: relative; bottom:10px; left:-10px;">{% if j.id|messages_count > 0 %}{{j.id|messages_count}}{%endif%}</span>
+        <span id="badge{{j.id}}" class="badge" style="position: relative; bottom:10px; left:-10px;">{% if j.id|messages_count:i.id > 0 %}{{j.id|messages_count:i.idp}}{%endif%}</span>
       </td>
       {% if i.status == "Accepted" or i.status == "InProcess" or i.status == "Confirmed"%}
       {% if i.id|check_test == 0%}
       <td><a href="{% url 'intern:give-test' pk=i.pk %}"><button class="btn btn-info" type="button">Give Test </button></td>
-  {% elif i.id|check_test == 1 %}
+      {% elif i.id|check_test == 1 %}
       <td><button class="btn btn-info disabled" type="button">submitted</button></td>
-  {% elif i.id|check_test == 2%}
+      {% elif i.id|check_test == 2%}
       <td><button id="btn-result{{i.id}}" class="btn btn-info" type="button" onclick="showResult('{{i.id}}')">Result</button></td>
-   {% endif %}
-   {%  endif %}
+      {% endif %}
+      {%  endif %}
     </tr>
-   {% endif %}
-   <div class="modal fade" id="ModalMes{{j.id}}" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
+   
+    <div class="modal fade" id="ModalMes{{j.id}}" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
 
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-          <h4 class="modal-title">Messages From Company </h4>
+            <h4 class="modal-title">Messages From Company</h4>
+          </div>
+          <div class="modal-body">
+           <ol style="list-style-type: none"> 
+            {% for k in j.id|messages:i.id %}
+            <li>{{k.message_date}}:- &nbsp;{{k.messages}}</li>
+            {% endfor %}
+          </ol>
         </div>
-        <div class="modal-body">
-         <ol style="list-style-type: none"> 
-          {% for k in j.id|messages %}
-          <li>{{k.message_date}}:- &nbsp;{{k.messages}}</li>
-          {% endfor %}
-        </ol>
-      </div>
-      <!--   <div class="modal-footer">
-    </div> -->
+      
   </div>  
 </div>  
-</div>
-
+</div> 
+ {% endif %}
 
 
 <script>
@@ -110,17 +109,17 @@
 {%endfor%}
 {%endfor%}
 <script>
-    function showResult(id){
-      $.ajax({
-        url: '/intern/showresult/',
-        type: 'GET',
-        data: {
-          'upc_id' : id,
-        },
-        success:function(response){
-          alert("Your Result is "+response.result);
-        },
-      });
+  function showResult(id){
+    $.ajax({
+      url: '/intern/showresult/',
+      type: 'GET',
+      data: {
+        'upc_id' : id,
+      },
+      success:function(response){
+        alert("Your Result is "+response.result);
+      },
+    });
   }
 </script>
 </table>
@@ -142,8 +141,4 @@
     {% endif %}
   </span>
 </div>
-
-<!-- </body>
-
-  </html> -->
   {% endblock %}

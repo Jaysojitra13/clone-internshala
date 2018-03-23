@@ -52,19 +52,19 @@ def question_text(value):
 
 @register.filter(name="answer_intern")
 def answer_intern(value,upc_id):
-	answer_intern =  Answers_intern.objects.filter(question_id = value,upc_id = upc_id)
+	answer_intern =  AnswersIntern.objects.filter(question_id = value,upc_id = upc_id)
 	return answer_intern
 	
 
 @register.filter(name="answer_internexist")
 def answer_internexist(value):
-	question =  Answers_intern.objects.filter(upc_id = value)
+	question =  AnswersIntern.objects.filter(upc_id = value)
 	return question
 
 @register.filter(name="answer_hr")
 def answer_hr(value):
-	answers_hr =  Answers_HR.objects.filter(question_id = value)
-	return answers_hr	
+	AnswerHR =  AnswersHR.objects.filter(question_id = value)
+	return AnswerHR	
 
 @register.filter(name="test_appmapping")
 def test_appmapping(value):
@@ -73,7 +73,7 @@ def test_appmapping(value):
 
 @register.filter(name="check_answer")
 def check_answer(value):
-	check_answer = Answers_intern.objects.get(id = value).is_correct
+	check_answer = AnswersIntern.objects.get(id = value).is_correct
 	return check_answer
 
 @register.filter(name="check_teststatus")
@@ -84,6 +84,6 @@ def check_teststatus(value):
 @register.filter(name="check_upcid")
 def check_upcid(value):
 	ans = answer_intern(value)
-	answer_intern = Answers_intern.objects.get(upc_id= value)
+	answer_intern = AnswersIntern.objects.get(upc_id= value)
 	return answer_intern.upc_id
 
