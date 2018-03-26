@@ -16,40 +16,54 @@
  </ul>
 </div>
 
-
+<script>
+var selector = '.nav li';
+	$(selector).on('click',function(){
+		$(selector).removeClass('active');
+		$(this).addClass('active');
+	});
+</script>
 
 {% block questions %}
 <div class="main">
-	{% if questions%}
-	<div class="btn-delete">
-		<input id="checkAll" type="checkbox" name="checkbox">&nbsp; Select all questions <button id="delete" class="btn btn-danger" onclick="deleteAllQuestion()">Delete All</button>
-		
-	</div>
-	{% else %}
-	<div class="btn-delete">
+	<div class="col-md-11">
+		<div class="row">
+			{% if questions%}
+			<div class="col-md-5">
+				<div class="btn-delete">
+					<input id="checkAll" type="checkbox" name="checkbox">&nbsp; Select all questions <button id="delete" class="btn btn-danger" onclick="deleteAllQuestion()">Delete All</button>
 
-		
+				</div>
+			</div>
+			{% else %}
+			<div class="col-md-5"
+			<div class="btn-delete">
+
+			</div>
+		</div>
+		{% endif%}
+		<div class="col-md-7" style="float: right;">
+			<button id="add_question" class="btn btn-info" style="float: right;" data-toggle="modal" data-target="#myModal">Add question</button>
+		</div>
 	</div>
-	{% endif%}
-	<button id="add_question" class="btn btn-info" style="float: right;" data-toggle="modal" data-target="#myModal">Add question</button>
+	<br>
 	<h2>{{type}}</h2>
-		
 
-	
+
+	<div class="col-md-11" id="allQuestions">
 		{% if questions%}
-		<div class="col-md-11 bgcolor" id="allQuestions">
 		{% for i in questions %}
 		{% for j in answers %}
 		{% if i.id == j.question_id%}
 		<div class="row">
 			<div class="col-md-1">
-				<input id="CB" class="checkBoxClass" type="checkbox" name="checkboxes" value="{{i.id}}" style="float: left;">
+				<input id="CB" class="checkBoxClass" type="checkbox" name="checkboxes" value="{{i.id}}">
 			</div>	
 			<div class="col-md-9" style="word-wrap: break-word;" >
 				<label>Question:- {{i.text}}  
 				</label><br>
 
-				<label>Ans:-</label><span>{{j.text}}</span><br>
+				<label>Ans:-</label>{{j.text}}<br>
 			</div>	
 			<div class="col-md-2">
 				<button class="icon-size" id="wrong{{i.id}}" type="button" onclick="deleteQuestion({{i.id}})"> 
@@ -93,13 +107,13 @@
 		{% endif %}
 		{% endfor %}	
 		{% endfor %}
-		</div>	
-		{% else%}
-		<h3 id="h3">No questions available</h3>
-		{% endif %}
+	</div>	
+	{% else%}
+	<h3 id="h3">No questions available</h3>
+	{% endif %}
 
 
-	
+
 
 	<div class="modal fade" id="myModal" role="dialog">
 		<div class="modal-dialog">
@@ -112,9 +126,9 @@
 					<form id="formQuesion" class="form-inline" enctype="multipart/form-data"  method="post">
 						{% csrf_token %}
 						<label>Question</label>
-						<textarea id="question11" class="form-control" type="text" name="question"></textarea>
+						<textarea id="question11" class="form-control" type="text" name="question" required="true"></textarea>
 						<label> Answer</label>
-						<textarea id="answer11" class="form-control" type="text" name="answer"></textarea>
+						<textarea id="answer11" class="form-control" type="text" name="answer" required="true"></textarea>
 
 
 						<div class="modal-footer">
@@ -142,7 +156,7 @@
 					$('#h3').remove();
 					$('.btn-delete').html('<input id="checkAll" type="checkbox" name="checkbox">&nbsp; Select all questions <button id="delete" class="btn btn-danger" onclick="deleteAllQuestion()">Delete All</button>');
 
-					$('#allQuestions').append('<div class="row"><div class="col-md-1"><input id="CB" class="checkBoxClass" type="checkbox" name="checkboxes"style="float: right;"></div> <div class="col-md-9"> <label>Question:- '+ response.obj_text+'</label><br><label>Ans:- </label><span>'+response.obj1_text+'</span><br></div><div class="col-md-2"><button class="icon-size" id="wrong'+response.obj_id+'" type="button" onclick="deleteQuestion('+response.obj_id+')"><i class="fa fa-close"></i></button>&nbsp;<button class="icon-size" id="edit'+response.obj_id+'" type="button"><i class="fa fa-edit"></i></button></div></div><hr class="hr">');
+					$('#allQuestions').append('<div class="row"><div class="col-md-1"><input id="CB" class="checkBoxClass" type="checkbox" name="checkboxes"></div> <div class="col-md-9" style="word-wrap: break-word;"> <label>Question:- '+ response.obj_text+'</label><br><label>Ans:- </label><span>'+response.obj1_text+'</span><br></div><div class="col-md-2"><button class="icon-size" id="wrong'+response.obj_id+'" type="button" onclick="deleteQuestion('+response.obj_id+')"><i class="fa fa-close"></i></button>&nbsp;<button class="icon-size" id="edit'+response.obj_id+'" type="button"><i class="fa fa-edit"></i></button></div></div><hr class="hr">');
 				},
 				error: function(response){
 					alert("ERROR");

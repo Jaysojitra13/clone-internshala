@@ -290,16 +290,12 @@ class InternshipDetailView(TemplateView):
 			# print(city)
 			# print(typ)
 			
-			
-			# if 'tech' in self.request.session:
-			# 	del self.request.session['tech']
-			# elif 'stipend' in self.request.session:
-			# 	del self.request.session['stipend']
-			# elif 'duration' in self.request.session:
-			# 	del self.request.session['duration']
-			# else:
-			# 	pass
-			
+			if AcademicDetails.objects.filter(internprofile_id = self.request.user.id).exists():
+				data['AD'] = AcademicDetails.objects.get(internprofile_id = self.request.user.id).pk
+
+			if PersonalDetails.objects.filter(internprofile_id = self.request.user.id).exists():
+				data['PD'] = PersonalDetails.objects.get(internprofile_id = self.request.user.id).pk
+				
 			tmp = ['tech','duration', 'stipend','city','typ']
 			p = PostDetails.objects.all()
 			

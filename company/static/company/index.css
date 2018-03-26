@@ -12,3 +12,12 @@
 a:focus{
 	color:red;
 }
+
+.icon-msg{
+	font-size: 14px;
+	
+}
+
+.modal-dialog{
+	left: 0%;
+}

@@ -1,6 +1,6 @@
 .center_div{
     margin: 30px auto;
-    width:30%; 
+    width:31%; 
 
      /* value of your choice which suits your alignment */
 }
@@ -30,4 +30,9 @@
 .notaccount{
 	text-align: center;
 	padding-top: 10px;
+}
+
+.reset{
+	border-radius: 5px;
+	font-size: 15px;
 }

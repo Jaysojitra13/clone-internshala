@@ -121,65 +121,61 @@
 
 							<td id="td{{k.id}}{{i.id}}"> 
 
-								<button id="btn-inprogress{{k.id}}" class="btn btn-info disabled" > Inprogress</button>
+								<button id="btn-inprogress{{k.id}}" class="btn btn-info disabled btn-sm" > Inprogress</button>
 							</td>
 							<td id="td-msg{{k.id}}{{i.id}}">
 
-								<button id="btn-message{{k.id}}{{i.id}}" class="btn btn-info" data-toggle="modal" data-target="#ModalReg{{k.id}}{{i.id}}" style="visibility: visible;"> Message </button>
+								<button id="btn-message{{k.id}}{{i.id}}" class="btn btn-basic btn-sm" data-toggle="modal" data-target="#ModalReg{{k.id}}{{i.id}}" style="visibility: visible;"> <i class="material-icons icon-msg">message</i></button>
 							</td>
 
 							<td>
-								<button id="btn-reject{{k.id}}{{i.id}}" class="btn btn-info" data-toggle="modal" data-target="#ModalRegReject{{k.id}}{{i.id}}">Reject</button>
+								<button id="btn-reject{{k.id}}{{i.id}}" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ModalRegReject{{k.id}}{{i.id}}"><i class="fa fa-close"></i></button>
 							</td>
 							<td id="td-confirm{{k.id}}{{i.id}}">
-								<button id="btn-confirm{{k.id}}{{i.id}}" class="btn btn-info " onclick="buttonConfirm({{k.id}},{{i.id}})" style="visibility: visible;">Confirm</button>
+								<button id="btn-confirm{{k.id}}{{i.id}}" class="btn btn-success btn-sm" onclick="buttonConfirm({{k.id}},{{i.id}})" style="visibility: visible;"><i class="fa fa-check"></i></button>
 							</td>
 
-							{% if i.id|check_teststatus == 1 %}
+							{% if i.id|check_teststatus == 1 or i.id|check_teststatus == 2 %}
 							<td id="td-result{{k.id}}{{i.id}}">
-								<a href="{% url 'company:result' id=i.id%}"><button id="btn-test{{k.id}}{{i.id}}" class="btn btn-info "style="visibility: visible;">Result</button></a>
-							</td>
-							{% elif i.id|check_teststatus == 2 %}
-							<td id="td-result{{k.id}}{{i.id}}">
-								<a href="{% url 'company:result' id=i.id%}"><button id="btn-test{{k.id}}{{i.id}}" class="btn btn-info "style="visibility: visible;">Result</button></a>
+								<a href="{% url 'company:result' id=i.id%}"><button id="btn-test{{k.id}}{{i.id}}" class="btn btn-info btn-sm" style="visibility: visible;">Result</button></a>
 							</td>
 							{%elif i.id|check_teststatus == 0%}
 							<td id="td-checkteststatus{{k.id}}{{i.id}}"> 
-								<button id="btn-checkteststatus{{k.id}}{{i.id}}" class="btn btn-info disabled" style="visibility: visible;">Not Submitted</button>
+								<button id="btn-checkteststatus{{k.id}}{{i.id}}" class="btn btn-info disabled btn-sm" style="visibility: visible;">Not Submitted</button>
 							</td>
 							{% else%}
 							<td id="td-test{{k.id}}{{i.id}}">
-								<a href="{% url 'company:generate-test' id=i.id%}"><button id="btn-test{{k.id}}{{i.id}}" class="btn btn-info" onclick="buttonTest({{k.id}},{{i.id}})" style="visibility: visible;">Generate Test</button></a>
+								<a href="{% url 'company:generate-test' id=i.id%}"><button id="btn-test{{k.id}}{{i.id}}" class="btn btn-info btn-sm" onclick="buttonTest({{k.id}},{{i.id}})" style="visibility: visible;">Generate Test</button></a>
 							</td>
 							{% endif  %}
 
 							{% else %}
 							<td >
-								<button id="btn-accept{{k.id}}{{i.id}}" class="btn btn-info" onclick="Internship({{k.id}},{{i.id}})"> Accept</button>
+								<button id="btn-accept{{k.id}}{{i.id}}" class="btn btn-info btn-sm" onclick="Internship({{k.id}},{{i.id}})"> Accept</button>
 							</td>
 							<td id="td-msg{{k.id}}{{i.id}}">
-								<button id="btn-message{{k.id}}{{i.id}}" class="btn btn-info" data-toggle="modal" data-target="#ModalReg{{k.id}}{{i.id}}" style="visibility: hidden;"> Message </button>
+								<button id="btn-message{{k.id}}{{i.id}}" class="btn btn-basic btn-sm" data-toggle="modal" data-target="#ModalReg{{k.id}}{{i.id}}" style="visibility: hidden;">  <i class="material-icons icon-msg">message</i> </button>
 							</td>
 							<td >
-								<button id="btn-reject{{k.id}}{{i.id}}" class="btn btn-info" data-toggle="modal" data-target="#ModalRegReject{{k.id}}{{i.id}}">Reject</button>
+								<button id="btn-reject{{k.id}}{{i.id}}" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ModalRegReject{{k.id}}{{i.id}}"><i class="fa fa-close"></i></button>
 							</td>
 							<td id="td-confirm{{k.id}}{{i.id}}">
-								<button id="btn-confirm{{k.id}}{{i.id}}" class="btn btn-info " onclick="buttonConfirm({{k.id}},{{i.id}}) " style="visibility: hidden;">Confirm</button>
+								<button id="btn-confirm{{k.id}}{{i.id}}" class="btn btn-success btn-sm" onclick="buttonConfirm({{k.id}},{{i.id}}) " style="visibility: hidden;"><i class="fa fa-check"></i></button>
 							</td>
 							{% if i.id|check_teststatus == 0 %}
 							<td id="td-checkteststatus{{k.id}}{{i.id}}"> 
-								<button id="btn-checkteststatus{{k.id}}{{i.id}}" class="btn btn-info disabled" style="visibility: hidden;">Not Submitted</button>
+								<button id="btn-checkteststatus{{k.id}}{{i.id}}" class="btn btn-info disabled btn-sm" style="visibility: hidden;">Not Submitted</button>
 							</td>
 							{% else %}
 							<td id="td-test{{k.id}}{{i.id}}">
-								<a href="{% url 'company:generate-test' id=i.id%}"><button id="btn-test{{k.id}}{{i.id}}" class="btn btn-info " onclick="buttonTest({{k.id}},{{i.id}})" style="visibility: hidden;">Generate Test</button></a>
+								<a href="{% url 'company:generate-test' id=i.id%}"><button id="btn-test{{k.id}}{{i.id}}" class="btn btn-info btn-sm" onclick="buttonTest({{k.id}},{{i.id}})" style="visibility: hidden;">Generate Test</button></a>
 							</td>
 							{% endif %}
 							{% endif %}
 						</tr>
 
 						<div class="modal fade" id="ModalReg{{k.id}}{{i.id}}" role="dialog">
-							<div class="modal-dialog">
+							<div class="modal-dialog" style="left: 0%;width: 500px;">
 								<div class="modal-content">
 									<div class="modal-header">
 
@@ -199,9 +195,9 @@
 								</div>	
 							</div>	
 						</div>
-
+						
 						<div class="modal fade" id="ModalRegReject{{k.id}}{{i.id}}" role="dialog">
-							<div class="modal-dialog">
+							<div class="modal-dialog" style="left: 0%;width: 500px;">
 								<div class="modal-content">
 									<div class="modal-header">
 
@@ -285,7 +281,7 @@
 		var btntest = "#btn-test"+id1+id2;
 		var btncheckteststatus = "#checkteststatus"+id1+id2;
 		$(btnaccept).replaceWith
-		('<button id="btn-inprogress" class="btn btn-info disabled" > Inprogress</button>');  
+		('<button id="btn-inprogress" class="btn btn-info disabled btn-sm" > Inprogress</button>');  
 		$(btnaccept).html('InProcess')
 		$.ajax({
 			url: '/company/accept/',
