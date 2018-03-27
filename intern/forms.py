@@ -107,7 +107,3 @@ class InternSignUpForm(UserCreationForm):
 		#internprofile.interests.add(*self.cleaned_data.get('interests'))
 		return user	
 
-class FilterForm(forms.Form):
-	location = forms.CharField(label="Choose City")
-	technology = forms.CharField(label="Choose technology")
-	stipend = forms.BooleanField(label="Stipend")

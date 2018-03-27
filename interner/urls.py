@@ -15,22 +15,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
-from intern import views
+# from intern import views
 from company import views
 from django.conf.urls import url
 from django.conf import settings
 from django.conf.urls.static import static
+from intern.views import  SignIn_SignUp, intern_details
  
 urlpatterns = [
-    url(r'^checkuser/(?P<type>\w+)/$', views.CheckUser, name='check-user'),
-    url(r'^checklogin/(?P<type>\w+)/$', views.CheckLogin, name='check-login'),
-    url(r'^accounts/signup/$', views.MySignUpView.as_view(), name='check-signupuser'),
-    url(r'^accounts/login/$', views.MyLogInView.as_view(), name='check-loginuser'),
+    url(r'^checkuser/(?P<type>\w+)/$', SignIn_SignUp.CheckUser, name='check-user'),
+    url(r'^checklogin/(?P<type>\w+)/$', SignIn_SignUp.CheckLogin, name='check-login'),
+    url(r'^accounts/signup/$', SignIn_SignUp.MySignUpView.as_view(), name='check-signupuser'),
+    url(r'^accounts/login/$', SignIn_SignUp.MyLogInView.as_view(), name='check-loginuser'),
     url(r'^admin/', admin.site.urls),
     url(r'^intern/', include('intern.urls')),
     url(r'^company/', include('company.urls')),
     url(r'^accounts/', include('allauth.urls')),
-    url(r'^$', views.Home.as_view(), name='home'),
+    url(r'^$', intern_details.Home.as_view(), name='home'),
     
 
 

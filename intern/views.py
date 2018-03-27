@@ -27,6 +27,7 @@ from django.core.files.storage import FileSystemStorage
 from django.views.generic.detail import SingleObjectMixin
 import datetime
 import json
+
 def InternProfileView(request):
 	
 	#profile_form = InternProfileForm()
@@ -269,10 +270,7 @@ class InternshipDetailView(TemplateView):
 	
 	template_name = 'intern/internship.html'
 	
-	# def get(seld, *args, **kwargs):
-	# 	data = dict()
-	# 	data['post'] = PostDetails.objects.get(id=1)
-	# 	return JsonResponse(data)
+
 	
 	def get_context_data(self, **kwargs):
 			data = dict()
@@ -285,22 +283,7 @@ class InternshipDetailView(TemplateView):
 			duration =  self.request.GET.get('duration')
 			typ = self.request.GET.get('typ')
 			page = self.request.GET.get('page')
-			# print(duration)
-			# print(stipend)
-			# print(tech)	
-			# print(city)
-			# print(typ)
-			
-			
-			# if 'tech' in self.request.session:
-			# 	del self.request.session['tech']
-			# elif 'stipend' in self.request.session:
-			# 	del self.request.session['stipend']
-			# elif 'duration' in self.request.session:
-			# 	del self.request.session['duration']
-			# else:
-			# 	pass
-			
+	
 			tmp = ['tech','duration', 'stipend','city','typ']
 			p = PostDetails.objects.all()
 			
@@ -357,161 +340,7 @@ class InternshipDetailView(TemplateView):
 			data['data'] = paginator.get_page(page)
 			return data
 		
-		# import code; code.interact(local=dict(globals(), **locals()))
-		# p =PostDetails.objects.all()
-		# for i in tmp:
-		# 	p=p.filter(i=test.get(i))
-		# print(p)
-		# import code; code.interact(local=dict(globals(), **locals()))
-
-		# if city is None  and tech is None and stipend is None and duration is None:
-		# 	print('All None')
-		# 	self.request.session['city']=''
-		# 	self.request.session['tech']=''
-		# 	self.request.session['stipend']=''
-		# 	data['data'] = PostDetails.objects.all()
-		# 	return data
-
-		# elif city is '' and tech is '' and duration != '':
-		# 	print('only duration')
-		# 	data['data'] = PostDetails.objects.filter(time_duration=duration)
-		# 	return data
-
-		# elif city is '' and tech is '' and stipend == 'on':
-		# 	print('only Sti')
-		# 	self.request.session['stipend'] = stipend
-		# 	print(self.request.session['stipend'])
-		# 	data['data'] = PostDetails.objects.all().filter(stipend__gt=0)
-		# 	return data	
-
-		# elif city is '' and tech is '':
-		# 	print('12')
-		# 	self.request.session['city']=''
-		# 	self.request.session['tech']=''
-		# 	self.request.session['stipend']=''
-		# 	data['data'] = PostDetails.objects.all()
-		# 	return data
-
-		# elif city is '' and tech != None and stipend == 'on':
-		# 	print('tech and stipend')
-		# 	self.request.session['tech'] = tech
 			
-		# 	data['data'] = PostDetails.objects.filter(technology=tech, stipend__gt=0)
-		# 	return data
-
-		# elif city is '' and tech != None:
-		# 	print('only tech')
-		# 	self.request.session['tech'] = tech
-		# 	print("session", self.request.session['tech'])
-		# 	if self.request.session['stipend'] != '':
-		# 		data['data'] = PostDetails.objects.filter(technology=tech,stipend__gt=0)
-		# 		return data
-		# 	data['data'] = PostDetails.objects.filter(technology=tech)
-		# 	return data
-
-
-		# elif  city != None and tech is '' and stipend == 'on':
-		# 	print('city and sti')
-		# 	self.request.session['city'] = city
-		# 	print("session", self.request.session['city'])
-		# 	contact = ContactDetails.objects.filter(location=city)
-		# 	post = PostDetails.objects.all()
-		# 	for i in contact:
-		# 		for j in post:
-		# 				data['data'] = PostDetails.objects.filter(company_id = i.company_id,stipend__gt=0)
-		# 				return data 
-
-		# 	data['data'] = PostDetails.objects.all()
-		# 	return data
-
-		# elif city != None and tech is '':
-		# 	print('only city')
-		# 	self.request.session['city'] = city
-		# 	contact = ContactDetails.objects.filter(location=city)
-		# 	post = PostDetails.objects.all()
-		# 	if self.request.session['stipend'] != '':
-
-		# 		for i in contact:
-		# 			for j in post:
-
-		# 					data['data'] = PostDetails.objects.filter(company_id = i.company_id, stipend__gt=0)
-		# 					return data
-		# 	elif self.request.session['stipend'] == '':
-		# 		for i in contact:
-		# 				for j in post:				
-		# 					data['data'] = PostDetails.objects.filter(company_id = i.company_id)
-		# 					return data	
-
-
-
-		# elif city != None and tech != None and stipend == 'on':
-		# 	print('All present')
-
-		# 	contact = ContactDetails.objects.filter(location=city)
-		# 	post = PostDetails.objects.filter(technology=tech)
-		# 	for i in contact:
-		# 		for j in post:
-											
-		# 				data['data'] = PostDetails.objects.filter(company_id = i.company_id,technology=tech,stipend__gt=0)
-		# 				return data
-
-		# 	data['data'] = PostDetails.objects.filter(technology=tech)
-		# 	return data
-		
-		# elif city != None and tech != None:
-		# 	print("only city and tech")
-		# 	contact = ContactDetails.objects.filter(location=city)
-		# 	post = PostDetails.objects.filter(technology=tech)
-		# 	for i in contact:
-		# 		for j in post:
-											
-		# 				data['data'] = PostDetails.objects.filter(company_id = i.company_id,technology=tech)
-		# 				return data
-
-		# 	data['data'] = PostDetails.objects.filter(technology=tech)
-		# 	return data
-
-
-
-
-
-#***********************************************************************************************************************************
-		# context = super().get_context_data(**kwargs)
-		
-		# if city is None and tech is None:
-		# 	print('Both None')
-		# 	context['post'] = PostDetails.objects.all()
-		# 	return context
-		# elif city is '' and tech != None:
-		# 	print('city None')
-		# 	context['post'] = PostDetails.objects.filter(domain=tech)
-		# 	import code; code.interact(local=dict(globals(), **locals()))
-		# 	return context
-		# elif city != None and tech is '':
-		# 	print('tech None')
-		# 	contact = ContactDetails.objects.filter(location=city)
-		# 	post = PostDetails.objects.all()
-		# 	for i in contact:
-		# 		for j in post:
-		# 				context['post'] = PostDetails.objects.filter(company_id = i.company_id)
-		# 				return context
-		# 	context['post'] = PostDetails.objects.all()
-		# 	return context
-		# else:
-		# 	print('both have values')
-		# 	contact = ContactDetails.objects.filter(location=city)
-		# 	post = PostDetails.objects.all()
-		# 	for i in contact:
-		# 		for j in post:
-		# 				context['post'] = PostDetails.objects.filter(company_id = i.company_id)
-		# 				return context
-		# 	context['post'] = PostDetails.objects.all()
-		# 	return context
-	# def get(self, request):
-	# 	print('---')
-	# 	city = request.GET.get('search1')	
-	# 	print(city)
-	# 	return HttpResponseRedirect('/intern/internship/')		
 
 	
 
@@ -548,12 +377,7 @@ class InternPostConnection(SingleObjectMixin, TemplateView):
 			return HttpResponseRedirect('/accounts/login/')
 	
 
-def FilterView(request):
-	if request.method == 'GET':
-		filterform = FilterForm(request.GET)
-		return render_to_response('intern/internship.html',{ 'form':filterform,})
-	else:
-		return HttpResponseRedirect('/intern/internship/')
+
 
 def ReadMessages(request,id):
 	upc_details = UserPostConnection.objects.filter(postdetails_id=id)
