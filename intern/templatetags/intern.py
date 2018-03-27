@@ -27,13 +27,14 @@ def tech_name(value):
 	return PostDetails.objects.all()
 
 @register.filter(name="messages")
-def messages(value):
-	q3 = Messages.objects.filter(postdetails_id=value)
-	return q3
+def messages(value, upc_id):
+	# import code; code.interact(local=dict(globals(), **locals()))
+	# q3 = Messages.objects.filter(postdetails_id=value, upc_id=upc_id)
+	return Messages.objects.filter(postdetails_id=value, upc_id=upc_id)
 
 @register.filter(name="messages_count")
-def messages_count(value):
-	q3 = Messages.objects.filter(postdetails_id=value,is_read=False).count()
+def messages_count(value, upc_id):
+	q3 = Messages.objects.filter(postdetails_id=value,upc_id=upc_id, is_read=False).count()
 	return q3
 
 @register.filter(name="pesonal_detail")
@@ -45,7 +46,9 @@ def personal_detail(value):
 def personal_detailid(value):
 	PD_id = PersonalDetails.objects.get(internprofile_id=value)
 	return PD_id.id
-# @register.filter(name="is_read")
-# def is_read(value):
-# 	MessageObj = Messages.objects.get(postdetails_id=value)
-# 	return MessageObj.is_read
+
+@register.filter(name="check_test")
+def check_test(value):
+	check_test = TestApplicationMapping.objects.get(upc_id = value)
+	return check_test.teststatus_id
+

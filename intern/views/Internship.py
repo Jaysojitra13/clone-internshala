@@ -38,7 +38,12 @@ class InternshipDetailView(TemplateView):
 	def get_context_data(self, **kwargs):
 			data = dict()
 
-		
+			if AcademicDetails.objects.filter(internprofile_id = self.request.user.id).exists():
+				data['AD'] = AcademicDetails.objects.get(internprofile_id = self.request.user.id).pk
+
+			if PersonalDetails.objects.filter(internprofile_id = self.request.user.id).exists():
+				data['PD'] = PersonalDetails.objects.get(internprofile_id = self.request.user.id).pk
+	
 	
 			city = self.request.GET.get('city')
 			tech = self.request.GET.get('tech')

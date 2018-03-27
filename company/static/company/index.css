@@ -8,3 +8,16 @@
 .show-inputbtns .input-buttons {
     display: inline-block;
 }
+
+a:focus{
+	color:red;
+}
+
+.icon-msg{
+	font-size: 14px;
+	
+}
+
+.modal-dialog{
+	left: 0%;
+}

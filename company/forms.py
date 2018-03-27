@@ -75,17 +75,17 @@ class PostDetailsForm(forms.ModelForm):
 			)
 			super(PersonalDetailsForm, self).__init__(*args, **kwargs)
 
-class QuestionForm(forms.ModelForm):
-	text = forms.CharField(label="Question")
-	class Meta:
-		model = Questions
-		fields = ['text']
+# 	class QuestionForm(forms.ModelForm):
+# 	text = forms.CharField(label="Question")
+# 	class Meta:
+# 		model = Question
+# 		fields = ['text']
 		
-class AnswerForm(forms.ModelForm):
-	text = forms.CharField(label="Answer")
-	class Meta:
-		model = Answers
-		fields = ['text']
+# class AnswerForm(forms.ModelForm):
+# 	text = forms.CharField(label="Answer")
+# 	class Meta:
+# 		model = Answers
+# 		fields = ['text']
 
 # class CompanySignUpForm(UserCreationForm):
 # 	class Meta(UserCreationForm.Meta):

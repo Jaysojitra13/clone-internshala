@@ -1,4 +1,4 @@
-{% extends 'company/post.html'%}
+{% extends 'company/index.html'%}
 {% load crispy_forms_tags %}
 {% load static %}
 {% load company %}
@@ -6,13 +6,16 @@
 {% load intern%}
 
 {% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'company/test.css'%}">
 <div class="main">
-<form method="post">
-{% csrf_token %}
-
-	{{ form|crispy }}<br>
-	{{ formset|crispy }}<br>
-<input type="submit" name="submit">
-</form>
+	<ul class="nav nav-tabs">
+	{% for i in technology %}
+			<li id="li"><a href="{% url 'company:listofquestion' type=i.technology_name %} ">{{i.technology_name}}</a></li>
+	{% endfor %}
+			</li>
+		</ul>
 </div>
+
+{% block questions %}
+{% endblock %}
 {% endblock %}

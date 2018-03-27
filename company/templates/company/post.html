@@ -3,46 +3,25 @@
 {% load static %}
 {% load intern%}
 {% load intern%}
-{% block sidenav %}
-
-
-
-<div class="dropdown">
-	<a class="dropdown-toggle" data-toggle="dropdown">Question Bank
-		<span class="caret"></span></a>
-		<ul class="dropdown-menu" style="list-style-type: none" >
-
-			{% for i in company%}
-
-			{% for j in i.user_id|post_nameee%}
-			<li><a href="{% url 'company:test' %}">{{j.technology}}</a></li>
-			{% endfor %}
-			{% endfor %}
-
-			
-			
-			
-			
-			
-		</ul>
-	</div>
-
-	
-	{% endblock %}
-
 
 
 	{% block content %}
 	<div class="main">
 		<ul class="nav nav-tabs">
-			<li id="id1" onclick="color()"><a href="{% url 'company:all-post' %}">All Posts</a></li>
-			<li><a href="{% url 'company:existing-post' %}">Existing</a></li>
-			<li><a href="{% url 'company:past-post'%}">History</a></li>
+			<li id="all-post" class="active"><a href="{% url 'company:all-post' %}">All Posts</a></li>
+			<li id="existing-post" ><a href="{% url 'company:existing-post' %}">Existing</a></li>
+			<li id="past-post" ><a href="{% url 'company:past-post'%}">History</a></li>
 			<li style="float: right;background-color: #f1f1f1;"><a href="{% url 'company:post-detail'%}">Create New Post</a>
 			</li>
 		</ul>
 	</div>
-	
+<!-- 	<script>
+	$("#existing-post").click(function(){
+		$("#all-post").removeClass("active");
+			$("#existing-post").addClass("active");
+		});
+
+	</script> -->
 	<div class="main"> 
 		{% block existingpost %}
 		{%  endblock %}
