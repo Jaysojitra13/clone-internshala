@@ -25,12 +25,11 @@ class ContactDetailsView(CreateView):
 	model = ContactDetails
 	form_class = ContactDetailsForm
 	template_name = 'company/contact_detail.html'
-	success_url = reverse_lazy('company:index')
+	success_url = reverse_lazy('company:applications')
 	def form_valid(self, form):
-		print('CD')
 		company_profile=CompanyProfile.objects.get(user = self.request.user)
 		PF = form.save(commit=False)
-		PF.company=company_profile
+		PF.company = company_profile
 		PF.save()
 		return super(ContactDetailsView, self).form_valid(form)
 

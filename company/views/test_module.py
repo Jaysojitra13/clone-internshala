@@ -94,11 +94,7 @@ class CreateTestView(View):
 		create_test = CreateTestViewService()
 		create_test.createTest(self, upc_id, question_list)
 
-
 		return HttpResponseRedirect('/company/applications/')
-
-
-
 
 class ResultView(TemplateView):
 	template_name = 'company/result.html'
@@ -107,12 +103,10 @@ class ResultView(TemplateView):
 		context = super().get_context_data(**kwargs)
 		upc_id = kwargs['id']
 		context['AnswersIntern'] = AnswersIntern.objects.filter(upc_id = kwargs['id'])
-		tam_testid = TestApplicationMapping.objects.get(upc_id = kwargs['id']).test_id
-		qtm = list(QuestionTestMap.objects.filter(test_id = tam_testid))
-		questions = []
-		for i in range(len(qtm)):	
-			if qtm[i].question_id == Question.objects.get(id = qtm[i].question_id).id:
-				questions.append(Question.objects.get(id = qtm[i].question_id))
+		
+		result = ResultViewService()
+		questions = result.show_result(upc_id)
+		
 		context['questions'] = questions
 		context['upc_id'] = kwargs['id']
 		return context
@@ -120,40 +114,29 @@ class ResultView(TemplateView):
 class CheckAnswerView(View):
 
 	def get(self, request, *args, **kwargs):
-		question_id = request.GET.get('question_id')
-		# import code; code.interact(local=dict(globals(), **locals()))
-		answer_intern = AnswersIntern.objects.get(question_id = request.GET.get('question_id'))
-		if request.GET.get('right') == 'right':
-			answer_intern.is_correct = True
-			answer_intern.save()
-		elif request.GET.get('wrong') == 'wrong':
-			answer_intern.is_correct = False
-			answer_intern.save()
-		return HttpResponseRedirect("/company/result/"+request.GET.get('upc_id')+"")
+
+		answer = CheckAnswerViewService()
+		answer.check_answer(request)
+	
+		return JsonResponse({'status':"OK"},safe=False)
 
 class CountResultView(View):
 	def get(self, request, *args, **kwargs):
 		upc_id = request.GET.get('upc_id')
-		all_answers = AnswersIntern.objects.filter(upc_id = request.GET.get('upc_id')).count()
-		right_answers = AnswersIntern.objects.filter(upc_id = request.GET.get('upc_id'),is_correct = True).count()
-		tap =  TestApplicationMapping.objects.get(upc_id = request.GET.get('upc_id'))
-		marks = round((right_answers *100 / all_answers), 2) 
-		tap.result = marks
-		tap.teststatus_id = 2
-		tap.save()
-		# import code; code.interact(local=dict(globals(), **locals()))
+
+		result = CountResultViewService()
+		marks = result.countResult(request)
+
 		return JsonResponse({'marks': marks}, safe=False)
 
 class DeleteOneQuestionView(View):
 	def get(self, request, *args, **kwargs):
-		# import code; code.interact(local=dict(globals(), **locals()))
 		question = Question.objects.get(id = request.GET.get('question_id')).delete()
 		return JsonResponse({'status':"OK"},safe=False)
 
 class DeleteAllQuestionView(View):
 	def get(self, request, *args, **kwargs):
 		question_list = request.GET.getlist('questions')
-		# import code; code.interact(local=dict(globals(), **locals()))
 		for id in question_list:
 			Question.objects.get(id = id).delete()
 		return JsonResponse({'status':"OK"},safe=False)

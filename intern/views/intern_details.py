@@ -130,7 +130,6 @@ class ProjectDetailView(CreateView):
 
 	def form_valid(self, form):
 		
-		print('POD')
 		IP = InternProfile.objects.get(user = self.request.user)
 		PF = form.save(commit=False)
 		PF.internprofile = IP

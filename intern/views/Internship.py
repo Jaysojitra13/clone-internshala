@@ -26,7 +26,7 @@ from django.core.files.storage import FileSystemStorage
 from django.views.generic.detail import SingleObjectMixin
 import datetime
 import json
-
+from intern.service.Internship_service import *
 
 class InternshipDetailView(TemplateView):
 	model = PostDetails
@@ -37,6 +37,7 @@ class InternshipDetailView(TemplateView):
 	
 	def get_context_data(self, **kwargs):
 			data = dict()
+			page = self.request.GET.get('page')
 
 			if AcademicDetails.objects.filter(internprofile_id = self.request.user.id).exists():
 				data['AD'] = AcademicDetails.objects.get(internprofile_id = self.request.user.id).pk
@@ -45,63 +46,10 @@ class InternshipDetailView(TemplateView):
 				data['PD'] = PersonalDetails.objects.get(internprofile_id = self.request.user.id).pk
 	
 	
-			city = self.request.GET.get('city')
-			tech = self.request.GET.get('tech')
-			stipend =  self.request.GET.get('stipend')
-			duration =  self.request.GET.get('duration')
-			typ = self.request.GET.get('typ')
-			page = self.request.GET.get('page')
 	
-			tmp = ['tech','duration', 'stipend','city','typ']
-			p = PostDetails.objects.all()
+			internship = InternshipDetailViewService()
+			p = internship.internships(self)
 			
-			for i in tmp:
-				if i == 'tech': 
-					if self.request.GET.get('tech') != '' and self.request.GET.get('tech') != None:
-						self.request.session['tech'] = self.request.GET.get('tech')
-						p = p.filter(technology=self.request.GET.get('tech'))
-					else:
-						if 'tech' in self.request.session:
-							del self.request.session['tech']
-					
-				
-				if i == 'duration':
-					if self.request.GET.get('duration') != '' and self.request.GET.get('duration') != None:
-						self.request.session['duration'] = self.request.GET.get('duration')					
-						p = p.filter(time_duration=self.request.GET.get('duration'))
-					else:
-						if 'duration' in self.request.session:
-							del self.request.session['duration']
-							
-
-				if i == 'stipend':
-					if self.request.GET.get('stipend') != '' and  self.request.GET.get('stipend') != None:
-						self.request.session['stipend'] = self.request.GET.get('stipend')
-						p = p.filter(stipend__gt=0)
-					else:
-						if 'stipend' in self.request.session:
-							del self.request.session['stipend']
-							
-
-				if i == 'city':
-					contact = ContactDetails.objects.filter(location=self.request.GET.get('city'))
-					post = PostDetails.objects.all()
-					if self.request.GET.get('city') != '' and self.request.GET.get('city') != None:
-						self.request.session['city'] = self.request.GET.get('city')
-						for i in contact:
-							for j in post:
-								p = p.filter(company_id = i.company_id)
-					else:
-						if 'city' in self.request.session:
-							del self.request.session['city']
-
-				if i== 'typ':
-					if self.request.GET.get('typ') != '' and self.request.GET.get('typ') != None:
-						self.request.session['typ'] = self.request.GET.get('typ')
-						p = p.filter(typeof_internship=self.request.GET.get('typ'))
-					else:
-						if 'typ' in self.request.session:
-							del self.request.session['typ']	
 
 			data['data']=p
 			paginator = Paginator(p, 3)
@@ -117,7 +65,6 @@ class InternPostConnection(SingleObjectMixin, TemplateView):
 	def get(self, request, *args, **kwargs):
 		
 		self.object = self.request.user
-		print(self.object.id)
 
 		if self.object.id != None:
 			id1 = kwargs['company_id']
@@ -131,14 +78,10 @@ class InternPostConnection(SingleObjectMixin, TemplateView):
 			else:
 				id1 = kwargs['company_id']
 				id2 = kwargs['post_id']
-				obj = UserPostConnection()
 				
-				obj.company_id = CompanyProfile.objects.get(user = id1).pk
-				obj.internprofile_id = request.user.id
-				obj.postdetails_id = PostDetails.objects.get(id = id2).id
-				obj.applied_date = datetime.datetime.now().date()
-				obj.statusupdate_date = datetime.datetime.now().date()
-				obj.save()
+				upc = InternPostConnectionService()
+				upc.user_postconnection(request, id1, id2)
+				
 				return HttpResponseRedirect('/intern/internship')
 		else:
 

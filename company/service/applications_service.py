@@ -1,6 +1,6 @@
 from intern.models import *
 from company.models import *
-from django.shortcuts import render, HttpResponseRedirect
+
 class AplicationViewService:
 
 	def applications(self, self1):

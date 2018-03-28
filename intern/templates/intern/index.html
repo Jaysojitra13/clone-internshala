@@ -62,7 +62,7 @@
       </td>
       {% if i.status == "Accepted" or i.status == "InProcess" or i.status == "Confirmed"%}
       {% if i.id|check_test == 0%}
-      <td><a href="{% url 'company:give-test' pk=i.pk %}"><button class="btn btn-info btn-sm" type="button">Give Test </button></td>
+      <td><a href="{% url 'intern:give-test' pk=i.pk %}"><button class="btn btn-info btn-sm" type="button">Give Test </button></td>
       {% elif i.id|check_test == 1 %}
       <td><button class="btn btn-info disabled btn-sm" type="button">submitted</button></td>
       {% elif i.id|check_test == 2%}

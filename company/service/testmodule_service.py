@@ -52,3 +52,41 @@ class CreateTestViewService:
 		tam.teststatus_id = 0
 		tam.save()
 		return 
+
+class ResultViewService:
+
+	def show_result(self, upc_id):
+		tam_testid = TestApplicationMapping.objects.get(upc_id = upc_id).test_id
+		qtm = list(QuestionTestMap.objects.filter(test_id = tam_testid))
+		questions = []
+		for i in range(len(qtm)):	
+			if qtm[i].question_id == Question.objects.get(id = qtm[i].question_id).id:
+				questions.append(Question.objects.get(id = qtm[i].question_id))
+
+		return questions
+
+class CheckAnswerViewService:
+
+	def check_answer(self, request):
+		answer_intern = AnswersIntern.objects.get(question_id = request.GET.get('question_id'))
+		if request.GET.get('right') == 'right':
+			answer_intern.is_correct = True
+			answer_intern.save()
+		elif request.GET.get('wrong') == 'wrong':
+			answer_intern.is_correct = False
+			answer_intern.save()
+		return
+
+
+class CountResultViewService:
+
+	def countResult(self, request):
+		all_answers = AnswersIntern.objects.filter(upc_id = request.GET.get('upc_id')).count()
+		right_answers = AnswersIntern.objects.filter(upc_id = request.GET.get('upc_id'),is_correct = True).count()
+		tap =  TestApplicationMapping.objects.get(upc_id = request.GET.get('upc_id'))
+		marks = round((right_answers *100 / all_answers), 2) 
+		tap.result = marks
+		tap.teststatus_id = 2
+		tap.save()
+
+		return marks

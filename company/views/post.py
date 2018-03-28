@@ -35,7 +35,6 @@ class ExistingPost(TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		CP = CompanyProfile.objects.get(user = self.request.user)
-		PD = PostDetails.objects.filter(company_id = CP.user_id)
 
 		context['company'] = CompanyProfile.objects.filter(user_id = CP.user_id)
 		context['post'] = PostDetails.objects.filter(company_id = CP.user_id, status="live")
@@ -47,7 +46,6 @@ class AllPostView(TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		CP = CompanyProfile.objects.get(user = self.request.user)
-		PD = PostDetails.objects.filter(company_id = CP.user_id)
 
 		context['company'] = CompanyProfile.objects.filter(user_id = CP.user_id)
 		context['post'] = PostDetails.objects.filter(company_id = CP.user_id)
@@ -61,7 +59,6 @@ class PastPostView(TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		CP = CompanyProfile.objects.get(user = self.request.user)
-		PD = PostDetails.objects.filter(company_id = CP.user_id)
 
 		context['company'] = CompanyProfile.objects.filter(user_id = CP.user_id)
 		context['post'] = PostDetails.objects.filter(company_id = CP.user_id,status="end")
