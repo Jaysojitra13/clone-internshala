@@ -20,6 +20,7 @@ from company.forms import *
 from intern.views import *
 from intern.models import *
 from company.models import *
+from company.service.message_service import *
 
 class MessageView(TemplateView):
 		
@@ -27,14 +28,11 @@ class MessageView(TemplateView):
 	def get(self, request, *args, **kwargs):
 		post_id = request.GET.get('idd')
 		upc_id = request.GET.get('upc_id')
-			
-		upc_obj = UserPostConnection.objects.get(id=upc_id,postdetails_id = post_id)
 		
-		upc_obj.status = "Accepted"
-		upc_obj.statusupdate_date = datetime.datetime.now().date()
-		upc_obj.save()
+		message = MessageViewService()
+		message.message(post_id, upc_id)
+		response = JsonResponse({'post_id':self.request.GET.get('idd'), 'upc_id': self.request.GET.get('upc_id')}, safe = False)
 
-		response = JsonResponse({'post_id':request.GET.get('idd'), 'upc_id': request.GET.get('upc_id')}, safe = False)
 		return response
 	
 class SaveMsg(TemplateView):
@@ -43,14 +41,8 @@ class SaveMsg(TemplateView):
 		data = request.GET.get('message')
 		post_id = request.GET.get('post_id')
 		upc_id = request.GET.get('upc_id')	
-		upc_obj = UserPostConnection.objects.get(id=upc_id,postdetails_id = post_id)
-		upc_obj.status="InProcess"
-		upc_obj.statusupdate_date = datetime.datetime.now().date()
-		upc_obj.save()
-		message_obj1 = Messages()
-		message_obj1.postdetails_id = post_id
-		message_obj1.upc_id = upc_id
-		message_obj1.messages = data
-		message_obj1.message_date = datetime.datetime.now().date()
-		message_obj1.save()
+
+		save_message = SaveMsgService()
+		save_message.saveMessage(data, post_id, upc_id)
+
 		return HttpResponseRedirect('/company/applications')

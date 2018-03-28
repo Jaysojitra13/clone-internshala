@@ -1,3 +1,4 @@
+
 {% extends 'intern/base.html'%}
 {% load intern %}
 {% load company%}
@@ -57,11 +58,11 @@
         <button id="btn-msg{{j.id}}" class="btn btn-notify btn-sm" data-toggle="modal" data-target="#ModalMes{{j.id}}"> <i class="material-icons icon-msg">message</i> </button>
         
 
-        <span id="badge{{j.id}}" class="badge" style="position: relative; bottom:10px; left:-10px;">{% if j.id|messages_count:i.id > 0 %}{{j.id|messages_count:i.idp}}{%endif%}</span>
+        <span id="badge{{j.id}}" class="badge" style="position: relative; bottom:10px; left:-10px;">{% if j.id|messages_count:i.id > 0 %}{{j.id|messages_count:i.id}}{%endif%}</span>
       </td>
       {% if i.status == "Accepted" or i.status == "InProcess" or i.status == "Confirmed"%}
       {% if i.id|check_test == 0%}
-      <td><a href="{% url 'intern:give-test' pk=i.pk %}"><button class="btn btn-info btn-sm" type="button">Give Test </button></td>
+      <td><a href="{% url 'company:give-test' pk=i.pk %}"><button class="btn btn-info btn-sm" type="button">Give Test </button></td>
       {% elif i.id|check_test == 1 %}
       <td><button class="btn btn-info disabled btn-sm" type="button">submitted</button></td>
       {% elif i.id|check_test == 2%}

@@ -20,6 +20,7 @@ from company.forms import *
 from intern.views import *
 from intern.models import *
 from company.models import *
+from company.service.testmodule_service import *
 
 class GenerateQuestionView(TemplateView):
 	template_name = 'company/addquestion.html'
@@ -51,38 +52,22 @@ class ListofQuestionView(TemplateView):
 			question_id = request.POST.get('question_id')
 
 			if question_id:
-				question_obj = Question.objects.get(id = question_id)
-				answer_obj = AnswersHR.objects.get(question_id = question_id)
-				question_obj.text = question
-				question_obj.save()
-
-				answer_obj.text = answer
-				answer_obj.save()
-				# import code; code.interact(local=dict(globals(), **locals()))
+				
+				update_question = ListofQuestionViewService()
+				response = update_question.updateQuestion(question, answer, question_id)
 				response = JsonResponse({'obj_id': question_obj.id,'obj_text':question_obj.text,'obj_technologyid':question_obj.technology_id,'obj1_text':answer_obj.text},safe =False)
+				
 				return  response
-			else:
-				print("before IF")
-				if request.POST.get('question') != "" and request.POST.get('answer') != "":
 
-					tech = Technology.objects.get(technology_name = kwargs['type'])
-					print("TEchnology is",tech)
+			else: 
 
-					answer_obj1 = AnswersHR()
-					question_obj1 = Question()
-					question_obj1.text = question
-					question_obj1.company_id = request.user.id
-					question_obj1.technology_id = tech.pk
-					question_obj1.save()
-					
-					answer_obj1.question_id = question_obj1.pk
-					answer_obj1.text = answer
-					answer_obj1.save()
-					# import code; code.interact(local=dict(globals(), **locals()))
-					print("obj is ---------------",question_obj1)
-					response = JsonResponse({'obj_id': question_obj1.id,'obj_text':question_obj1.text,'obj_technologyid':question_obj1.technology_id,'obj1_text':answer_obj1.text},safe =False)
-					
-					return  response
+				tech = Technology.objects.get(technology_name = kwargs['type'])
+
+				add_question = ListofQuestionViewService()
+				question_obj1, answer_obj1 = add_question.addQuestion(self, question, answer, tech)
+				
+				response = JsonResponse({'obj_id': question_obj1.id,'obj_text':question_obj1.text,'obj_technologyid':question_obj1.technology_id,'obj1_text':answer_obj1.text},safe =False)
+				return  response
 		except Exception as e:
 			return HttpResponseRedirect('/company/applications/')		
 
@@ -105,25 +90,10 @@ class CreateTestView(View):
 	def post(self, request, *args, **kwargs):
 		upc_id = request.POST.get('upc_id')
 		question_list = request.POST.getlist('checkboxes')
-		# import code; code.interact(local=dict(globals(), **locals()))
-		post_id = UserPostConnection.objects.get(id = upc_id).postdetails_id
-		tech = PostDetails.objects.get(id = post_id).technology
-		technology = Technology.objects.get(technology_name = tech).id
-		test = Test()
-		test.technology_id = technology
-		test.save()
-		ids = [Question.objects.get(text = question).id for question in question_list]
-		objs = [QuestionTestMap() for i in question_list]
-		for i in range(len(question_list)):
-			objs[i].question_id = ids[i]
-			objs[i].test_id = test.id
-			objs[i].save()
-		
-		tam = TestApplicationMapping()
-		tam.test_id = test.id
-		tam.upc_id = request.POST.get('upc_id')
-		tam.teststatus_id = 0
-		tam.save()
+
+		create_test = CreateTestViewService()
+		create_test.createTest(self, upc_id, question_list)
+
 
 		return HttpResponseRedirect('/company/applications/')
 
@@ -143,7 +113,6 @@ class ResultView(TemplateView):
 		for i in range(len(qtm)):	
 			if qtm[i].question_id == Question.objects.get(id = qtm[i].question_id).id:
 				questions.append(Question.objects.get(id = qtm[i].question_id))
-		# import code; code.interact(local=dict(globals(), **locals()))
 		context['questions'] = questions
 		context['upc_id'] = kwargs['id']
 		return context

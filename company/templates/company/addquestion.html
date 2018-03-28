@@ -41,7 +41,7 @@ var selector = '.nav li';
 
 			</div>
 		</div>
-		{% endif%}
+		{% endif%} 
 		<div class="col-md-7" style="float: right;">
 			<button id="add_question" class="btn btn-info" style="float: right;" data-toggle="modal" data-target="#myModal">Add question</button>
 		</div>
@@ -170,7 +170,6 @@ var selector = '.nav li';
 		function Save(type){
 			$(document).on('click','#save',function(){
 				// e.preventDefault();
-				debugger;
 				$.ajax({
 					type: 'POST',
 					url : '/company/listofquestion/'+type+'/',
@@ -194,8 +193,9 @@ var selector = '.nav li';
 				type: "POST",
 				url:'/company/listofquestion/'+type+'/',
 				data : $(x).serialize(),
-				success:function(){
+				success:function(response){
 					location.reload();
+					
 				},
 
 

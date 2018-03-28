@@ -278,7 +278,7 @@
 		var btncheckteststatus = "#checkteststatus"+id1+id2;
 		$(btnaccept).replaceWith
 		('<button id="btn-inprogress" class="btn btn-info disabled btn-sm" > Inprogress</button>');  
-		$(btnaccept).html('InProcess')
+		$(btnaccept).html('InProcess');
 		$.ajax({
 			url: '/company/accept/',
 			type: 'GET',
@@ -299,7 +299,7 @@
 				$(tdmsg).append('<button id=btn-message'+ id1+id2+' class="btn btn-info" data-toggle="modal" data-target=#ModalReg'+id1+id2+'> Message </button>');
 				$(tdtest).append('<a href="{% url "company:generate-test" id=45 %}"><button id="btn-test'+id1+id2+'" class="btn btn-info " onclick="buttonTest('+id1+','+id2+')">Generate Test</button></a>');*/
 
-			}
+			},
 
 		});
 

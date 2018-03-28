@@ -28,8 +28,6 @@ def tech_name(value):
 
 @register.filter(name="messages")
 def messages(value, upc_id):
-	# import code; code.interact(local=dict(globals(), **locals()))
-	# q3 = Messages.objects.filter(postdetails_id=value, upc_id=upc_id)
 	return Messages.objects.filter(postdetails_id=value, upc_id=upc_id)
 
 @register.filter(name="messages_count")
