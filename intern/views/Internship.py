@@ -154,3 +154,4 @@ def ReadMessages(request,id):
 		Messages.objects.filter(postdetails_id=upc.postdetails_id).update(is_read="True")
 
 	return HttpResponse(status = 200)
+
