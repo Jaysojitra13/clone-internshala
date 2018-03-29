@@ -34,8 +34,16 @@
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
 }
+.center_div{
+    margin:  auto;
+    width:30%; 
+
+     /* value of your choice which suits your alignment */
+}
+
 
 .sidenav a:active {
     color: black;
 }
+
 

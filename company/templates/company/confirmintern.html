@@ -13,22 +13,45 @@
 			<td> Contact Number</td>
 		</tr>
 	</thead>
-		{% for i in upc %}
-			{% for j in i.internprofile_id|intern_name%}
-			<tr class="well tr1">
-				<td>{{j.name}}</td>
-				<td>{{j.email}}</td>
-				<td>{{j.contact_number}}</td>
-				<td>
-					<a href="{% url 'company:view-details' id=i.internprofile_id%}"><button class="btn btn-info" >View Application</button></a>
-				</td>
-			</tr>
-		{% endfor %}
-		{% endfor %}
+	{% for i in upc %}
+	{% for j in i.internprofile_id|intern_name%}
+	<tr class="well tr1">
+		<td>{{j.name}}</td>
+		<td>{{j.email}}</td>
+		<td>{{j.contact_number}}</td>
+		<td>
+			<a href="{% url 'company:view-details' id=i.internprofile_id%}"><button class="btn btn-info" >View Application</button></a>
+		</td>
+	</tr>
+	{% endfor %}
+	{% endfor %}
 </table>
 
 
 
+<div class="body center_div">
+
+	<nav>
+		<ul class="pagination">
+		{% if upc.has_previous %}
+			<li><a href="?page={{ upc.previous_page_number }}" class="waves-effect">
+				<i class="material-icons">chevron_left</i>
+			</a></li>
+			{% endif %}
+
+			<li><a href="#" class="waves-effect">Page {{ upc.number }} </a></li>
+
+			{% if upc.has_next %}
+			<li>
+				<a href="?page={{ upc.next_page_number }}" class="waves-effect">
+					<i class="material-icons">chevron_right</i>
+				</a>
+			</li>
+			{% endif %}
+
+		</ul>
+	</nav>
+</div>
 
 
 

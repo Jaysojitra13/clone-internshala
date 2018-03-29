@@ -5,7 +5,7 @@
      /* value of your choice which suits your alignment */
 }
 
-.right{
+.right{ 
 	float: left;
 	border-radius: 5px;
 	width: 100%;

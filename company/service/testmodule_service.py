@@ -68,7 +68,7 @@ class ResultViewService:
 class CheckAnswerViewService:
 
 	def check_answer(self, request):
-		answer_intern = AnswersIntern.objects.get(question_id = request.GET.get('question_id'))
+		answer_intern = AnswersIntern.objects.get(question_id = request.GET.get('question_id'), upc_id = request.GET.get('upc_id'))
 		if request.GET.get('right') == 'right':
 			answer_intern.is_correct = True
 			answer_intern.save()

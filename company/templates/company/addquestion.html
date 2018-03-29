@@ -6,18 +6,35 @@
  {% load intern%}
 
  {% block content %}
+ <link rel="stylesheet" type="text/css" href="{% static 'company/sidenav.css'%}">
 
  <div class="main">
- 	<ul class="nav nav-tabs">
+
+ 	<!-- <ul class="nav nav-tabs tab-nav-right" role="tablist" >
+ 	
  		{% for i in technology %}
- 		<li><a href="{% url 'company:listofquestion' type=i.technology_name %} ">{{i.technology_name}}</a></li>
- 		{% endfor %}
- 	</li>
- </ul>
+ 		<li class="active"><a href="{% url 'company:listofquestion' type=i.technology_name %}" >{{i.technology_name}}</a></li>
+ 		{% endfor %}	
+ 	</ul> -->
+
+ 	<div class="body">
+ 		<!-- Nav tabs -->
+ 		<ul class="nav nav-tabs tab-nav-right" role="tablist">
+ 			<li role="presentation" class="active"><a href="{% url 'company:listofquestion' type=first_tech.technology_name %}" >{{first_tech.technology_name}}</a></li>
+
+ 			{% for i in technology %}
+ 			<li role="presentation" class="active"><a href="{% url 'company:listofquestion' type=i.technology_name %}" >{{i.technology_name}}</a></li>
+
+ 			{% endfor %}
+ 			
+ 		</ul>
+ 		
+ 	</div>
+ </div>
 </div>
 
 <script>
-var selector = '.nav li';
+	var selector = '.nav li';
 	$(selector).on('click',function(){
 		$(selector).removeClass('active');
 		$(this).addClass('active');
@@ -25,124 +42,138 @@ var selector = '.nav li';
 </script>
 
 {% block questions %}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+<script src="http://malsup.github.com/jquery.form.js"></script>
 <div class="main">
 	<div class="col-md-11">
 		<div class="row">
 			{% if questions%}
 			<div class="col-md-5">
 				<div class="btn-delete">
-					<input id="checkAll" type="checkbox" name="checkbox">&nbsp; Select all questions <button id="delete" class="btn btn-danger" onclick="deleteAllQuestion()">Delete All</button>
-
+					<input type="checkbox" id="checkAll" class="filled-in">
+					<label for="checkAll"> Select all questions</label>
+					<button id="delete" class="btn btn-danger" onclick="deleteAllQuestion()">Delete All</button>
 				</div>
 			</div>
 			{% else %}
 			<div class="col-md-5">
-			<div class="btn-delete">
+				<div class="btn-delete">
 
+				</div>
+			</div>
+			{% endif%} 
+			<div class="col-md-7" style="float: right;">
+				<button id="add_question" class="btn btn-info" style="float: right;" data-toggle="modal" data-target="#myModal">Add question</button>
 			</div>
 		</div>
-		{% endif%} 
-		<div class="col-md-7" style="float: right;">
-			<button id="add_question" class="btn btn-info" style="float: right;" data-toggle="modal" data-target="#myModal">Add question</button>
-		</div>
-	</div>
-	<br>
-	<h2>{{type}}</h2>
+		<br>
+		<h2>{{type}}</h2>
 
 
-	<div class="col-md-11" id="allQuestions">
-		{% if questions%}
-		{% for i in questions %}
-		{% for j in answers %}
-		{% if i.id == j.question_id%}
-		<div class="row">
-			<div class="col-md-1">
-				<input id="CB" class="checkBoxClass" type="checkbox" name="checkboxes" value="{{i.id}}">
-			</div>	
-			<div class="col-md-9" style="word-wrap: break-word;" >
-				<label>Question:- {{i.text}}  
-				</label><br>
+		<div class="col-md-11" id="allQuestions">
+			{% if questions%}
+			{% for i in questions %}
 
-				<label>Ans:-</label>{{j.text}}<br>
-			</div>	
-			<div class="col-md-2">
-				<button class="icon-size" id="wrong{{i.id}}" type="button" onclick="deleteQuestion({{i.id}})"> 
-					<i class="fa fa-close">
-					</i>
-				</button>
-				<button class="icon-size" id="edit{{i.id}}" type="button"  data-toggle="modal" data-target="#updateModal{{i.id}}"> 
-					<i class="fa fa-edit">
-					</i>
-				</button>
+			{% for j in answers %}
+			{% if i.id == j.question_id and i.company_id == request.user.id %}
+			<div class="row">
+				<div class="col-md-1">
+					<div class="body">
+						<input type="checkbox" id="CB{{i.id}}" class="filled-in checkBoxClass" name="checkboxes" value="{{i.id}}">
+							<label for="CB{{i.id}}"> </label>
+						<!-- <input id="CB" class="checkBoxClass" type="checkbox" name="checkboxes" value="{{i.id}}"> -->
+					</div>
+				</div>	
+				<div class="col-md-9" style="word-wrap: break-word;" >
+					<label>Question:- {{i.text}}  
+					</label><br>
+
+					<label>Ans:-</label>{{j.text}}<br>
+				</div>	
+				<div class="col-md-2">
+					<button class="icon-size" id="wrong{{i.id}}" type="button" onclick="deleteQuestion({{i.id}})"> 
+						<i class="fa fa-close">
+						</i>
+					</button>
+					<button class="icon-size" id="edit{{i.id}}" type="button"  data-toggle="modal" data-target="#updateModal{{i.id}}"> 
+						<i class="fa fa-edit">
+						</i>
+					</button>
+				</div>
 			</div>
-		</div>
-		<hr class="hr">
+			<hr class="hr">
 
-		<div class="modal fade" id="updateModal{{i.id}}" role="dialog">
+			<div class="modal fade" id="updateModal{{i.id}}" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">Update Question</h4>
+						</div>
+						<div class="modal-body">
+							<form id="updateQuestion{{i.id}}" class="form-line" enctype="multipart/form-data" method="post">
+								{% csrf_token %}
+								<input type="hidden" name="question_id" value={{i.id}}>
+								<label>Question</label>
+								<textarea id="question" class="form-control" type="text" name="question">{{i.text}}</textarea>
+								<label> Answer</label>
+								<textarea id="answer" class="form-control" type="text" name="answer">{{j.text}}</textarea>
+
+
+								<div class="modal-footer">
+									<button id="Save" type="button" class="btn btn-info"  data-dismiss="modal" onclick="Update('{{type}}',{{i.id}})" style="float: right;">Save</button>
+
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endif %}
+			{% endfor %}	
+			{% endfor %}
+		</div>	
+		{% else%}
+		<h3 id="h3">No questions available</h3>
+		{% endif %}
+
+
+
+
+		<div class="modal fade" id="myModal" role="dialog">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title">Update Question</h4>
+						<h4 class="modal-title">Add Question</h4>
 					</div>
 					<div class="modal-body">
-						<form id="updateQuestion{{i.id}}" class="form-inline" enctype="multipart/form-data" method="post">
+						<form id="formQuesion" class="form-line" enctype="multipart/form-data"  method="post">
 							{% csrf_token %}
-							<input type="hidden" name="question_id" value={{i.id}}>
 							<label>Question</label>
-							<textarea id="question" class="form-control" type="text" name="question">{{i.text}}</textarea>
+							<textarea id="question11" class="form-control" type="text" name="question" required="true"></textarea><br>
 							<label> Answer</label>
-							<textarea id="answer" class="form-control" type="text" name="answer">{{j.text}}</textarea>
+							<textarea id="answer11" class="form-control" type="text" name="answer" required="true"></textarea>
 
 
 							<div class="modal-footer">
-								<button id="Save" type="button" class="btn btn-info"  data-dismiss="modal" onclick="Update('{{type}}',{{i.id}})" style="float: right;">Save</button>
-
+								<button id="save" type="button" class="btn btn-info"  data-dismiss="modal" onclick="Save('{{type}}')" style="float: left;">Save</button>
+								<button id="save-cont" type="button" class="btn btn-info" onclick="saveAndContinue('{{type}}'); $('#myModal').modal({'backdrop': 'static'});">Save and continue </button>
 							</div>
 						</form>
 					</div>
 				</div>
+
 			</div>
 		</div>
-		{% endif %}
-		{% endfor %}	
-		{% endfor %}
-	</div>	
-	{% else%}
-	<h3 id="h3">No questions available</h3>
-	{% endif %}
+		<script>
 
+			$("#checkAll").click(function() {
 
-
-
-	<div class="modal fade" id="myModal" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Add Question</h4>
-				</div>
-				<div class="modal-body">
-					<form id="formQuesion" class="form-inline" enctype="multipart/form-data"  method="post">
-						{% csrf_token %}
-						<label>Question</label>
-						<textarea id="question11" class="form-control" type="text" name="question" required="true"></textarea>
-						<label> Answer</label>
-						<textarea id="answer11" class="form-control" type="text" name="answer" required="true"></textarea>
-
-
-						<div class="modal-footer">
-							<button id="save" type="button" class="btn btn-info"  data-dismiss="modal" onclick="Save('{{type}}')" style="float: left;">Save</button>
-							<button id="save-cont" type="button" class="btn btn-info" onclick="saveAndContinue('{{type}}'); $('#myModal').modal({'backdrop': 'static'});">Save and continue </button>
-						</div>
-					</form>
-				</div>
-			</div>
-
-		</div>
-	</div>
-	<script>
-		function saveAndContinue(type){
+				$(".checkBoxClass").prop('checked', $(this).prop('checked'));
+			});
+			
+			function saveAndContinue(type){
 			// $(document).on('click', '#save-cont', function(e){
 			// 	e.preventDefault();
 
@@ -154,9 +185,9 @@ var selector = '.nav li';
 					$('#question11').val('');
 					$('#answer11').val(''); 
 					$('#h3').remove();
-					$('.col-md-5').html('<input id="checkAll" type="checkbox" name="checkbox">&nbsp; Select all questions <button id="delete" class="btn btn-danger" onclick="deleteAllQuestion()">Delete All</button>');
+					$('.col-md-5').html('<input type="checkbox" id="checkAll" class="filled-in"><label for="checkAll"> Select all questions</label><button id="delete" class="btn btn-danger" onclick="deleteAllQuestion()">Delete All</button>');
 
-					$('#allQuestions').append('<div class="row"><div class="col-md-1"><input id="CB" class="checkBoxClass" type="checkbox" name="checkboxes"></div> <div class="col-md-9" style="word-wrap: break-word;"> <label>Question:- '+ response.obj_text+'</label><br><label>Ans:- </label><span>'+response.obj1_text+'</span><br></div><div class="col-md-2"><button class="icon-size" id="wrong'+response.obj_id+'" type="button" onclick="deleteQuestion('+response.obj_id+')"><i class="fa fa-close"></i></button>&nbsp;<button class="icon-size" id="edit'+response.obj_id+'" type="button"><i class="fa fa-edit"></i></button></div></div><hr class="hr">');
+					$('#allQuestions').append('<div class="row"><div class="col-md-1"><input type="checkbox" id="CB{{i.id}}" class="filled-in checkBoxClass" name="checkboxes" value="{{i.id}}"><label for="CB{{i.id}}"> </label></div> <div class="col-md-9" style="word-wrap: break-word;"> <label>Question:- '+ response.obj_text+'</label><br><label>Ans:- </label><span>'+response.obj1_text+'</span><br></div><div class="col-md-2"><button class="icon-size" id="wrong'+response.obj_id+'" type="button" onclick="deleteQuestion('+response.obj_id+')"><i class="fa fa-close"></i></button>&nbsp;<button class="icon-size" id="edit'+response.obj_id+'" type="button"><i class="fa fa-edit"></i></button></div></div><hr class="hr">');
 				},
 				error: function(response){
 					alert("ERROR");
@@ -202,10 +233,7 @@ var selector = '.nav li';
 			});
 		}
 
-		$("#checkAll").click(function () {
-			$(".checkBoxClass").prop('checked', $(this).prop('checked'));
-		});
-
+		
 		function deleteAllQuestion(){
 			var questions = [];
 			$.each($("input[name='checkboxes']:checked"), function(){            

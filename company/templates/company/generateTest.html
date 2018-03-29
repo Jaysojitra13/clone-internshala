@@ -6,6 +6,7 @@
 {% load intern%}
 
 {% block content %} 
+<link rel="stylesheet" type="text/css" href="{% static 'company/sidenav.css'%}">
 
 <div class="main">
 	<ul class="nav nav-tabs">
@@ -13,7 +14,7 @@
 		<li><a href="{% url 'company:listofquestion' type=technology.technology_name %} ">Add Question for {{technology.technology_name}}</a></li>
 		
 	</li>
-</ul>
+</ul> 
 </div>
 
 
@@ -23,7 +24,8 @@
 <div class="main">
 	{% if questions %}
 	<div class="btn-delete">
-		<input id="checkAll" type="checkbox" name="checkbox">&nbsp; Select all questions
+		<input type="checkbox" id="checkAll" class="filled-in">
+		<label for="checkAll"> Select all questions</label>
 		<button id="preview" class="btn btn-info" type="button" style="float: right;" data-toggle="modal" data-target="#myModal" onclick="previewQuestion({{upc_id}})">Preview</button>
 	</div>	
 	<br><br>
@@ -38,7 +40,9 @@
 			{% for j in i.id|answer_hr %}
 			<div class="row">
 				<div class="col-md-1">
-					<input class="checkBoxClass" type="checkbox" data-question_id="{{i.id}}" name="checkboxes" value="{{i.text}}">&nbsp; 
+					<!-- <input class="checkBoxClass" type="checkbox" data-question_id="{{i.id}}" name="checkboxes" value="{{i.text}}"> -->
+					<input type="checkbox" id="check" class="filled-in checkBoxClass" data-question_id="{{i.id}}" name="checkboxes" value="{{i.text}}">
+					<label for="check"> </label>
 				</div>
 				<div class="col-md-9" style="word-wrap: break-word;">
 					<label>Question:- {{i.text}}</label><br>
@@ -63,7 +67,7 @@
 						<h4 class="modal-title">Selected Questions</h4>
 					</div>
 					<div id="modalBody" class="modal-body">
-					
+
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Close</button>
@@ -87,21 +91,21 @@
 	});
 	
 
-function previewQuestion(id){
-	var questions = [];
+	function previewQuestion(id){
+		var questions = [];
 
-	$.each($("input[name='checkboxes']:checked"), function(){            
-		questions.push($(this).val());
-	});
+		$.each($("input[name='checkboxes']:checked"), function(){            
+			questions.push($(this).val());
+		});
 
-	if (questions == ''){
-		document.getElementById("modalBody").innerHTML = "First select questions.";	
+		if (questions == ''){
+			document.getElementById("modalBody").innerHTML = "First select questions.";	
+		}
+		else{
+			document.getElementById("modalBody").innerHTML = questions.join("<hr>");
+		}
+
 	}
-	else{
-		document.getElementById("modalBody").innerHTML = questions.join("<hr>");
-	}
-	
-}
 </script>
 
 

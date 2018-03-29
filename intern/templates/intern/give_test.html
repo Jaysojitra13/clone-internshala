@@ -1,4 +1,4 @@
-{% extends 'intern/base.html'%}
+{% extends 'intern/index.html'%}
 {% load intern %}
 {% load company%}
 {% load static %}
@@ -13,7 +13,7 @@
 		<ul>
 			{% for i in questions %}
 			<li><label style="font-weight: bolder;" name="questions" id="questions">Question:- {{i.text}}</label></li>
-			<textarea id="answer" class="form-control" type="text" name="answers" placeholder="Give Your Answer"></textarea>
+			<textarea id="answer" class="form-control" type="text" name="answers" placeholder="Give Your Answer" required="true"></textarea>
 			{% endfor %}
 		</ul>
 		<button class="btn btn-info right" type="submit">submit</button>

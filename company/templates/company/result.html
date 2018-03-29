@@ -4,6 +4,9 @@
 {% load intern%}
 
 {% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'company/sidenav.css'%}">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+<script src="http://malsup.github.com/jquery.form.js"></script>
 <div class="main">
   
 		{% for i in questions%}
@@ -118,6 +121,7 @@
 									'upc_id': {{upc_id}},
 								},
 								success:function(response){
+									debugger;
 									$('label').css('visibility','visible');
 									$('#result').html(response.marks);
 								},

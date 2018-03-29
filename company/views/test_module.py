@@ -37,10 +37,11 @@ class ListofQuestionView(TemplateView):
 
 	def get_context_data(self, 	**kwargs):
 		context = super().get_context_data(**kwargs)
-		context['technology'] = Technology.objects.all()
+		context['first_tech'] = Technology.objects.all().first()
+		context['technology'] = list(Technology.objects.all())[1:]
 		tech = Technology.objects.get(technology_name = kwargs['type'])
 		context['type'] = kwargs['type']
-		context['questions'] = Question.objects.filter(technology_id = tech.pk).order_by('id')
+		context['questions'] = Question.objects.filter(technology_id = tech.pk, company_id = self.request.user.id).order_by('id')
 		context['answers'] = AnswersHR.objects.all()
 		return context
 
@@ -114,7 +115,7 @@ class ResultView(TemplateView):
 class CheckAnswerView(View):
 
 	def get(self, request, *args, **kwargs):
-
+		
 		answer = CheckAnswerViewService()
 		answer.check_answer(request)
 	
@@ -126,6 +127,7 @@ class CountResultView(View):
 
 		result = CountResultViewService()
 		marks = result.countResult(request)
+
 
 		return JsonResponse({'marks': marks}, safe=False)
 

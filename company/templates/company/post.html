@@ -6,12 +6,14 @@
 
 
 	{% block content %}
+    <link rel="stylesheet" type="text/css" href="{% static 'company/sidenav.css'%}">
+	
 	<div class="main">
 		<ul class="nav nav-tabs">
 			<li id="all-post" class="active"><a href="{% url 'company:all-post' %}">All Posts</a></li>
 			<li id="existing-post" ><a href="{% url 'company:existing-post' %}">Existing</a></li>
 			<li id="past-post" ><a href="{% url 'company:past-post'%}">History</a></li>
-			<li style="float: right;background-color: #f1f1f1;"><a href="{% url 'company:post-detail'%}">Create New Post</a>
+			<li style="float: right;background-color: #f1f1f1"><a href="{% url 'company:post-detail'%}">Create New Post</a>
 			</li>
 		</ul>
 	</div>

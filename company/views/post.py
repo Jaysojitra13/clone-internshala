@@ -34,10 +34,14 @@ class ExistingPost(TemplateView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
+		page = self.request.GET.get('page')
 		CP = CompanyProfile.objects.get(user = self.request.user)
 
 		context['company'] = CompanyProfile.objects.filter(user_id = CP.user_id)
-		context['post'] = PostDetails.objects.filter(company_id = CP.user_id, status="live")
+		post = PostDetails.objects.filter(company_id = CP.user_id, status="live")
+		context['post'] = post
+		paginator = Paginator(post, 4)
+		context['post'] = paginator.get_page(page)
 		return context
 
 class AllPostView(TemplateView):
@@ -45,10 +49,15 @@ class AllPostView(TemplateView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
+		page = self.request.GET.get('page')
+
 		CP = CompanyProfile.objects.get(user = self.request.user)
 
 		context['company'] = CompanyProfile.objects.filter(user_id = CP.user_id)
-		context['post'] = PostDetails.objects.filter(company_id = CP.user_id)
+		post = PostDetails.objects.filter(company_id = CP.user_id)
+		context['post'] = post
+		paginator = Paginator(post, 5)
+		context['post'] = paginator.get_page(page)
 		return context
 
 
@@ -58,8 +67,12 @@ class PastPostView(TemplateView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
+		page = self.request.GET.get('page')
 		CP = CompanyProfile.objects.get(user = self.request.user)
 
 		context['company'] = CompanyProfile.objects.filter(user_id = CP.user_id)
-		context['post'] = PostDetails.objects.filter(company_id = CP.user_id,status="end")
+		post= PostDetails.objects.filter(company_id = CP.user_id,status="end")
+		context['post'] = post
+		paginator = Paginator(post, 5)
+		context['post'] = paginator.get_page(page)
 		return context

@@ -41,7 +41,7 @@ class ApplicationView(TemplateView):
 
 		context['data'] = PostDetails.objects.all()	
 		context['applicants'] = applicants
-		paginator = Paginator(applicants, 50)
+		paginator = Paginator(applicants, 5)
 		context['applicants'] = paginator.get_page(page)
 		return context
 
@@ -60,7 +60,7 @@ class ViewDetails(TemplateView):
 		context['applicants'] = applicants
 		return context
 
-class RejectView(TemplateView):
+class RejectView(View):
 	def get(self, request, *args, **kwargs):
 		post_id = request.GET.get('idd')
 		upc_id = request.GET.get('upc_id')
@@ -71,7 +71,7 @@ class RejectView(TemplateView):
 
 		return HttpResponseRedirect('/company/applications/')
 
-class ConfirmView(TemplateView):
+class ConfirmView(View):
 	def get(self, request, *args, **kwargs):
 		post_id = request.GET.get('idd')
 		upc_id = request.GET.get('upc_id')
@@ -90,8 +90,12 @@ class ConfirmInternView(TemplateView):
 	def get_context_data(self, 	**kwargs):
 			
 		context = super().get_context_data(**kwargs)
+		page = self.request.GET.get('page')
 		company_id = kwargs['pk']
-		context['upc'] = UserPostConnection.objects.filter(company_id= kwargs['pk'],status="Confirmed") 
+		upc = UserPostConnection.objects.filter(company_id= kwargs['pk'],status="Confirmed") 
+		context['upc'] = upc
+		paginator = Paginator(upc, 5)
+		context['upc'] = paginator.get_page(page)
 		return context
 
 class RejectInternView(TemplateView):
@@ -100,8 +104,13 @@ class RejectInternView(TemplateView):
 	def get_context_data(self, 	**kwargs):
 			
 		context = super().get_context_data(**kwargs)
+		page = self.request.GET.get('page')
+
 		company_id = kwargs['pk']
-		context['upc'] = UserPostConnection.objects.filter(company_id= kwargs['pk'],status="Rejected") 
+		upc = UserPostConnection.objects.filter(company_id= kwargs['pk'],status="Rejected") 
+		context['upc'] = upc
+		paginator = Paginator(upc, 5)
+		context['upc'] = paginator.get_page(page)
 		return context
 
 class ListofInternView(TemplateView):

@@ -1,5 +1,5 @@
 
-{% extends 'intern/base.html'%}
+{% extends 'intern/home.html'%}
 {% load intern %}
 {% load company%}
 <!-- <!DOCTYPE html>
@@ -34,118 +34,160 @@
       
     </div>
   </nav>  -->
-  {% block content %}
-  <h2> List of Internships in which you have applied</h2>
-  <div class="alert alert-success" style="visibility: hidden;">
+  {% block navbar %}
+  {% if user.is_authenticated %}
+   <div class="container-fluid"> 
+  <div class="navbar-header">
+    <a class="navbar-brand" href="index.html">Welcome {{user.username}}</a>
+
   </div>
-  <table class="table table-condensed">
-    <thead style="font-weight: bolder;">
-      <tr>
-        <td> Company </td>
-        <td> Profile</td>
-        <td> Status</td>
-      </tr>
-    </thead>
-    {% for i in upc %}
-    {% for j in i.company_id|post_details %}
-    {% if j.id == i.postdetails_id%}
+  <div class="collapse navbar-collapse" id="navbar-collapse">
+    <ul class="nav navbar-nav navbar-right">
+     <li>
+      <a href="{% url 'intern:index'%}">Dashboard</a>
+    </li>
+    <li><a href="{% url 'intern:internship-detail' %}">Internship</a></li>
+
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+        Update Profile
+      </a>
+      <ul class="dropdown-menu">
+        <li><a href="{%url 'intern:updatepersonal-detail' pk=PD%}">Personal Detail</a></li>
+        <li><a href="{% url 'intern:updateacademic-detail' pk=AD %}">Academic Detail</a></li>
+        <li><a href="{% url 'intern:project-detail' %}">Project Detail</a></li>
+      </ul>
+
+    </li>
+    <li><a href="{% url 'account_logout' %}">Log Out</a></li>
+  </ul>
+</div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block content %}
+
+<table class="table table-condensed">
+  <thead style="font-weight: bolder;">
     <tr>
-      <td> {{j.company_id|company_name }} </td>
-      <td> {{j.domain}} </td>
-      <td> {{i.status}} </td>
-      <td>
-
-        <button id="btn-msg{{j.id}}" class="btn btn-notify btn-sm" data-toggle="modal" data-target="#ModalMes{{j.id}}"> <i class="material-icons icon-msg">message</i> </button>
-        
-
-        <span id="badge{{j.id}}" class="badge" style="position: relative; bottom:10px; left:-10px;">{% if j.id|messages_count:i.id > 0 %}{{j.id|messages_count:i.id}}{%endif%}</span>
-      </td>
-      {% if i.status == "Accepted" or i.status == "InProcess" or i.status == "Confirmed"%}
-      {% if i.id|check_test == 0%}
-      <td><a href="{% url 'intern:give-test' pk=i.pk %}"><button class="btn btn-info btn-sm" type="button">Give Test </button></td>
-      {% elif i.id|check_test == 1 %}
-      <td><button class="btn btn-info disabled btn-sm" type="button">submitted</button></td>
-      {% elif i.id|check_test == 2%}
-      <td><button id="btn-result{{i.id}}" class="btn btn-info btn-sm" type="button" onclick="showResult('{{i.id}}')">Result</button></td>
-      {% endif %}
-      {%  endif %}
+      <td> Company </td>
+      <td> Profile</td>
+      <td> Status</td>
     </tr>
+  </thead>
+  {% for i in upc %}
+  {% for j in i.company_id|post_details %}
+  {% if j.id == i.postdetails_id%}
+  <tr>
+    <td> {{j.company_id|company_name }} </td>
+    <td> {{j.domain}} </td>
+    <td> {{i.status}} </td>
+    <td>
 
-    <div class="modal fade" id="ModalMes{{j.id}}" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
+      <button id="btn-msg{{j.id}}" class="btn btn-notify btn-sm" data-toggle="modal" data-target="#ModalMes{{j.id}}"> <i class="material-icons icon-msg">message</i> </button>
 
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-            <h4 class="modal-title">Messages From Company</h4>
-          </div>
-          <div class="modal-body">
-           <ol style="list-style-type: none"> 
-            {% for k in j.id|messages:i.id %}
-            <li>{{k.message_date}}:- &nbsp;{{k.messages}}</li>
-            {% endfor %}
-          </ol>
+      <span id="badge{{j.id}}" class="badge" style="position: relative; bottom:10px; left:-10px;">{% if j.id|messages_count:i.id > 0 %}{{j.id|messages_count:i.id}}{%endif%}</span>
+    </td>
+    {% if i.status == "Accepted" or i.status == "InProcess" or i.status == "Confirmed"%}
+    {% if i.id|check_test == 0%}
+    <td><a href="{% url 'intern:give-test' pk=i.pk %}"><button class="btn btn-info btn-sm" type="button">Give Test </button></td>
+    {% elif i.id|check_test == 1 %}
+    <td><button class="btn btn-info disabled btn-sm" type="button">submitted</button></td>
+    {% elif i.id|check_test == 2%}
+    <td><button id="btn-result{{i.id}}" class="btn btn-info btn-sm" type="button" onclick="showResult('{{i.id}}')">Result</button></td>
+    <td style="width: 200px;">
+      <div class="demo" style="visibility: hidden;">
+        
+      </div>
+    </td>
+    {% endif %}
+    {%  endif %}
+  </tr>
+
+  <div class="modal fade" id="ModalMes{{j.id}}" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+          <h4 class="modal-title">Messages From Company</h4>
         </div>
+        <div class="modal-body">
+         <ol style="list-style-type: none"> 
+          {% for k in j.id|messages:i.id %}
+          <li>{{k.message_date}}:- &nbsp;{{k.messages}}</li>
+          {% endfor %}
+        </ol>
+      </div>
 
-      </div>  
     </div>  
-  </div> 
-  {% endif %}
+  </div>  
+</div> 
+{% endif %}
 
 
-  <script>
-    $('#btn-msg{{j.id}}').on('click',function(){
-      var x = '#badge'+{{j.id}}
-      $.ajax({
-        url:'/intern/readmessages/'+{{j.id}},
-        type:'GET',
+<script>
+  $('#btn-msg{{j.id}}').on('click',function(){
+    var x = '#badge'+{{j.id}}
+    $.ajax({
+      url:'/intern/readmessages/'+{{j.id}},
+      type:'GET',
 
-        success:function(response){
-          $(x).remove();
-        },
-      });
+      success:function(response){
+        $(x).remove();
+      },
     });
+  });
 
-  </script>
-  {%endfor%}
-  {%endfor%}
-  <script>
-    function showResult(id){
-      var btnresult = "#btn-result"+id;
-      $.ajax({
-        url: '/intern/showresult/',
-        type: 'GET',
-        data: {
-          'upc_id' : id,
-        },
-        success:function(response){
+</script>
+{%endfor%}
+{%endfor%}
+<script>
+  function showResult(id){
+    var btnresult = "#btn-result"+id;
+    $.ajax({
+      url: '/intern/showresult/',
+      type: 'GET',
+      data: {
+        'upc_id' : id,
+      },
+      success:function(response){
         // $(btnresult).html("your result is:-" + response.result);
-        $('.alert-success').css("visibility","visible");
-        $('.alert-success').css("text-align","center");
-        $('.alert-success').html("Your Result is "+response.result+"%.");
+        $('.demo').css("visibility","visible");
+        $('.demo').css("text-align","center");
+        $('.demo').html("Your Result is "+response.result+"%.");
         // alert("Your Result is "+response.result);
       },
     });
-    }
-  </script>
+  }
+</script>
 </table>
 
-<div class="pagination">
-  <span class="step-links">
-    {% if upc.has_previous %}
-    <a href="?page=1">&laquo; first</a>
-    <a href="?page={{ upc.previous_page_number }}">previous</a>
-    {% endif %}
+<div class="body center_div">
 
-    <span class="current">
-      Page {{ upc.number }} of {{ upc.paginator.num_pages }}.
-    </span>
+          <nav>
+            <ul class="pagination">
+              {% if upc.has_previous %}
+              <li><a href="?page={{ upc.previous_page_number }}" class="waves-effect">
+                  <i class="material-icons">chevron_left</i>
+                </a></li>
+              {% endif %}
 
-    {% if upc.has_next %}
-    <a href="?page={{ upc.next_page_number }}">next</a>
-    <a href="?page={{ upc.paginator.num_pages }}">last &raquo;</a>
-    {% endif %}
-  </span>
-</div>
+              <li><a href="#" class="waves-effect">  {{ upc.number }} of {{ upc.paginator.num_pages }}.</a></li>
+
+              {% if upc.has_next %}
+              <li>
+                <a href="?page={{ upc.next_page_number }}" class="waves-effect">
+                  <i class="material-icons">chevron_right</i>
+                </a>
+              </li>
+              {% endif %}
+
+            </ul>
+          </nav>
+        </div>
 {% endblock %}

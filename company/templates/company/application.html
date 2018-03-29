@@ -5,10 +5,11 @@
 {% load intern%}
 
 {% block content %}
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
 <link rel="stylesheet" type="text/css" href="{% static 'company/sidenav.css'%}">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">        
 
 <!-- <html>
 <head> 
@@ -21,7 +22,41 @@
 </head>
 <body> -->
 	<div class='maincontainer main'>
-		<form id="HRFilter" method="get" class="form-inline	">
+		<div class="body">
+			<div class="row clearfix">
+				<div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+				<form id="HRFilter" method="get">
+					<div class="form-group">
+						<div class="form-line"> 
+
+							<select class="form-control" id="domain" name="domain"  >
+					
+					<option value="">Select Technology</option>
+
+					{% for j in data|tech_name %}
+
+					<option value="{{ j.technology }}">{{j.technology}}</option>
+					{% endfor %}
+				</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+					<div class="form-group">
+						<div class="form-line">
+							<input class="form-control" type="date" name="date"/>
+
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+					<button type="submit" class="btn btn-primary btn-lg m-l-15 waves-effect">Submit</button>
+				</div>
+			</div>
+
+		</form>
+	</div>
+		<!-- <form id="HRFilter" method="get" class="form-inline">
 			<div class="form-group">
 				<label>Technology</label>
 				<select class="form-control" id="domain" name="domain"  >
@@ -42,8 +77,8 @@
 
 			<button id="sub" type="submit" class="btn btn-default">Submit</button>
 
-		</form>
-		<div id="wait" style="display:none;width:69px;height:89px;border:1px solid black;position:absolute;top:50%;left:50%;padding:2px;"><img src="{% static 'images/11699799.gif'%}" width="64" height="64" /><br>Loading..</div>
+		</form> -->
+		<!-- <div id="wait" style="display:none;width:69px;height:89px;border:1px solid black;position:absolute;top:50%;left:50%;padding:2px;"><img src="{% static 'images/11699799.gif'%}" width="64" height="64" /><br>Loading..</div> -->
 		<script>
 			$('#sub').on('click',function(){
 
@@ -223,7 +258,7 @@
 
 
 					</table>
-					<div class="pagination">
+					<!-- <div class="pagination">
 						<span class="step-links">
 							{% if applicants.has_previous %}
 							<a href="?page=1">&laquo; first</a>
@@ -239,7 +274,32 @@
 							<a href="?page={{ applicants.paginator.num_pages }}">last &raquo;</a>
 							{% endif %}
 						</span>
-					</div>
+					</div> -->
+
+
+				<div class="body center_div">
+
+					<nav>
+						<ul class="pagination">
+							{% if applicants.has_previous %}
+							<li><a href="?page={{ applicants.previous_page_number }}" class="waves-effect">
+									<i class="material-icons">chevron_left</i>
+								</a></li>
+							{% endif %}
+
+							<li><a href="#" class="waves-effect">	 {{ applicants.number }}</a></li>
+
+							{% if applicants.has_next %}
+							<li>
+								<a href="?page={{ applicants.next_page_number }}" class="waves-effect">
+									<i class="material-icons">chevron_right</i>
+								</a>
+							</li>
+							{% endif %}
+
+						</ul>
+					</nav>
+				</div>
 				</div>
 			</div>	
 <!-- 

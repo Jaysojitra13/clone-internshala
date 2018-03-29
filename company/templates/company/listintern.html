@@ -6,6 +6,8 @@
 
 
 {% block content %}
+    <link rel="stylesheet" type="text/css" href="{% static 'company/sidenav.css'%}">
+
 <div class="main">
 <ul class="nav nav-tabs">
     <li id="confirm" class="active"><a href="{% url 'company:confirm-intern' pk=request.user.id%}">Confirmed Interns</a></li>

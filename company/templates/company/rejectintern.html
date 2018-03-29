@@ -27,6 +27,29 @@
 
 
 
+<div class="body center_div">
+
+	<nav>
+		<ul class="pagination">
+		{% if upc.has_previous %}
+			<li><a href="?page={{ upc.previous_page_number }}" class="waves-effect">
+				<i class="material-icons">chevron_left</i>
+			</a></li>
+			{% endif %}
+
+			<li><a href="#" class="waves-effect">Page {{ upc.number }} </a></li>
+
+			{% if upc.has_next %}
+			<li>
+				<a href="?page={{ upc.next_page_number }}" class="waves-effect">
+					<i class="material-icons">chevron_right</i>
+				</a>
+			</li>
+			{% endif %}
+
+		</ul>
+	</nav>
+</div>
 
 
 

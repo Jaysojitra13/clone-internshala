@@ -12,9 +12,9 @@
 
 	<!-- <h2>NO post</h2> -->
 	{% block existingpost %}
-							
-	{% if post %}
 
+	{% if post %}
+	
 	<h1> List of Existing posts</h1>	
 
 	<table class="table">
@@ -53,6 +53,31 @@
 	{% endif %}
 </table>
 
+<div class="body center_div">
+
+	<nav>
+		<ul class="pagination">
+		{% if post.has_previous %}
+			<li><a href="?page={{ post.previous_page_number }}" class="waves-effect">
+				<i class="material-icons">chevron_left</i>
+			</a></li>
+			{% endif %}
+
+			<li><a href="#" class="waves-effect">Page {{ post.number }} </a></li>
+
+			{% if post.has_next %}
+			<li>
+				<a href="?page={{ post.next_page_number }}" class="waves-effect">
+					<i class="material-icons">chevron_right</i>
+				</a>
+			</li>
+			{% endif %}
+
+		</ul>
+	</nav>
+</div>
+</div>
+</div>
 
 {% endblock %}
 <!-- </body>

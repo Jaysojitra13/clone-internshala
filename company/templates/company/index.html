@@ -1,22 +1,23 @@
+{% extends "intern/home.html"%}
 {% load static%}
-<!DOCTYPE html>
-<html>
-<head>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+ <!--  
   <link rel="stylesheet" type="text/css" href="{% static 'company/contactdetail.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'company/addquestion.css' %}" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ 
   <link rel="stylesheet" type="text/css" href="{% static 'company/confirmintern.css'%}">
   <link rel="stylesheet" type="text/css" href="{% static 'company/index.css'%}">
   <link rel="stylesheet" type="text/css" href="{% static 'company/test.css'%}">
-  <link rel="stylesheet" type="text/css" href="{% static 'company/sidenav.css'%}">
+
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  
-</head>
-<body>
-  <nav class="navbar navbar-default">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="{% static 'company/sidenav.css'%}">
+    
+     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
+  {% block navbar %}
+  <!-- <nav class="navbar navbar-default">
     <div class="container-fluid">
       <ul class="nav navbar-nav">
 
@@ -35,21 +36,48 @@
       </li>
     </ul>
   </div>
-</nav>
+</nav> -->
+<div class="container-fluid"> 
 
+  <div class="navbar-header">
+    <a class="navbar-brand" href="index.html">Welcome {{user.username}}</a>
 
-<div class="sidenav">
- <a href="{% url 'company:applications'%}"> Applications</a>
-<a href="{% url 'company:all-post'%}">Requirements   </a>
-<a href="{% url 'company:listofquestion' type='Python'%}">Question Bank
-<a href="{% url 'company:confirm-intern' pk=request.user.id%}">Interns</a>
+  </div>
+  <div class="collapse navbar-collapse" id="navbar-collapse">
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="{% url 'account_logout' %}">Log Out</a></li>
+    </ul>
+  </div>
 </div>
 
-
-
-  {% block content%}
+<section>
+  <aside id="leftsidebar" class="sidebar">
+    <div class="menu">
+      <ul class="list">
+       <li class="active"> <a href="{% url 'company:applications'%}"> Applications</a></li>
+       <li> <a href="{% url 'company:all-post'%}">Requirements   </a></li>
+       <li> <a href="{% url 'company:listofquestion' type='Python'%}">Question Bank </a></li>
+         <li> <a href="{% url 'company:confirm-intern' pk=request.user.id%}">Interns</a></li>
+        </ul>
+      </div>
+      
+    </aside>
+  </section>
   {% endblock %}
 
 
-</body>
-</html>
+
+
+ <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                {% block content%}
+                
+                {% endblock %}
+            </div>
+
+            
+        </div>
+    </section>
+
+

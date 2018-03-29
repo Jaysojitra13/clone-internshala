@@ -1,11 +1,20 @@
-{% extends "account/base.html" %}
-
+{%  extends 'intern/home.html'%}	
+{% load static%}
 {% load i18n %}
 
 {% block head_title %}{% trans "Sign Out" %}{% endblock %}
 
+{% block navbar%}
+	 <div class="container-fluid"> 
+       
+            <div class="navbar-header">
+                <a class="navbar-brand" href="index.html">PRACTICUM</a>
+            </div>
+       </div>
+{% endblock %}
 {% block content %}
-<div class="container center_div" >
+
+<div class="container" >
 <h1>{% trans "Sign Out" %}</h1>
 
 <p>{% trans 'Are you sure you want to sign out?' %}</p>
@@ -16,7 +25,7 @@
   {% if redirect_field_value %}
   <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
   {% endif %}
-  <button  class="btn btn-primary" type="submit">{% trans 'Sign Out' %}</button>
+  <button  class="btn btn-primary " type="submit">{% trans 'Sign Out' %}</button>
 </form>
 </div>
 
