@@ -10,8 +10,19 @@
 
 <div class="main">
 <ul class="nav nav-tabs">
+	{% if check == "confirm" %}
     <li id="confirm" class="active"><a href="{% url 'company:confirm-intern' pk=request.user.id%}">Confirmed Interns</a></li>
-    <li id="reject"><a href="{% url 'company:reject-intern' pk=request.user.id%}">Rejected Interns</a></li>
+	{% else%}
+    <li id="confirm"><a href="{% url 'company:confirm-intern' pk=request.user.id%}">Confirmed Interns</a></li>
+	{% endif %}
+
+	{% if check == "reject" %}
+    <li id="reject" class="active"><a href="{% url 'company:reject-intern' pk=request.user.id%}">Rejected Interns</a></li>
+	{% else %}
+    <li id="reject" ><a href="{% url 'company:reject-intern' pk=request.user.id%}">Rejected Interns</a></li>
+	{% endif %}
+
+  
   </ul>
   
  </div>

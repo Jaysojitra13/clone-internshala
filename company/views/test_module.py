@@ -37,17 +37,18 @@ class ListofQuestionView(TemplateView):
 
 	def get_context_data(self, 	**kwargs):
 		context = super().get_context_data(**kwargs)
-		context['first_tech'] = Technology.objects.all().first()
-		context['technology'] = list(Technology.objects.all())[1:]
+		context['technology'] = list(Technology.objects.all())
 		tech = Technology.objects.get(technology_name = kwargs['type'])
 		context['type'] = kwargs['type']
+		context['check'] = "question"
+
 		context['questions'] = Question.objects.filter(technology_id = tech.pk, company_id = self.request.user.id).order_by('id')
 		context['answers'] = AnswersHR.objects.all()
 		return context
 
 	def post(self,request, *args, **kwargs):
 
-		try:
+		try: 
 			question = request.POST.get('question')
 			answer = request.POST.get('answer')
 			question_id = request.POST.get('question_id')
@@ -79,6 +80,7 @@ class GenerateTestView(TemplateView):
 		context = super().get_context_data(**kwargs)
 		# upc_id = kwargs['id']
 		upc = UserPostConnection.objects.get(id=kwargs['id']).postdetails_id
+		context['check'] = "app"
 		post = PostDetails.objects.get(id = upc).technology
 		tech = Technology.objects.get(technology_name = post)
 		context['questions'] = Question.objects.filter(company_id = self.request.user.id, technology_id= tech)

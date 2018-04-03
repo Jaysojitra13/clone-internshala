@@ -89,7 +89,7 @@ class InternPostConnection(SingleObjectMixin, TemplateView):
 	
 
 
-
+ 
 def ReadMessages(request,id):
 	upc_details = UserPostConnection.objects.filter(postdetails_id=id)
 	

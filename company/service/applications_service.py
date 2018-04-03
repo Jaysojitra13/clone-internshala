@@ -1,6 +1,6 @@
 from intern.models import *
 from company.models import *
-
+ 
 class AplicationViewService:
 
 	def applications(self, self1):
@@ -23,7 +23,6 @@ class AplicationViewService:
 		else:
 			applicants = UserPostConnection.objects.filter(company_id = company_profile.user_id).order_by('id')
 
-		# import code; code.interact(local=dict(globals(), **locals()))
 
 		if domain == '' and date != '':	
 			applicants = applicants.filter(applied_date = self1.request.GET.get('date'))
@@ -49,7 +48,7 @@ class RejectViewService:
 
 	def rejectIntern(self, post_id, upc_id, reject_msg):
 		upc_obj = UserPostConnection.objects.get(id=upc_id,postdetails_id = post_id)
-		upc_obj.status="Rejected"
+		upc_obj.status= 3
 		upc_obj.statusupdate_date = datetime.datetime.now().date()
 		upc_obj.save()
 		message_obj1 = Messages()
@@ -63,7 +62,7 @@ class ConfirmViewService:
 
 	def confirmIntern(self, post_id, upc_id):
 		upc_obj = UserPostConnection.objects.get(id=upc_id,postdetails_id = post_id)
-		upc_obj.status="Confirmed"
+		upc_obj.status= 4
 		upc_obj.statusupdate_date = datetime.datetime.now().date()
 		upc_obj.save()
 		return 

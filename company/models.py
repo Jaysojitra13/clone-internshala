@@ -102,3 +102,6 @@ class TestApplicationMapping(models.Model):
 	test = models.ForeignKey(Test, on_delete=models.CASCADE)
 	result = models.FloatField(default=0)
 	teststatus = models.ForeignKey(TestStatus, on_delete=models.CASCADE, default=0)
+
+class InternStatus(models.Model):
+	status = models.CharField(max_length=10)

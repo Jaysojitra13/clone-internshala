@@ -20,11 +20,14 @@
  	<div class="body">
  		<!-- Nav tabs -->
  		<ul class="nav nav-tabs tab-nav-right" role="tablist">
- 			<li role="presentation" class="active"><a href="{% url 'company:listofquestion' type=first_tech.technology_name %}" >{{first_tech.technology_name}}</a></li>
-
- 			{% for i in technology %}
- 			<li role="presentation" class="active"><a href="{% url 'company:listofquestion' type=i.technology_name %}" >{{i.technology_name}}</a></li>
-
+ 					{% for i in technology %}
+ 			{% if i.technology_name == type%}
+ 			<li role="presentation" class="active"><a href="{% url 'company:listofquestion' type=i.technology_name %}" >
+ 			{{i.technology_name}}</a></li>
+ 			{% else %}
+ 			<li role="presentation" ><a href="{% url 'company:listofquestion' type=i.technology_name %}" >
+ 			{{i.technology_name}}</a></li>
+ 			{% endif %}
  			{% endfor %}
  			
  		</ul>
@@ -50,7 +53,7 @@
 			{% if questions%}
 			<div class="col-md-5">
 				<div class="btn-delete">
-					<input type="checkbox" id="checkAll" class="filled-in">
+					<input type="checkbox" id="checkAll" class="filled-in chk-col-light-blue">
 					<label for="checkAll"> Select all questions</label>
 					<button id="delete" class="btn btn-danger" onclick="deleteAllQuestion()">Delete All</button>
 				</div>
@@ -67,7 +70,7 @@
 			</div>
 		</div>
 		<br>
-		<h2>{{type}}</h2>
+		
 
 
 		<div class="col-md-11" id="allQuestions">
@@ -79,7 +82,7 @@
 			<div class="row">
 				<div class="col-md-1">
 					<div class="body">
-						<input type="checkbox" id="CB{{i.id}}" class="filled-in checkBoxClass" name="checkboxes" value="{{i.id}}">
+						<input type="checkbox" id="CB{{i.id}}" class="filled-in checkBoxClass chk-col-light-blue" name="checkboxes" value="{{i.id}}">
 							<label for="CB{{i.id}}"> </label>
 						<!-- <input id="CB" class="checkBoxClass" type="checkbox" name="checkboxes" value="{{i.id}}"> -->
 					</div>
@@ -187,7 +190,7 @@
 					$('#h3').remove();
 					$('.col-md-5').html('<input type="checkbox" id="checkAll" class="filled-in"><label for="checkAll"> Select all questions</label><button id="delete" class="btn btn-danger" onclick="deleteAllQuestion()">Delete All</button>');
 
-					$('#allQuestions').append('<div class="row"><div class="col-md-1"><input type="checkbox" id="CB{{i.id}}" class="filled-in checkBoxClass" name="checkboxes" value="{{i.id}}"><label for="CB{{i.id}}"> </label></div> <div class="col-md-9" style="word-wrap: break-word;"> <label>Question:- '+ response.obj_text+'</label><br><label>Ans:- </label><span>'+response.obj1_text+'</span><br></div><div class="col-md-2"><button class="icon-size" id="wrong'+response.obj_id+'" type="button" onclick="deleteQuestion('+response.obj_id+')"><i class="fa fa-close"></i></button>&nbsp;<button class="icon-size" id="edit'+response.obj_id+'" type="button"><i class="fa fa-edit"></i></button></div></div><hr class="hr">');
+					$('#allQuestions').append('<div class="row"><div class="col-md-1"><input type="checkbox" id="CB{{i.id}}" class="filled-in checkBoxClass chk-col-light-blue" name="checkboxes" value="{{i.id}}"><label for="CB{{i.id}}"> </label></div> <div class="col-md-9" style="word-wrap: break-word;"> <label>Question:- '+ response.obj_text+'</label><br><label>Ans:- </label><span>'+response.obj1_text+'</span><br></div><div class="col-md-2"><button class="icon-size" id="wrong'+response.obj_id+'" type="button" onclick="deleteQuestion('+response.obj_id+')"><i class="fa fa-close"></i></button>&nbsp;<button class="icon-size" id="edit'+response.obj_id+'" type="button"><i class="fa fa-edit"></i></button></div></div><hr class="hr">');
 				},
 				error: function(response){
 					alert("ERROR");

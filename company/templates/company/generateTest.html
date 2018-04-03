@@ -24,7 +24,7 @@
 <div class="main">
 	{% if questions %}
 	<div class="btn-delete">
-		<input type="checkbox" id="checkAll" class="filled-in">
+		<input type="checkbox" id="checkAll" class="filled-in chk-col-light-blue">
 		<label for="checkAll"> Select all questions</label>
 		<button id="preview" class="btn btn-info" type="button" style="float: right;" data-toggle="modal" data-target="#myModal" onclick="previewQuestion({{upc_id}})">Preview</button>
 	</div>	
@@ -41,7 +41,7 @@
 			<div class="row">
 				<div class="col-md-1">
 					<!-- <input class="checkBoxClass" type="checkbox" data-question_id="{{i.id}}" name="checkboxes" value="{{i.text}}"> -->
-					<input type="checkbox" id="check" class="filled-in checkBoxClass" data-question_id="{{i.id}}" name="checkboxes" value="{{i.text}}">
+					<input type="checkbox" id="check" class="filled-in checkBoxClass chk-col-light-blue" data-question_id="{{i.id}}" name="checkboxes" value="{{i.text}}">
 					<label for="check"> </label>
 				</div>
 				<div class="col-md-9" style="word-wrap: break-word;">

@@ -10,20 +10,28 @@
 	
 	<div class="main">
 		<ul class="nav nav-tabs">
+			{% if check == "all"%}
 			<li id="all-post" class="active"><a href="{% url 'company:all-post' %}">All Posts</a></li>
-			<li id="existing-post" ><a href="{% url 'company:existing-post' %}">Existing</a></li>
-			<li id="past-post" ><a href="{% url 'company:past-post'%}">History</a></li>
-			<li style="float: right;background-color: #f1f1f1"><a href="{% url 'company:post-detail'%}">Create New Post</a>
-			</li>
-		</ul>
-	</div>
-<!-- 	<script>
-	$("#existing-post").click(function(){
-		$("#all-post").removeClass("active");
-			$("#existing-post").addClass("active");
-		});
+			{% else %}
+			<li id="all-post" ><a href="{% url 'company:all-post' %}">All Posts</a></li>
+			{% endif %}
+			{% if check == "existing"%}
+			<li id="existing-post" class="active"><a href="{% url 'company:existing-post' %}">Existing</a></li>
+			{% else %}
+			<li id="existing-post"><a href="{% url 'company:existing-post' %}">Existing</a></li>
+			{% endif %}
 
-	</script> -->
+			{% if check == "past" %}
+			<li id="past-post" class="active"><a href="{% url 'company:past-post'%}">History</a></li>
+			{% else %}
+			<li id="past-post"><a href="{% url 'company:past-post'%}">History</a></li>
+			{% endif %}
+			<li style="float: right;"><a href="{% url 'company:post-detail'%}">Create New Post</a>
+			</li>
+		</ul> 
+	</div>
+
+	
 	<div class="main"> 
 		{% block existingpost %}
 		{%  endblock %}

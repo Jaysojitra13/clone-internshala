@@ -50,3 +50,7 @@ def check_test(value):
 	check_test = TestApplicationMapping.objects.get(upc_id = value)
 	return check_test.teststatus_id
 
+@register.filter(name="intern_status")
+def intern_status(value):
+	intern_status = InternStatus.objects.get(id=int(value))
+	return intern_status.status

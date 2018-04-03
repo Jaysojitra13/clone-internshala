@@ -11,7 +11,9 @@
 </head>
 <body> -->
 {% block content %}
-<h2 style="text-align: center;"> Contact Details</h2>
+<link rel="stylesheet" type="text/css" href="{% static 'company/newpost.css' %}" />
+
+<h3 style="text-align: center;"> Contact Details</h3>
 <div class="container center_div">
 <form action="" method="post">
 {% csrf_token %}

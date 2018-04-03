@@ -5,7 +5,7 @@ from django.http import JsonResponse
 class MessageViewService:
 	def message(self, post_id, upc_id):
 		upc_obj = UserPostConnection.objects.get(id=upc_id,postdetails_id = post_id)
-		upc_obj.status = "Accepted"
+		upc_obj.status = "1"
 		upc_obj.statusupdate_date = datetime.datetime.now().date()
 		upc_obj.save()
 		return 
@@ -13,7 +13,7 @@ class MessageViewService:
 class SaveMsgService:
 	def saveMessage(self, data, post_id, upc_id):
 		upc_obj = UserPostConnection.objects.get(id=upc_id,postdetails_id = post_id)
-		upc_obj.status="InProcess"
+		upc_obj.status = 2
 		upc_obj.statusupdate_date = datetime.datetime.now().date()
 		upc_obj.save()
 		

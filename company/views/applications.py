@@ -1,5 +1,6 @@
 # import code; code.interact(local=dict(globals(), **locals()))
 import datetime 
+import json
 from django.views import View
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, redirect, render_to_response
 from django.contrib.auth.decorators import login_required
@@ -29,6 +30,7 @@ class ApplicationView(TemplateView):
 		context = super().get_context_data(**kwargs)
 		application  = AplicationViewService()
 		di = application.applications(self)
+		context['check'] = "app"
 		applied_datedesc = di['applied_datedesc']
 		applied_dateasc = di['applied_dateasc']
 		name_desc = di['name_desc'] 
@@ -41,8 +43,9 @@ class ApplicationView(TemplateView):
 
 		context['data'] = PostDetails.objects.all()	
 		context['applicants'] = applicants
-		paginator = Paginator(applicants, 5)
+		paginator = Paginator(applicants, 15)
 		context['applicants'] = paginator.get_page(page)
+
 		return context
 
 class ViewDetails(TemplateView):
@@ -91,11 +94,12 @@ class ConfirmInternView(TemplateView):
 			
 		context = super().get_context_data(**kwargs)
 		page = self.request.GET.get('page')
+		context['check'] = "confirm"
 		company_id = kwargs['pk']
-		upc = UserPostConnection.objects.filter(company_id= kwargs['pk'],status="Confirmed") 
+		upc = UserPostConnection.objects.filter(company_id= kwargs['pk'],status=4) 
 		context['upc'] = upc
 		paginator = Paginator(upc, 5)
-		context['upc'] = paginator.get_page(page)
+		context['upc1'] = paginator.get_page(page)
 		return context
 
 class RejectInternView(TemplateView):
@@ -105,9 +109,10 @@ class RejectInternView(TemplateView):
 			
 		context = super().get_context_data(**kwargs)
 		page = self.request.GET.get('page')
+		context['check'] = "reject"
 
 		company_id = kwargs['pk']
-		upc = UserPostConnection.objects.filter(company_id= kwargs['pk'],status="Rejected") 
+		upc = UserPostConnection.objects.filter(company_id= kwargs['pk'],status=3) 
 		context['upc'] = upc
 		paginator = Paginator(upc, 5)
 		context['upc'] = paginator.get_page(page)
@@ -115,3 +120,5 @@ class RejectInternView(TemplateView):
 
 class ListofInternView(TemplateView):
 	template_name = 'company/listintern.html'
+
+

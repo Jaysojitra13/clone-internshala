@@ -80,7 +80,6 @@ class MyLogInView(LoginView):
 			return HttpResponseRedirect('/intern/index/')
 
 	def post(self, request):
-		print('login')
 		PD = PersonalDetails.objects.all()
 		AD = AcademicDetails.objects.all()		
 		CD = ContactDetails.objects.all()
@@ -98,3 +97,4 @@ class MyLogInView(LoginView):
 						return HttpResponseRedirect('/intern/index/')
 				return HttpResponseRedirect('/intern/personaldetail/')
 		return HttpResponseRedirect('/accounts/login/')
+

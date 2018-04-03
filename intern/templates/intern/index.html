@@ -54,8 +54,8 @@
       </a>
       <ul class="dropdown-menu">
         <li><a href="{%url 'intern:updatepersonal-detail' pk=PD%}">Personal Detail</a></li>
-        <li><a href="{% url 'intern:updateacademic-detail' pk=AD %}">Academic Detail</a></li>
-        <li><a href="{% url 'intern:project-detail' %}">Project Detail</a></li>
+        <li><a href="{%url 'intern:updateacademic-detail' pk=AD%}">Academic Detail</a></li>
+       <li><a href="{% url 'intern:project-detail' %}">Project Detail</a></li>
       </ul>
 
     </li>
@@ -69,7 +69,7 @@
 
 {% block content %}
 
-<table class="table table-condensed">
+<table class="table table-striped">
   <thead style="font-weight: bolder;">
     <tr>
       <td> Company </td>
@@ -83,10 +83,10 @@
   <tr>
     <td> {{j.company_id|company_name }} </td>
     <td> {{j.domain}} </td>
-    <td> {{i.status}} </td>
+    <td> {{i.status|intern_status}} </td>
     <td>
 
-      <button id="btn-msg{{j.id}}" class="btn btn-notify btn-sm" data-toggle="modal" data-target="#ModalMes{{j.id}}"> <i class="material-icons icon-msg">message</i> </button>
+      <button id="btn-msg{{j.id}}" class="btn btn-notify btn-sm" data-toggle="modal" data-target="#ModalMes{{j.id}}" onclick="readMessage({{j.id}})"><i class="material-icons icon-msg">message</i> </button>
 
 
       <span id="badge{{j.id}}" class="badge" style="position: relative; bottom:10px; left:-10px;">{% if j.id|messages_count:i.id > 0 %}{{j.id|messages_count:i.id}}{%endif%}</span>
@@ -130,9 +130,10 @@
 {% endif %}
 
 
-<script>
+<!-- <script>
+
   $('#btn-msg{{j.id}}').on('click',function(){
-    var x = '#badge'+{{j.id}}
+    var x = '#badge'+{{j.id}};
     $.ajax({
       url:'/intern/readmessages/'+{{j.id}},
       type:'GET',
@@ -143,10 +144,26 @@
     });
   });
 
-</script>
+</script> -->
 {%endfor%}
 {%endfor%}
 <script>
+
+function readMessage(id){
+  var btnmsg = "#btn-msg"+id;
+  var badge = "#badge"+id;
+  $.ajax({
+      url:'/intern/readmessages/'+id,
+      type:'GET',
+
+      success:function(response){
+        $(badge).remove();
+      },
+    });
+
+
+}
+
   function showResult(id){
     var btnresult = "#btn-result"+id;
     $.ajax({
@@ -167,7 +184,7 @@
 </script>
 </table>
 
-<div class="body center_div">
+<div class="center" style="text-align: center;">
 
           <nav>
             <ul class="pagination">
@@ -177,7 +194,7 @@
                 </a></li>
               {% endif %}
 
-              <li><a href="#" class="waves-effect">  {{ upc.number }} of {{ upc.paginator.num_pages }}.</a></li>
+              <li><a href="#" class="waves-effect">  {{ upc.number }} of {{ upc.paginator.num_pages }}</a></li>
 
               {% if upc.has_next %}
               <li>

@@ -38,6 +38,7 @@
 				</head>
 				<body>
 				-->
+				
 				{% block content %}
 
 
@@ -76,9 +77,11 @@
 						<br>
 						<br>
 						{% if request.session.stipend %}
-						<input type="checkbox" name="stipend" id="stipend" checked="True"> <lable>Stipend</lable></input>
+						<input type="checkbox" id="stipend" class="filled-in" checked="True" name="stipend">
+						<label for="stipend"> Stipend</label>
 						{% else%}
-						<input type="checkbox" class="checkbox" name="stipend" id="stipend" > <lable>Stipend</lable>
+						<input type="checkbox" id="stipend" class="filled-in" name="stipend">
+						<label for="stipend"> Stipend</label>
 						{% endif %}
 
 						<h4>Max.Duration (month)</h4>
@@ -106,9 +109,9 @@
 							{%else%}
 							<option value=""> Choose Type of Internship</option>
 							{% endif %}
-							<option value="full time">Full Time</option>
-							<option value="part time">Part Time</option>
-							<option value="work from home">Work From Home</option>
+							<option value="Full Time">Full Time</option>
+							<option value="Part Time">Part Time</option>
+							<option value="Work From H.ome">Work From Home</option>
 						</select>
 						<br><br>
 						<input id="sub" type="submit" >
@@ -261,17 +264,17 @@
 				</script>
 
 				
-				<div class="body center_div">
-
+				
+				<div class="center" style="text-align: center;">
 					<nav>
 						<ul class="pagination">
 							{% if data.has_previous %}
 							<li><a href="?page={{ data.previous_page_number }}" class="waves-effect">
-									<i class="material-icons">chevron_left</i>
-								</a></li>
+								<i class="material-icons">chevron_left</i>
+							</a></li>
 							{% endif %}
 
-							<li><a href="#" class="waves-effect">	 {{ data.number }} of {{ data.paginator.num_pages }}.</a></li>
+							<li><a href="#" class="waves-effect">	 {{ data.number }} of {{ data.paginator.num_pages }}</a></li>
 
 							{% if data.has_next %}
 							<li>
@@ -284,7 +287,6 @@
 						</ul>
 					</nav>
 				</div>
-				
 
-				<div id="wait" style="display:none;width:69px;height:89px;border:1px solid black;position:absolute;top:50%;left:50%;padding:2px;"><img src="{% static 'images/11699799.gif'%}" width="64" height="64" /><br>Loading..</div>				<!-- </html>  -->
+				
 				{% endblock %}
