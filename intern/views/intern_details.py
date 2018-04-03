@@ -151,6 +151,6 @@ class HomeView(TemplateView):
 	
 		upc= UserPostConnection.objects.filter(internprofile_id = IP.user_id).order_by('-id')
 		context['upc'] = upc
-		paginator = Paginator(upc, 5)
+		paginator = Paginator(upc, 3)
 		context['upc'] = paginator.get_page(page)
 		return context

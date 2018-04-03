@@ -27,6 +27,7 @@ from django.views.generic.detail import SingleObjectMixin
 import datetime
 import json
 from intern.service.Internship_service import *
+from braces.views import LoginRequiredMixin
 
 class InternshipDetailView(TemplateView):
 	model = PostDetails

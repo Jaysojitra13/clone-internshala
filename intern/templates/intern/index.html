@@ -91,7 +91,7 @@
 
       <span id="badge{{j.id}}" class="badge" style="position: relative; bottom:10px; left:-10px;">{% if j.id|messages_count:i.id > 0 %}{{j.id|messages_count:i.id}}{%endif%}</span>
     </td>
-    {% if i.status == "Accepted" or i.status == "InProcess" or i.status == "Confirmed"%}
+    {% if i.status == "1" or i.status == "2" or i.status == "4"%}
     {% if i.id|check_test == 0%}
     <td><a href="{% url 'intern:give-test' pk=i.pk %}"><button class="btn btn-info btn-sm" type="button">Give Test </button></td>
     {% elif i.id|check_test == 1 %}

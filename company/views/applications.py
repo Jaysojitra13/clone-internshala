@@ -22,8 +22,9 @@ from intern.views import *
 from intern.models import *
 from company.models import *
 from company.service.applications_service import *
+from braces.views import LoginRequiredMixin
 
-class ApplicationView(TemplateView):
+class ApplicationView(LoginRequiredMixin,TemplateView):
 	template_name = 'company/application.html'
 
 	def get_context_data(self, **kwargs):
@@ -45,7 +46,7 @@ class ApplicationView(TemplateView):
 		context['applicants'] = applicants
 		paginator = Paginator(applicants, 15)
 		context['applicants'] = paginator.get_page(page)
-
+ 
 		return context
 
 class ViewDetails(TemplateView):

@@ -73,7 +73,6 @@ class MyLogInView(LoginView):
 	def form_valid(self, form):
 		data = self.request.session.get('user')
 		
-		print('login', data)
 		if data == 'company':
 			return HttpResponseRedirect('/company/contactdetail/')
 		elif data == 'intern':
