@@ -45,7 +45,7 @@ class ApplicationView(LoginRequiredMixin,TemplateView):
 		context['data'] = PostDetails.objects.all()	
 		context['applicants'] = applicants
 		paginator = Paginator(applicants, 15)
-		context['applicants'] = paginator.get_page(page)
+		context['applicantss'] = paginator.get_page(page)
  
 		return context
 

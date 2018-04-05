@@ -96,14 +96,23 @@
     <td><a href="{% url 'intern:give-test' pk=i.pk %}"><button class="btn btn-info btn-sm" type="button">Give Test </button></td>
     {% elif i.id|check_test == 1 %}
     <td><button class="btn btn-info disabled btn-sm" type="button">submitted</button></td>
+    <td></td>
     {% elif i.id|check_test == 2%}
-    <td><button id="btn-result{{i.id}}" class="btn btn-info btn-sm" type="button" onclick="showResult('{{i.id}}')">Result</button></td>
+    <td><button id="btn-result{{i.id}}" class="btn btn-info btn-sm" type="button" onclick="showResult({{i.id}})">Result</button></td>
     <td style="width: 200px;">
-      <div class="demo" style="visibility: hidden;">
+      <div class="demo{{i.id}}" style="visibility: hidden;">
         
       </div>
     </td>
+    {% else %}
+    <td></td>
+    <td></td>
+    <td></td>
     {% endif %}
+    {% else %}
+    <td></td>
+    <td></td>
+    <td></td>
     {%  endif %}
   </tr>
 
@@ -166,6 +175,7 @@ function readMessage(id){
 
   function showResult(id){
     var btnresult = "#btn-result"+id;
+    var demo = ".demo"+id;
     $.ajax({
       url: '/intern/showresult/',
       type: 'GET',
@@ -174,9 +184,9 @@ function readMessage(id){
       },
       success:function(response){
         // $(btnresult).html("your result is:-" + response.result);
-        $('.demo').css("visibility","visible");
-        $('.demo').css("text-align","center");
-        $('.demo').html("Your Result is "+response.result+"%.");
+        $(demo).css("visibility","visible");
+        $(demo).css("text-align","center");
+        $(demo).html("Your Result is "+response.result+"%.");
         // alert("Your Result is "+response.result);
       },
     });

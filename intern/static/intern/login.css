@@ -5,18 +5,8 @@
      /* value of your choice which suits your alignment */
 }
 
-.right{ 
-	float: left;
-	border-radius: 5px;
-	width: 100%;
-	height: 40px;
-}
 
-.btn{
-	margin-left: 33.95%;
-	width: 29%;
-	font-size: 20px;
-}
+
 
 .login-or{
 	text-align: center;
@@ -27,12 +17,9 @@
 	
 }
 
-.notaccount{
-	text-align: center;
-	padding-top: 10px;
-}
-
-.reset{
-	border-radius: 5px;
-	font-size: 15px;
+.btn-margin{
+	margin-left: 33.50%;
+	width: 30%;
+	font-size: 18px;
+	border-radius: 3px;
 }

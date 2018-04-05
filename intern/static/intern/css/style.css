@@ -1,5 +1,13 @@
 ﻿/* Navbar ====================================== */
 @import url(materialize.css);
+.bodyimage{
+  background-image: url("../../../media/apple2.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  height: 553px;
+}
+
+
 .navbar {
   font-family: "Roboto", sans-serif;
   -webkit-border-radius: 0;

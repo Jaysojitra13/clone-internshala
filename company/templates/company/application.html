@@ -19,10 +19,13 @@
 				<div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
 					<div class="form-group">
 						<div class="form-line"> 
-
 							<select class="form-control" id="domain" name="domain"  >
-
+							{% if request.session.domain %}
+								<option value="{{request.session.domain}}">{{request.session.domain}}</option>
+								<option value=""> No Technology</option>
+							{%else%}
 								<option value="">Select Technology</option>
+							{% endif %}
 
 								{% for j in data|tech_name %}
 
@@ -226,40 +229,23 @@
 
 
 				</table>
-					<!-- <div class="pagination">
-						<span class="step-links">
-							{% if applicants.has_previous %}
-							<a href="?page=1">&laquo; first</a>
-							<a href="?page={{ applicants.previous_page_number }}">previous</a>
-							{% endif %}
-
-							<span class="current">
-								Page {{ applicants.number }} of {{ applicants.paginator.num_pages }}.
-							</span>
-
-							{% if applicants.has_next %}
-							<a href="?page={{ applicants.next_page_number }}">next</a>
-							<a href="?page={{ applicants.paginator.num_pages }}">last &raquo;</a>
-							{% endif %}
-						</span>
-					</div> -->
-
+				
 
 					<div class="body center_div">
 
 						<nav>
 							<ul class="pagination">
-								{% if applicants.has_previous %}
-								<li><a href="?page={{ applicants.previous_page_number }}" class="waves-effect">
+								{% if applicantss.has_previous %}
+								<li><a href="?page={{ applicantss.previous_page_number }}" class="waves-effect">
 									<i class="material-icons">chevron_left</i>
 								</a></li>
 								{% endif %}
 
-								<li><a href="#" class="waves-effect">	 {{ applicants.number }}</a></li>
+								<li><a href="#" class="waves-effect">	Page {{ applicantss.number }}</a></li>
 
-								{% if applicants.has_next %}
+								{% if applicantss.has_next %}
 								<li>
-									<a href="?page={{ applicants.next_page_number }}" class="waves-effect">
+									<a href="?page={{ applicantss.next_page_number }}" class="waves-effect">
 										<i class="material-icons">chevron_right</i>
 									</a>
 								</li>
@@ -373,6 +359,7 @@
 				
 			},
 			success: function(response){
+				$('#HRFilter').replaceWith($(response).find('#HRFilter'));
 				$('#tb').replaceWith($(response).find('#tb'));
 			}
 		});

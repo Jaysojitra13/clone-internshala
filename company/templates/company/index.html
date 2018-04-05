@@ -41,7 +41,7 @@
        <li > <a href="{% url 'company:applications'%}"> Applications</a></li>
       {% endif %}
 
-      {% if check == "all"%}
+      {% if check == "all" or check == "existing" or check == "past"%}
       <li style="background-color: #e9e9e9;"> <a href="{% url 'company:all-post'%}">Requirements   </a></li>
       {% else %}
       <li> <a href="{% url 'company:all-post'%}">Requirements   </a></li>

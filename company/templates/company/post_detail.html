@@ -11,19 +11,106 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body> -->
-{% block content %}
-<link rel="stylesheet" type="text/css" href="{% static 'company/newpost.css' %}" />
-<h3 style="text-align: center;">Create New Post</h3>
-<div class="container center_div">
+	{% block content %}
+	<link rel="stylesheet" type="text/css" href="{% static 'company/newpost.css' %}" />
+	<h3 style="text-align: center;">Create New Post</h3>
+	<div class="container center_div">
 
-<form action="" method="post">
-{% csrf_token %}
- 
-	{{ form|crispy }}
+		<!-- <form action="" method="post">
+			{% csrf_token %}
 
-<input class="btn btn-primary right" type="submit" value="submit">
+			{{ form|crispy }}
+
+			<input class="btn btn-primary right" type="submit" value="submit">
+		</form>
+		<br><br> -->
+
+		<form action="" method="post">
+			{% csrf_token %}
+
+
+
+			<div id="div_id_domain" class="form-group">
+				<label for="id_domain" class="form-control-label  requiredField">
+					Domain<span class="asteriskField">*</span> 
+				</label> <div class="form-group form-line">
+				<input type="text" name="domain" class="textinput textInput form-control" id="id_domain" placeholder="domain" required=""> 
+			</div>
+		</div>
+		<div id="div_id_technology" class="form-group">
+			<label for="id_technology" class="form-control-label  requiredField">
+				Technology<span class="asteriskField">*</span>
+			</label> <div class="form-group form-line">
+			<select name="technology" class="regDropDown select form-control" required="" id="id_technology"> <option value="" selected="">Select Technology</option> 
+				<option value="Java">Java</option> 
+				<option value="Test">Test</option>
+				<option value="node">node</option> 
+				<option value="Python">Python</option>
+				<option value="Android">Android</option> 
+				<option value="Ruby">Ruby</option> 
+				<option value="Ruby">Ruby</option> 
+				<option value="BD">BD</option>
+				<option value="BI">BI</option> 
+				<option value="UX/UI design">UX/UI design</option>
+
+			</select> 
+		</div> 
+	</div> 
+	<div id="div_id_numberof_interns" class="form-group"> 
+		<label for="id_numberof_interns" class="form-control-label  requiredField">
+			Numberof interns<span class="asteriskField">*</span> 
+		</label> 
+		<div class="form-group form-line"> 
+			<input type="text" name="numberof_interns" class="textinput textInput form-control" id="id_numberof_interns" placeholder="No. of integers" required=""> 
+		</div> 
+	</div> 
+	<div id="div_id_time_duration" class="form-group">
+		<label for="id_time_duration" class="form-control-label  requiredField">
+			Time duration (In month)<span class="asteriskField">*</span> 
+		</label>
+		<div class="form-group form-line"> 
+			<input type="text" name="time_duration" class="textinput textInput form-control" id="id_time_duration" placeholder="Time Duration" required=""> 
+		</div> 
+	</div>
+	<div id="div_id_stipend" class="form-group">
+		<label for="id_stipend" class="form-control-label ">
+			Stipend (per month)
+		</label>
+		<div class="form-group form-line"> 
+			<input type="text" name="stipend" class="textinput textInput form-control" placeholder="Stipend" id="id_stipend"> </div>
+		</div> 
+		<div id="div_id_start_date" class="form-group">
+			<label for="id_start_date" class="form-control-label  requiredField">
+				Start date(YY-MM-DD)<span class="asteriskField">*</span> 
+			</label> 
+			<div class="form-group form-line"> 
+				<input type="text" name="start_date" class="textinput textInput form-control" id="id_start_date" placeholder="Start Date" required="">
+			</div>
+		</div>
+		<div id="div_id_apply_by" class="form-group">
+			<label for="id_apply_by" class="form-control-label  requiredField">
+				Last date to apply<span class="asteriskField">*</span>
+			</label>
+			<div class="form-group form-line"> 
+				<input type="text" name="apply_by" class="textinput textInput form-control" id="id_apply_by" placeholder="Apply by" required="">
+			</div>
+		</div> 
+		<div id="div_id_typeof_internship" class="form-group">
+			<label for="id_typeof_internship" class="form-control-label  requiredField">
+				Typeof internship<span class="asteriskField">*</span> 
+			</label> <div class="form-group form-line"> 
+			<select name="typeof_internship" class="regDropDown select form-control" required="" id="id_typeof_internship"> <option value="" selected="">Select type</option>
+				<option value="Full Time">Full Time</option>
+				<option value="Part Time">Part Time</option>
+				<option value="Work From Home">Work From Home</option>
+
+			</select>
+		</div> 
+	</div>
+
+
+	<input class="btn btn-primary right" type="submit" value="submit">
 </form>
-<br><br>
 </div>
 {% endblock %}
 <!-- </body>

@@ -12,10 +12,11 @@
 	 
 	
 }
-.btn{
-	margin-left: 33.95%;
-	width: 30%;
-	font-size: 20px;
+.btn-margin{
+	margin-left: 33%;
+	width: 31%;
+	border-radius: 3px;
+	font-size: 18px;
 }
 
 .right{

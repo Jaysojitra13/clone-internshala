@@ -28,7 +28,7 @@ import datetime
 import json
 
 def InternProfileView(request):
-	
+	 
 	#profile_form = InternProfileForm()
 	if request.method == 'POST':
 		user_form = UserForm(request.POST, prefix='UF')
@@ -54,7 +54,7 @@ def InternProfileView(request):
 
 class Home(TemplateView):
 	
-	template_name = 'intern/home.html'
+	template_name = 'intern/home1.html'
 	def dispatch(self, request, *args, **kwargs):
 		# if 'company' in request.session:
 		# 	print('not there')	
@@ -81,7 +81,6 @@ class UpdatePersonalDetailView(UpdateView):
 	form_class = PersonalDetailsForm
 	template_name  = 'intern/personal_detail.html'
 	success_url = reverse_lazy('intern:index')	
-	print('hh')
 	
 	def dispatch(self, *args, **kwargs):
 		#or put some logic here
@@ -101,7 +100,6 @@ class AcademicDetailView(CreateView):
 	success_url = reverse_lazy('intern:project-detail')
 	
 	def form_valid(self, form):
-		print('PD')
 		IP = InternProfile.objects.get(user = self.request.user)
 		PF = form.save(commit=False)
 		PF.internprofile = IP
@@ -115,7 +113,6 @@ class UpdateAcademicDetailView(UpdateView):
 
 	def dispatch(self, *args, **kwargs):
 		#or put some logic here
-		print(kwargs['pk'])
 		if kwargs['pk'] == '':
 			return HttpResponseRedirect('/intern/academicdetail/')
 		
@@ -151,6 +148,6 @@ class HomeView(TemplateView):
 	
 		upc= UserPostConnection.objects.filter(internprofile_id = IP.user_id).order_by('-id')
 		context['upc'] = upc
-		paginator = Paginator(upc, 3)
+		paginator = Paginator(upc, 10)
 		context['upc'] = paginator.get_page(page)
 		return context

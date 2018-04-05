@@ -22,17 +22,20 @@ class AplicationViewService:
 			applicants = UserPostConnection.objects.filter(company_id = company_profile.user_id).order_by('internprofile__personal_details__name')
 		else:
 			applicants = UserPostConnection.objects.filter(company_id = company_profile.user_id).order_by('id')
-
+			if 'domain' in self1.request.session:
+				del self1.request.session['domain']
 
 		if domain == '' and date != '':	
 			applicants = applicants.filter(applied_date = self1.request.GET.get('date'))
+			
 		elif domain != '' and date == '':
+			self1.request.session['domain'] = domain
 			for j in post:
 				applicants = applicants.filter(postdetails_id = j.id).order_by('-applied_date')
 		elif domain != '' and date != '':
 			for j in post:
 				applicants = applicants.filter(applied_date = self1.request.GET.get('date'),postdetails_id = j.id).order_by('-applied_date')
-
+		
 		return applicants
 
 

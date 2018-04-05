@@ -23,9 +23,9 @@
 
 
 <div class="socialaccount_ballot">
-  
+    
   <ul class="socialaccount_providers">
-    <button class="btn"><i class="fa fa-google" aria-hidden="true" ></i>{% include "socialaccount/snippets/provider_list.html" with process="login" %}</button>
+    <button class="btn-margin"><i class="fa fa-google" aria-hidden="true" ></i>{% include "socialaccount/snippets/provider_list.html" with process="login" %}</button>
   </ul>
 
   <div class="login-or">{% trans 'or' %}</div>
@@ -41,7 +41,7 @@
 <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
 {% endif %}
 <div class="container center_div" >
-<form class="login" method="POST" action="{% url 'account_login' %}">
+<!-- <form class="login" method="POST" action="{% url 'account_login' %}">
   {% csrf_token %}
   {{ form|crispy }}
   {% if redirect_field_value %}
@@ -52,7 +52,47 @@
   <button class="btn-primary primaryAction right" type="submit" >{% trans "Sign In" %}</button>
   <br><br>
   <div class="notaccount">Don't have an account? <a href="{% url 'account_signup'%}">Sign up.</a></div>
-</form>
+</form> -->
+
+<div class="login-box">
+       
+        <div class="card">
+            <div class="body">
+                <form id="sign_in" method="POST" novalidate="novalidate" action="{% url 'account_login' %}">
+                  {% csrf_token %}
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">person</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="text" class="form-control" name="login" id="id_login" placeholder="Username" required="" autofocus="" aria-required="true">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">lock</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="password" class="form-control" name="password" placeholder="Password" required="" aria-required="true">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-8 p-t-5">
+                            <input type="checkbox" name="remember" id="id_remember" class="filled-in chk-col-pink">
+                            <label for="id_remember">Remember Me</label>
+                        </div>
+                            
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <a href="{% url 'account_reset_password' %}">Forgot Password?</a>
+                        </div>
+                    </div>
+                    <button class="btn btn-block bg-pink waves-effect" type="submit">SIGN IN</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 </div>
 {% endblock %}

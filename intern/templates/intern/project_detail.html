@@ -12,20 +12,53 @@
 </head>
 <body> -->
 
-{% block content %}
-<link rel="stylesheet" type="text/css" href="{% static 'intern/projectdetail.css' %}" />
-<h3 style="text-align: center;font-weight: bolder;">Project Details</h3>
-<div class="container center_div" >
-<form action="" method="post">
+	{% block content %}
+	<link rel="stylesheet" type="text/css" href="{% static 'intern/projectdetail.css' %}" />
+	<h3 style="text-align: center;font-weight: bolder;">Project Details</h3>
+	<div class="container center_div" >
+		<!-- <form action="" method="post">
+			{% csrf_token %}
+			{{form|crispy}}
+			<input class="btn btn-info right" type="submit" name="submit"/>
+		</form> -->
+		<form action="" method="post">
+			{% csrf_token %}
+			<div id="div_id_title" class="form-group">
+				<label for="id_title" class="form-control-label  requiredField">
+					Title<span class="asteriskField">*</span> 
+				</label>
+				<div class="form-group form-line">
+					<input type="text" name="title" class="textinput textInput form-control" id="id_title" placeholder="Project Title" required=""> 
+				</div>
+			</div> 
+			<div id="div_id_typeof_project" class="form-group">
+				<label for="id_typeof_project" class="form-control-label  requiredField">
+					Typeof project<span class="asteriskField">*</span> 
+				</label> 
+				<div class="form-group form-line"> 
+					<input type="text" name="typeof_project" class="textinput textInput form-control" id="id_typeof_project" placeholder="Type of Project" required=""> 
+				</div> 
+			</div> 
+			<div id="div_id_description" class="form-group"> 
+				<label for="id_description" class="form-control-label  requiredField">
+					Description<span class="asteriskField">*</span> 
+				</label> 
+				<div class="form-group form-line"> 
+					<textarea name="description" class="textarea form-control" maxlength="500" rows="7" required="" id="id_description" cols="40" placeholder="Description"></textarea>
+				</div> 
+			</div> 
+			<div id="div_id_project_link" class="form-group">
+				<label for="id_project_link" class="form-control-label  requiredField">
+					Project link<span class="asteriskField">*</span>
+				</label> 
+				<div class="form-group form-line">
+					<input type="text" name="project_link" class="textinput textInput form-control" id="id_project_link" placeholder="project Link" required="">
+				</div> 
+			</div>
 
-	{% csrf_token %}
-
-	{{form|crispy}}
-	<!-- {{  form }} -->
-
-	<input class="btn btn-info right" type="submit" name="submit"/>
-</form>
-</div>
-{% endblock 	%}
+			<input class="btn btn-info right" type="submit" name="submit">
+		</form>
+	</div>
+	{% endblock 	%}
 <!-- </body>
 </html>	 -->

@@ -35,7 +35,7 @@
     <link href="{% static 'intern/css/themes/all-themes.css' %}" rel="stylesheet" />
 </head>
 
-<body class="theme-light-blue">
+<body id="body-image" class="theme-light-blue">
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
         <div class="loader">
@@ -57,7 +57,7 @@
     <!-- #END# Overlay For Sidebars -->
    
     <!-- Top Bar -->
-    <nav class="navbar">
+    <nav class="navbar" style="opacity: 1;">
         {% block navbar %}
         <div class="container-fluid"> 
        
@@ -135,16 +135,13 @@
     </nav>
    <section class="content">
         <div class="container-fluid">
-            <div class="block-header">
                 {% block content%}
-
+                
                 {% endblock %}
-            </div>
-
-            
         </div>
     </section>
     <!-- Jquery Core Js -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="{% static 'intern/plugins/jquery/jquery.min.js' %}"></script>
         
     <!-- Bootstrap Core Js -->
