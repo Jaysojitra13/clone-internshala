@@ -8,7 +8,7 @@ class AplicationViewService:
 		return di
 
 	def sorted_applicants(self, self1, applied_datedesc, applied_dateasc, name_desc, name_asc, domain, date):
-		company_profile = CompanyProfile.objects.get(user = self1.request.user)
+		company_profile = InternProfile.objects.get(user = self1.request.user)
 		applicants = UserPostConnection.objects.filter(company_id = company_profile.user_id).order_by('id')
 		post = PostDetails.objects.filter(technology = domain)
 

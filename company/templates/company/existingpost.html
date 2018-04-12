@@ -38,9 +38,7 @@
 		{% endfor %}
 	</thead>
 
-	{% else %}
-	<h2> No posts are available</h2>
-	{% endif %}
+	
 </table>
 
 <div class="body center_div">
@@ -67,7 +65,9 @@
 	</nav>
 </div>
 </div>
-</div>
+</div>{% else %}
+	<h2> No posts are available</h2>
+	{% endif %}
 
 {% endblock %}
 <!-- </body>

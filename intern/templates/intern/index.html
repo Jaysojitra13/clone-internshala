@@ -69,6 +69,7 @@
 
 {% block content %}
 
+{% if upc %}
 <table class="table table-striped">
   <thead style="font-weight: bolder;">
     <tr>
@@ -126,11 +127,11 @@
           <h4 class="modal-title">Messages From Company</h4>
         </div>
         <div class="modal-body">
-         <ol style="list-style-type: none"> 
+        <ol style="list-style-type: none;">
           {% for k in j.id|messages:i.id %}
-          <li>{{k.message_date}}:- &nbsp;{{k.messages}}</li>
+          <li>{{k.message_date}} &nbsp; -  {{k.messages}}</li>
           {% endfor %}
-        </ol>
+      </ol>
       </div>
 
     </div>  
@@ -149,13 +150,16 @@
 
       success:function(response){
         $(x).remove();
-      },
+      }, 
     });
   });
 
 </script> -->
 {%endfor%}
 {%endfor%}
+{% else %}
+  <h3>You don't have apply for any Internships.</h3>
+{% endif %}
 <script>
 
 function readMessage(id){

@@ -20,12 +20,12 @@
   <link rel="stylesheet" type="text/css" href="{% static 'intern/login.css' %}" />
 </head>
 <body>
-
+ 
 
 <div class="socialaccount_ballot">
     
   <ul class="socialaccount_providers">
-    <button class="btn-margin"><i class="fa fa-google" aria-hidden="true" ></i>{% include "socialaccount/snippets/provider_list.html" with process="login" %}</button>
+    <div class="btn-margin"><i class="fa fa-google" aria-hidden="true" ></i>{% include "socialaccount/snippets/provider_list.html" with process="login" %}</div>
   </ul>
 
   <div class="login-or">{% trans 'or' %}</div>

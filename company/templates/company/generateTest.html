@@ -41,8 +41,8 @@
 			<div class="row">
 				<div class="col-md-1">
 					<!-- <input class="checkBoxClass" type="checkbox" data-question_id="{{i.id}}" name="checkboxes" value="{{i.text}}"> -->
-					<input type="checkbox" id="check" class="filled-in checkBoxClass chk-col-light-blue" data-question_id="{{i.id}}" name="checkboxes" value="{{i.text}}">
-					<label for="check"> </label>
+					<input type="checkbox" id="check{{i.id}}" class="filled-in checkBoxClass chk-col-light-blue" data-question_id="{{i.id}}" name="checkboxes" value="{{i.text}}">
+					<label for="check{{i.id}}"> </label>
 				</div>
 				<div class="col-md-9" style="word-wrap: break-word;">
 					<label>Question:- {{i.text}}</label><br>
@@ -87,6 +87,7 @@
 </div>
 <script>
 	$("#checkAll").click(function () {
+		console.log("dsf");
 		$(".checkBoxClass").prop('checked', $(this).prop('checked'));
 	});
 	
