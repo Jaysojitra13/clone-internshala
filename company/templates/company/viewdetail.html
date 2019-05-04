@@ -1,116 +1,144 @@
+{% extends 'company/index.html'%}
 {% load company %}
 {% load static %}
-<html>
-<head>
-	<link rel="stylesheet" type="text/css" href="{% static 'intern/demo.css' %}" />
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	
-</head>
-<body>
-	
+{% load intern%}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'company/sidenav.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'company/viewdetail.css'%}">
+
+<div class="main">
 	{% for j in pk|intern_name%}
-	<h2>Details of {{j.name}}</h2>
-	<br>
-	<h3 style="font-weight: bold;">Personal Details:</h3>
-	<table class="table">
-		<thead style="font-weight: bold;">
-			<tr>
-				<td>Email-ID</td>
-				<td>contact Number</td>
-				<td>Current City</td>
-				<td>2<sup>nd</sup> City</td>
-			</tr>
-		</thead>
-		<tr>
-			<td> {{j.email}}</td>
-			<td> {{j.contact_number}}</td>
-			<td> {{j.current_city}}</td>
-			<td> {{j.second_city}}</td>
-		</tr>
-	</table>
-	{% endfor %}
-	<br>
+
+	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+		<div class="card">
+			<div class="header">
+				<h2>Details of {{j.name}}</h2>
+
+			</div>
+			<div class="body">
+				<p class="lead">
+					Personal Details:
+				</p>
+				<table  class="table">
+					<thead style="font-weight: bold;">
+						<tr>
+							<td>Email-ID</td>
+							<td>contact Number</td>
+							<td>Current City</td>
+							<td>2<sup>nd</sup> City</td>
+						</tr>
+					</thead>
+					<tr>
+						<td> {{j.email}}</td>
+						<td> {{j.contact_number}}</td>
+						<td> {{j.current_city}}</td>
+						<td> {{j.second_city}}</td>
+					</tr>
+				</table>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+
+
+	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+		<div class="card">
+			
+			<div class="body">
+				<p class="lead">
+					Academic details:
+				</p>
+				<table class="table">
+					<thead style="font-weight: bolder;">
+						<tr>
+							<td> 10<sup>th</sup> schoolname</td>
+							<td> 10<sup>th</sup> Percentage</td>
+							<td> 12<sup>th</sup> schoolname </td>
+							<td> 12<sup>th</sup> Percentage</td>
+							<td> College</td>
+							<td> Current year</td>
+							<td> Current Cpi</td>
+						</tr>
+					</thead>
+					<tr>
+						{% for l in pk|academic_detail%}
+						<td> {{l.schoolname_10}}</td>
+						<td>{{l.percentage_10}}%</td>
+						<td> {{l.schoolname_12}}</td>
+						<td>{{l.percentage_12}}%</td>
+						<td>{{l.college_name}}</td>
+						<td>{{l.current_year}}</td>
+						<td> {{l.cpi}}</td>	
+					</tr>
+				</table>
+				<table class="table">
+					<thead style="font-weight: bolder;">
+						<tr>
+							<td> 10<sup>th</sup> Result</td>
+							<td> 12<sup>th</sup> Result</td>
+							<td> College Result</td>
+						</tr>
+					</thead>
+					<tr>
+						<td><img  id="myImg" src="/media/{{l.marksheet_10}}" height="200" width="300"></td>
+
+
+						<div id="myModal" class="modal">
+							<span class="close" style="opacity: 0.5;">&times;</span>
+							<img  id="img" class="modal-content">
+						</div>
+						<td><img  id="myImg1" src="/media/{{l.marksheet_12}}" height="200" width="300"></td>
+						<div id="myModal1" class="modal1">
+							<span class="close1" style="opacity: 0.5;font-size: 15px;">&times;</span>
+							<img  id="img1" class="modal-content1">
+						</div>
+						<td><img  id="myImg2" src="/media/{{l.marksheet_clg}}" height="200" width="300"></td>
+						<div id="myModal2" class="modal2">
+							<span class="close2" style="opacity: .8;font-size: 25px;">&times;</span>
+							<img  id="img2" class="modal-content2">
+						</div>
+
+					</tr>
+					{% endfor %}
+				</table>
+			</div>
+		</div>
+	</div>
 	
-	<h3 style="font-weight: bold;">Academic details:</h3>
-	<table class="table">
-		<thead style="font-weight: bolder;">
-			<tr>
-				<td> 10<sup>th</sup> schoolname</td>
-				<td> 10<sup>th</sup> Percentage</td>
-				<td> 12<sup>th</sup> schoolname </td>
-				<td> 12<sup>th</sup> Percentage</td>
-				<td> College</td>
-				<td> Current year</td>
-				<td> Current Cpi</td>
-			</tr>
-		</thead>
-		<tr>
-			{% for l in pk|academic_detail%}
-			<td> {{l.schoolname_10}}</td>
-			<td>{{l.percentage_10}}%</td>
-			<td> {{l.schoolname_12}}</td>
-			<td>{{l.percentage_12}}%</td>
-			<td>{{l.college_name}}</td>
-			<td>{{l.current_year}}</td>
-			<td> {{l.cpi}}</td>	
-		</tr>
-	</table>
-
-	<table class="table">
-		<thead style="font-weight: bolder;">
-			<tr>
-				<td> 10<sup>th</sup> Result</td>
-				<td> 12<sup>th</sup> Result</td>
-				<td> College Result</td>
-			</tr>
-		</thead>
-		<tr>
-			<td><img  id="myImg" src="/media/{{l.marksheet_10}}" height="200" width="300"></td>
+	
+	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+		<div class="card">
 			
-			
-			<div id="myModal" class="modal">
-				<span class="close" style="opacity: 0.5;">&times;</span>
-				<img  id="img" class="modal-content">
+			<div class="body">
+				<p class="lead">
+					Project Details:
+				</p>
+				<table class="table">
+
+					<thead style="font-weight: bolder;">
+						<tr>
+							<td> Project Title </td>
+							<td> Description</td>
+							<td> Link</td>
+						</tr>
+					</thead>
+					{% for m in pk|project_detail%}
+					<tr>
+						<td> {{m.title}}</td>
+						<td> {{m.description}}</td>
+						<td> {{m.project_link}}</td>
+					</tr>
+					{% endfor %}
+				</table>
+
 			</div>
-			<td><img  id="myImg1" src="/media/{{l.marksheet_12}}" height="200" width="300"></td>
-			<div id="myModal1" class="modal1">
-				<span class="close1" style="opacity: 0.5;font-size: 15px;">&times;</span>
-				<img  id="img1" class="modal-content1">
-			</div>
-			<td><img  id="myImg2" src="/media/{{l.marksheet_clg}}" height="200" width="300"></td>
-			<div id="myModal2" class="modal2">
-				<span class="close2" style="opacity: .8;font-size: 25px;">&times;</span>
-				<img  id="img2" class="modal-content2">
-			</div>
+		</div>
+	</div>
 
-		</tr>
-	</table>
-	{% endfor %}
 
-	<br>
-	<h4 style="font-weight: bold;">Project details:</h4>
-	<table class="table">
 
-		<thead style="font-weight: bolder;">
-			<tr>
-				<td> Project Title </td>
-				<td> Description</td>
-				<td> Link</td>
-			</tr>
-		</thead>
-		{% for m in pk|project_detail%}
-		<tr>
-			<td> {{m.title}}</td>
-			<td> {{m.description}}</td>
-			<td> {{m.project_link}}</td>
-		</tr>
-		{% endfor %}
-	</table>
-
-</body>
- <script>
+	<script>
 // Get the modal
 var modal = document.getElementById('myModal');
 // Get the image and insert it inside the modal - use its "alt" text as a caption
@@ -166,4 +194,5 @@ span.onclick = function() {
 	modal.style.display = "none";
 }
 </script>
-</html>
+</div>
+{% endblock %}

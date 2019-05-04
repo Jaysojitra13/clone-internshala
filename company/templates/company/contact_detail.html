@@ -1,22 +1,91 @@
+{% extends 'company/index.html'%}
 {% load crispy_forms_tags %}
 {% load static %}
-<!DOCTYPE>
-<html>
+<!-- <!DOCTYPE>
+<html> 
 <head>
 	<link rel="stylesheet" type="text/css" href="{% static 'company/contactdetail.css' %}" />
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body> -->
+	{% block content %}
+	<link rel="stylesheet" type="text/css" href="{% static 'company/newpost.css' %}" />
 
-<h2 style="text-align: center;"> Contact Details</h2>
-<div class="container center_div">
-<form action="" method="post">
-{% csrf_token %}
-	{{form|crispy }}
-<input class="btn btn-primary right" type='submit' value='submit'>
+	<h3 style="text-align: center;"> Contact Details</h3>
+	<div class="container center_div">
+		<!-- <form action="" method="post">
+			{% csrf_token %}
+			{{form|crispy }}
+			<input class="btn btn-primary right" type='submit' value='submit'>
+		</form>
+	-->
+	<form action="" method="post">
+		{% csrf_token %}
+
+
+
+		<div id="div_id_company_name" class="form-group">
+			<label for="id_company_name" class="form-control-label  requiredField">
+				Organization name<span class="asteriskField">*</span> 
+			</label> 
+			<div class="form-group form-line"> 
+				<input type="text" name="company_name" class="textinput textInput form-control" id="id_company_name" placeholder="Organization Name" required=""> 
+			</div>
+		</div>
+		<div id="div_id_hr_fname" class="form-group"> 
+			<label for="id_hr_fname" class="form-control-label  requiredField">
+				HR's Fisrtname<span class="asteriskField">*</span> 
+
+			</label> 
+			<div class="form-group form-line"> 
+			<input type="text" name="hr_fname" class="textinput textInput form-control" id="id_hr_fname" placeholder="First Name" required=""> 
+		</div> 
+	</div> 
+	<div id="div_id_hr_lname" class="form-group"> 
+		<label for="id_hr_lname" class="form-control-label  requiredField">
+			HR's Lastname<span class="asteriskField">*</span>
+		</label> 
+		<div class="form-group form-line"> 
+			<input type="text" name="hr_lname" class="textinput textInput form-control" id="id_hr_lname" placeholder="Last Name" required=""> 
+		</div>
+	</div>
+	<div id="div_id_hr_email" class="form-group"> <label for="id_hr_email" class="form-control-label  requiredField">
+		HR's Email-id<span class="asteriskField">*</span> 
+	</label>
+	<div class="form-group form-line"> 
+		<input type="text" name="hr_email" class="textinput textInput form-control" id="id_hr_email" placeholder="Email-id" required="">
+	</div> 
+</div>
+<div id="div_id_website_url" class="form-group">
+	<label for="id_website_url" class="form-control-label  requiredField">
+		Website url<span class="asteriskField">*</span>
+	</label> 
+	<div class="form-group form-line">
+		<input type="text" name="website_url" class="textinput textInput form-control" id="id_website_url" placeholder="website URL" required=""> 
+	</div> 
+</div> 
+<div id="div_id_location" class="form-group"> 
+	<label for="id_location" class="form-control-label  requiredField">
+		Location<span class="asteriskField">*</span> 
+	</label>
+	<div class="form-group form-line">
+		<input type="text" name="location" class="textinput textInput form-control" id="id_location" placeholder="Location" required=""> 
+	</div>
+</div> 
+<div id="div_id_contact_number" class="form-group"> 
+	<label for="id_contact_number" class="form-control-label  requiredField">
+		Mobile Number<span class="asteriskField">*</span> 
+	</label> 
+	<div class="form-group form-line">
+		<input type="text" name="contact_number" class="textinput textInput form-control" id="id_contact_number" placeholder="Contact Number" required=""> 
+	</div> 
+</div>
+
+<input class="btn btn-primary right" type="submit" value="submit">
 </form>
 </div>
-</body>
-</html>
+{% endblock %}
+<!-- </body>
+	</html> -->

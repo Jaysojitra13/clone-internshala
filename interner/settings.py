@@ -98,7 +98,7 @@ SITE_ID = 1
 SOCIAL_AUTH_GOOGLE_ALLAUTH_KEY = '909809979825-89d7r3lfj9atsgqj4dklklg80rinskco.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_ALLAUTH_SECRET = 'ggCEjOHsmxRy7D3eQ1QwiTjg'
 
-LOGIN_REDIRECT_URL = '/intern/index/'
+LOGIN_REDIRECT_URL = '/'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
@@ -113,6 +113,12 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
@@ -171,3 +177,10 @@ STATICFILES_DIRS = [
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = '13jay96@gmail.com'
+EMAIL_HOST_PASSWORD = "Gotham@b201"

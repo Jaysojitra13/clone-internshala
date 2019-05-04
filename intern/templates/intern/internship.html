@@ -1,12 +1,13 @@
+{% extends 'intern/index.html'%}
 
 {% if request.user.id == None%}
 {% include 'intern/home.html' %}
 {% endif %}
 {% if request.user.id != None%}
-{% include 'intern/base.html'%}
 {% endif %}
 {% load static%}
 {% load intern %}
+{% load static %}
 
 <!-- <script>
 					$('#btn-search').on("click",function(){
@@ -36,167 +37,176 @@
 
 				</head>
 				<body>
- -->
- 					{% block content %}
+				-->
+				
+				{% block content %}
 
 
-					<div id="con" class="container">
-						<div class="col-md-4" > 
+				<div class="col-md-3" > 
 
-							<form id="FF" action="" method="get" >
+					<form id="FF" action="" method="get" >
 
-								<h4>Location</h4>
-								
-								<select id="city" name="city"  class='form-control'>
-									{% if request.session.city %}
-									<option value="{{request.session.city}}" >{{request.session.city}}</option>
-									<option value=""> No city </option>	
+						<h4>Location</h4>
 
-									{% else %}		
-									<option value="">Select city</option>
-									{% endif %}
-									{% for i in data|city_name %}
-									<option value="{{ i.location }}">{{i.location}}</option>
-									{% endfor %}
-								</select>
+						<select id="city" name="city"  class='form-control'>
+							{% if request.session.city %}
+							<option value="{{request.session.city}}" >{{request.session.city}}</option>
+							<option value=""> No city </option>	
 
-								<h4>Technology</h4>
-								<select id="tech" name="tech"  class='form-control'>	
-									{% if  request.session.tech %}
-									<option value="{{request.session.tech}}" >{{request.session.tech}}</option>
-									<option value=""> No tech </option>	
-
-									{% else %}			
-									<option value="">Select Technology</option>
-									{% endif %}
-									{% for j in data|tech_name %}
-									<option value="{{ j.technology }}">{{j.technology}}</option>
-									{% endfor %}
-								</select>
-								<br>
-								<br>
-								{% if request.session.stipend %}
-								<input type="checkbox" name="stipend" id="stipend" checked="True"> <lable>Stipend</lable></input>
-								{% else%}
-								<input type="checkbox" name="stipend" id="stipend" > <lable>Stipend</lable></input>
-								{% endif %}
-								
-								<h4>Max.Duration (month)</h4>
-
-								<select id="duration" name="duration"  class='form-control'>
-									{% if request.session.duration %}
-									<option value="{{request.session.duration}}">{{request.session.duration}}</option>
-									<option value="">No Duration</option>
-									{%else%}
-									<option value="">Choose Duration</option>
-									{% endif %}
-									<option value="1">1</option>
-									<option value="2">2</option>
-									<option value="3">3</option>
-									<option value="4">4</option>
-									<option value="5">5</option>
-
-								</select>
-								<br>
-								<h4>Type of Internship</h4>
-								<select id="typ" name="typ"  class='form-control'>
-									{% if request.session.typ %}
-									<option value="{{request.session.typ}}">{{request.session.typ}}</option>
-									<option value="">Remoe Type</option>
-									{%else%}
-									<option value=""> Choose Type of Internship</option>
-									{% endif %}
-									<option value="full time">Full Time</option>
-									<option value="part time">Part Time</option>
-									<option value="work from home">Work From Home</option>
-								</select>
-								<br><br>
-								<input id="sub" type="submit" >
-							</form>
-							
-						</div>
-
-						<div id="abc" class="col-md-8">
-							{% for post in data%}
-
-							<div style="margin:10px;background-color:#f1f1f1;padding: 10px;" >
-
-
-								<h3>{{ post.domain }}</h3>
-
-
-								<div>
-
-									<table class="table">
-										<thead style="font-weight: bolder;">
-											<tr>
-												<td> Start date</td>
-												<td> Duration</td>
-												<td> stipend</td>
-												<td> Apply By</td>
-
-											</tr>
-										</thead>
-										<tr>
-											<td> {{ post.start_date|date}}</td>
-											<td> {{ post.time_duration }} </td>
-											<td> {{ post.stipend }}/- </td>
-											<td> {{ post.apply_by|date }} </td>
-
-										</tr>
-									</table>
-
-								</div>
-								<div class="panel-group" id="accordion">
-									<div class="panel panel-default" style="background-color: #f1f1f1;border:0;">
-										<h4 class="panel-title" >
-											<a data-toggle="collapse" data-parent="#accordion" href="#collapse{{post.id}}">View Details</a>
-										</h4>
-
-										<div id="collapse{{post.id}}" class="panel-collapse collapse out">
-											<div class="panel-body">
-												{% for i in post.company_id|company_details %}	
-												<table class="table">
-													<thead>
-														<tr>
-															<td>Organization Name</td>
-															<td> HR Name</td>
-															<td> HR Email-ID</td>
-															<td> Website</td>
-															<td> Location</td>
-															<td> Contact Number</td>
-														</tr>
-													</thead>
-													<tr>
-														<td>{{i.company_name}}</td>
-														<td>{{i.hr_fname}}{{i.hr_lname}}</td>
-														<td>{{i.hr_email}}</td>
-														<td>{{i.website_url}}</td>
-														<td>{{i.location}}</td>
-														<td>{{i.contact_number}}</td>
-													</tr>
-												</table>	
-											</div>
-
-										</div>
-									</div>
-								</div>
-
-								<div calss="row" style="float:right;">
-									<a href="{% url 'intern:internpost-connection'	company_id=i.company_id post_id=post.id %}">
-										<button >Apply</button>
-									</a>
-								</div>
-								{% endfor %}
-								<hr>
-							</div>
+							{% else %}		
+							<option value="">Select city</option>
+							{% endif %}
+							{% for i in data|city_name %}
+							<option value="{{ i.location }}">{{i.location}}</option>
 							{% endfor %}
+						</select>
 
+						<h4>Technology</h4>
+						<select id="tech" name="tech"  class='form-control'>	
+							{% if  request.session.tech %}
+							<option value="{{request.session.tech}}" >{{request.session.tech}}</option>
+							<option value=""> No tech </option>	
+
+							{% else %}			
+							<option value="">Select Technology</option>
+							{% endif %}
+							{% for j in data|tech_name %}
+							<option value="{{ j.technology }}">{{j.technology}}</option>
+							{% endfor %}
+						</select>
+						<br>
+						<br>
+						{% if request.session.stipend %}
+						<input type="checkbox" id="stipend" class="filled-in" checked="True" name="stipend">
+						<label for="stipend"> Stipend</label>
+						{% else%}
+						<input type="checkbox" id="stipend" class="filled-in" name="stipend">
+						<label for="stipend"> Stipend</label>
+						{% endif %}
+
+						<h4>Max.Duration (month)</h4>
+
+						<select id="duration" name="duration"  class='form-control'>
+							{% if request.session.duration %}
+							<option value="{{request.session.duration}}">{{request.session.duration}}</option>
+							<option value="">No Duration</option>
+							{%else%}
+							<option value="">Choose Duration</option>
+							{% endif %}
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+
+						</select>
+						<br>
+						<h4>Type of Internship</h4>
+						<select id="typ" name="typ"  class='form-control'>
+							{% if request.session.typ %}
+							<option value="{{request.session.typ}}">{{request.session.typ}}</option>
+							<option value="">Remoe Type</option>
+							{%else%}
+							<option value=""> Choose Type of Internship</option>
+							{% endif %}
+							<option value="Full Time">Full Time</option>
+							<option value="Part Time">Part Time</option>
+							<option value="Work From Home">Work From Home</option>
+						</select>
+						<br><br>
+						<input id="sub" type="submit" >
+					</form>
+
+				</div>
+
+
+
+				<div id="abc" class="col-md-9">
+					{% if data %}
+					{% for post in data%}
+
+					<div style="margin:10px;background-color:#f1f1f1;padding: 10px;" >
+
+
+						<h3>{{ post.domain }}</h3>
+
+
+						<div>
+
+							<table class="table">
+								<thead style="font-weight: bolder;">
+									<tr>
+										<td> Start date</td>
+										<td> Duration</td>
+										<td> stipend</td>
+										<td> Apply By</td>
+
+									</tr>
+								</thead>
+								<tr>
+									<td> {{ post.start_date|date}}</td>
+									<td> {{ post.time_duration }} </td>
+									<td> {{ post.stipend }}/- </td>
+									<td> {{ post.apply_by|date }} </td>
+
+								</tr>
+							</table>
 
 						</div>
-					</div>	
-				<!-- </body> -->
-				<script>
+						<div class="panel-group" id="accordion">
+							<div class="panel panel-default" style="background-color: #f1f1f1;border:0;">
+								<h4 class="panel-title" >
+									<a data-toggle="collapse" data-parent="#accordion" href="#collapse{{post.id}}">View Details</a>
+								</h4>
+
+								<div id="collapse{{post.id}}" class="panel-collapse collapse out">
+									<div class="panel-body">
+										{% for i in post.company_id|company_details %}	
+										<table class="table">
+											<thead style="font-weight: bolder;">
+												<tr>
+													<td>Organization Name</td>
+													<td> HR Name</td>
+													<td> HR Email-ID</td>
+													<td> Website</td>
+													<td> Location</td>
+													<td> Contact Number</td>
+												</tr>
+											</thead>
+											<tr>
+												<td>{{i.company_name}}</td>
+												<td>{{i.hr_fname}}{{i.hr_lname}}</td>
+												<td>{{i.hr_email}}</td>
+												<td>{{i.website_url}}</td>
+												<td>{{i.location}}</td>
+												<td>{{i.contact_number}}</td>
+											</tr>
+										</table>	
+									</div>
+
+								</div>
+							</div>
+						</div>
+
+						<div calss="row" style="float:right;">
+							<a href="{% url 'intern:internpost-connection'	company_id=i.company_id post_id=post.id %}">
+								<button >Apply</button>
+							</a>
+						</div>
+						{% endfor %}
+						<hr>
+					</div>
+
+					{% endfor %}
+					{% else %}
+					<h4>No internship is available </h4>
+					{% endif%}
+
+
+				</div>
+			</div>	
+			<!-- </body> -->
+			<script>
 					/*$('[id="city"],[id="tech"]').on('change',function(e)	{
 
 						$.ajax({
@@ -232,7 +242,6 @@
 						});
 					});	*/
 					$('#sub').on('click',function(){
-						console.log($('#FF'))
 						$('#FF').submit(function(){
 
 							$.ajax({
@@ -240,28 +249,44 @@
 								type: 'GET',
 								data: $('#FF').serialize(),
 								success:function(response){
-									console.log("OK")
 								},
 							});
+
+						});
+						$(document).ajaxStart(function(){
+							$("#wait").css("display", "block");
+						});
+						$(document).ajaxComplete(function(){
+							$("#wait").css("display", "none");
 						});
 					});
 
 				</script>
-				<div class="pagination">
-					<span class="step-links">
-						{% if data.has_previous %}
-						<a href="?page=1">&laquo; first</a>
-						<a href="?page={{ data.previous_page_number }}">previous</a>
-						{% endif %}
-						<span class="current">
-							Page {{ data.number }} of {{ data.paginator.num_pages }}.
-						</span>
 
-						{% if data.has_next %}
-						<a href="?page={{ data.next_page_number }}">next</a>
-						<a href="?page={{ data.paginator.num_pages }}">last &raquo;</a>
-						{% endif %}
-					</span>
+				
+				
+				<div class="center" style="text-align: center;">
+					<nav>
+						<ul class="pagination">
+							{% if data.has_previous %}
+							<li><a href="?page={{ data.previous_page_number }}" class="waves-effect">
+								<i class="material-icons">chevron_left</i>
+							</a></li>
+							{% endif %}
+
+							<li><a href="#" class="waves-effect">	 {{ data.number }} of {{ data.paginator.num_pages }}</a></li>
+
+							{% if data.has_next %}
+							<li>
+								<a href="?page={{ data.next_page_number }}" class="waves-effect">
+									<i class="material-icons">chevron_right</i>
+								</a>
+							</li>
+							{% endif %}
+
+						</ul>
+					</nav>
 				</div>
-				<!-- </html>  -->
+
+				
 				{% endblock %}

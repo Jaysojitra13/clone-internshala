@@ -1,72 +1,161 @@
-    {% load socialaccount %}
-  {% load static %}
-  <html>
-  <head>
-    <link rel="stylesheet" type="text/css" href="{% static 'intern/homepage.css' %}" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ {% load socialaccount %}
+{% load static%}
+  <!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Welcome To Practicum</title>
+    <!-- Favicon-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!--     Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
 
-  </head>
-  <body>
-    <nav class="navbar navbar-default">
-      <div class="container-fluid">
-        <ul class="nav navbar-nav">
-          <li>
-            <h1 class="titlefont">Practicum</h1>
-          </li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
+    <!-- Bootstrap Core Css -->
+    <link href="{% static 'intern/plugins/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
 
-          {% if user.is_authenticated %}
-          <li class="box">
-            <p>{{ user.username }}</p>
-          </li>
-          <li>
-            <a href="{% url 'account_logout' %}"><button class="btn btn-primary">Log Out</button></a>
-          </li>
+    <!-- Waves Effect Css -->
+    <link href="{% static 'intern/plugins/node-waves/waves.css' %}" rel="stylesheet" />
 
-          {% else %}
-          <li>
-           <a href="{% url 'intern:internship-detail' %}"><button class="btn btn-primary internbtn" >Internship</button></a>
-         </li>
-         <li style="padding-right: 10px;padding-top: 10px;">
-          <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"> Sign up
-              <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu signup">
-              <li><a href="{% url 'check-user' 'intern' %}">SignUp as Intern</a></li>
-              <li><a href="{% url 'check-user' 'company' %}">SignUp as Company</a></li>
-            </ul>
-          </div>
-          <br>    
-        </li>
+    <!-- Animation Css -->
+    <link href="{% static 'intern/plugins/animate-css/animate.css' %}" rel="stylesheet" />
 
-        <li style="padding-top: 10px;">
-          <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Log In
-              <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-              <li><a href="{% url 'check-login' 'intern' %}">LogIn as Intern</a></li>
-              <li><a href="{% url 'check-login' 'company' %}">LogIn as Company</a></li>
-            </ul>
-          </div>
-        </li>
-      </ul>
+    <!-- Morris Chart Css-->
+    <link href="{% static 'intern/plugins/morrisjs/morris.css' %}" rel="stylesheet" />
+
+    <!-- Custom Css -->
+    <link href="{% static 'intern/css/style.css' %}" rel="stylesheet">
+
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link href="{% static 'intern/css/themes/all-themes.css' %}" rel="stylesheet" />
+</head>
+
+<body id="body-image" class="theme-light-blue">
+    <!-- Page Loader -->
+    <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="preloader">
+                <div class="spinner-layer pl-red">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </nav>
+    <!-- #END# Page Loader -->
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+   
+    <!-- Top Bar -->
+    <nav class="navbar" style="opacity: 1;">
+        {% block navbar %}
+        <div class="container-fluid"> 
+       
+            <div class="navbar-header">
+                <a class="navbar-brand" href="index.html">PRACTICUM</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- Call Search -->
+                    <li><a href="{% url 'intern:internship-detail' %}" class="js-search">Internship</a></li>
+                    <!-- #END# Call Search -->
+                    <!-- Notifications -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                            Sign Up
+                        </a>
+                        <ul class="dropdown-menu">
+                            
+                            <li class="body">
+                                <ul class="menu">
+                                    <li>
+                                        <a href="{% url 'check-user' 'intern' %}">
+                                            
+                                            <div class="menu-info">
+                                                <h5>SignUp as Intern</h5>
+                                            </div>
+                                        </a>
+                                    </li>
+                                     <li>
+                                        <a href="{% url 'check-user' 'company' %}">
+                                            <div class="menu-info">
+                                                <h5>SignUp as Company</h5>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- #END# Notifications -->
+                    <!-- Tasks -->
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                            Log In
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="body">
+                                <ul class="menu tasks">
+                                    <li>
+                                        <a href="{% url 'check-login' 'intern' %}">
+                                            <h5>
+                                                LogIn as Intern
+                                            </h5>
+                                            
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'check-login' 'company' %}">
+                                            <h5>
+                                                LogIn as Company
+                                            </h5>
+                                            
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                           
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            {% endblock %}
+        </div>
+    </nav>
+   <section class="content">
+        <div class="container-fluid">
+                {% block content%}
+                
+                {% endblock %}
+        </div>
+    </section>
+    <!-- Jquery Core Js -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{% static 'intern/plugins/jquery/jquery.min.js' %}"></script>
+        
+    <!-- Bootstrap Core Js -->
+    <script src="{% static 'intern/plugins/bootstrap/js/bootstrap.js' %}"></script>
 
-  {% block content %}
+      <!-- Waves Effect Plugin Js -->
+    <script src="{% static 'intern/plugins/node-waves/waves.js' %}"></script>
 
-  {% endblock %}
+    
+    <script src="{% static 'intern/js/admin.js' %}"></script>
+    <script src="{% static 'intern/js/pages/index.js' %}"></script>
 
-  {% endif %}
-
-
-
+    <!-- Demo Js -->
+    <script src="{% static 'intern/js/demo.js' %}"></script>
 </body>
+
 </html>

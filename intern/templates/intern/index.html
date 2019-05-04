@@ -1,6 +1,7 @@
-{% extends 'intern/base.html'%}
-{% load intern %}
 
+{% extends 'intern/home.html'%}
+{% load intern %}
+{% load company%}
 <!-- <!DOCTYPE html>
 <html>
 <head>
@@ -9,7 +10,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
- -->
+-->
   <!-- <nav class="navbar navbar-default">
     <div class="container-fluid">
       <ul class="nav navbar-nav">
@@ -33,98 +34,191 @@
       
     </div>
   </nav>  -->
-  {% block content %}
-  <h2> List of Internships in which you have applied</h2>
-  
-  <table class="table table-condensed">
-    <thead style="font-weight: bolder;">
-      <tr>
-        <td> Company </td>
-        <td> Profile</td>
-        <td> Status</td>
-      </tr>
-    </thead>
-    {% for i in upc %}
-    {%for j in i.company_id|post_details %}
-    {% if j.id == i.postdetails_id%}
-    <tr>
-      <td> {{j.company_id|company_name }}</td>
-      <td> {{j.domain}}</td>
-      <td> {{i.status}}</td>
-      <td>
+  {% block navbar %}
+  {% if user.is_authenticated %}
+   <div class="container-fluid"> 
+  <div class="navbar-header">
+    <a class="navbar-brand" href="index.html">Welcome {{user.username}}</a>
 
-        <button id="btn-msg{{j.id}}" class="btn btn-notify" data-toggle="modal" data-target="#ModalMes{{j.id}}"> Message</button>
-        
-
-        <span id="badge{{j.id}}" class="badge" style="position: relative; bottom:10px; left:-10px;">{% if j.id|messages_count > 0 %}{{j.id|messages_count}}{%endif%}</span>
-
-        
-        
-        
-      </td>
-    </tr>
-    {% endif %}
-    <div class="modal fade" id="ModalMes{{j.id}}" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-
-            <h4 class="modal-title">Messages From Company </h4>
-          </div>
-          <div class="modal-body">
-           <ol style="list-style-type: none"> 
-            {% for k in j.id|messages %}
-            <li>{{k.message_date}}:- &nbsp;{{k.messages}}</li>
-            {% endfor %}
-          </ol>
-        </div>
-
-        <div class="modal-footer">
-
-          
-        </div>
-      </div>  
-    </div>  
   </div>
-  <script>
-    $('#btn-msg{{j.id}}').on('click',function(){
-      var x = '#badge'+{{j.id}}
-      $.ajax({
-        url:'/intern/readmessages/'+{{j.id}},
-        type:'GET',
-       
-        success:function(response){
-          console.log(x);
-          $(x).remove();
-         
-        },
-      });
-    });
-  </script>
-  {%endfor%}
-  {%endfor%}
-</table>
-<div class="pagination">
-    <span class="step-links">
-        {% if upc.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            <a href="?page={{ upc.previous_page_number }}">previous</a>
-        {% endif %}
+  <div class="collapse navbar-collapse" id="navbar-collapse">
+    <ul class="nav navbar-nav navbar-right">
+     <li>
+      <a href="{% url 'intern:index'%}">Dashboard</a>
+    </li>
+    <li><a href="{% url 'intern:internship-detail' %}">Internship</a></li>
 
-        <span class="current">
-            Page {{ upc.number }} of {{ upc.paginator.num_pages }}.
-        </span>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+        Update Profile
+      </a>
+      <ul class="dropdown-menu">
+        <li><a href="{%url 'intern:updatepersonal-detail' pk=PD%}">Personal Detail</a></li>
+        <li><a href="{%url 'intern:updateacademic-detail' pk=AD%}">Academic Detail</a></li>
+       <li><a href="{% url 'intern:project-detail' %}">Project Detail</a></li>
+      </ul>
 
-        {% if upc.has_next %}
-            <a href="?page={{ upc.next_page_number }}">next</a>
-            <a href="?page={{ upc.paginator.num_pages }}">last &raquo;</a>
-        {% endif %}
-    </span>
+    </li>
+    <li><a href="{% url 'account_logout' %}">Log Out</a></li>
+  </ul>
 </div>
+</div>
+{% endif %}
 
-<!-- </body>
+{% endblock %}
 
-</html> -->
+{% block content %}
+
+{% if upc %}
+<table class="table table-striped">
+  <thead style="font-weight: bolder;">
+    <tr>
+      <td> Company </td>
+      <td> Profile</td>
+      <td> Status</td>
+    </tr>
+  </thead>
+  {% for i in upc %}
+  {% for j in i.company_id|post_details %}
+  {% if j.id == i.postdetails_id%}
+  <tr>
+    <td> {{j.company_id|company_name }} </td>
+    <td> {{j.domain}} </td>
+    <td> {{i.status|intern_status}} </td>
+    <td>
+
+      <button id="btn-msg{{j.id}}" class="btn btn-notify btn-sm" data-toggle="modal" data-target="#ModalMes{{j.id}}" onclick="readMessage({{j.id}})"><i class="material-icons icon-msg">message</i> </button>
+
+
+      <span id="badge{{j.id}}" class="badge" style="position: relative; bottom:10px; left:-10px;">{% if j.id|messages_count:i.id > 0 %}{{j.id|messages_count:i.id}}{%endif%}</span>
+    </td>
+    {% if i.status == "1" or i.status == "2" or i.status == "4"%}
+    {% if i.id|check_test == 0%}
+    <td><a href="{% url 'intern:give-test' pk=i.pk %}"><button class="btn btn-info btn-sm" type="button">Give Test </button></td>
+    {% elif i.id|check_test == 1 %}
+    <td><button class="btn btn-info disabled btn-sm" type="button">submitted</button></td>
+    <td></td>
+    {% elif i.id|check_test == 2%}
+    <td><button id="btn-result{{i.id}}" class="btn btn-info btn-sm" type="button" onclick="showResult({{i.id}})">Result</button></td>
+    <td style="width: 200px;">
+      <div class="demo{{i.id}}" style="visibility: hidden;">
+        
+      </div>
+    </td>
+    {% else %}
+    <td></td>
+    <td></td>
+    <td></td>
+    {% endif %}
+    {% else %}
+    <td></td>
+    <td></td>
+    <td></td>
+    {%  endif %}
+  </tr>
+
+  <div class="modal fade" id="ModalMes{{j.id}}" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+          <h4 class="modal-title">Messages From Company</h4>
+        </div>
+        <div class="modal-body">
+        <ol style="list-style-type: none;">
+          {% for k in j.id|messages:i.id %}
+          <li>{{k.message_date}} &nbsp; -  {{k.messages}}</li>
+          {% endfor %}
+      </ol>
+      </div>
+
+    </div>  
+  </div>  
+</div> 
+{% endif %}
+
+
+<!-- <script>
+
+  $('#btn-msg{{j.id}}').on('click',function(){
+    var x = '#badge'+{{j.id}};
+    $.ajax({
+      url:'/intern/readmessages/'+{{j.id}},
+      type:'GET',
+
+      success:function(response){
+        $(x).remove();
+      }, 
+    });
+  });
+
+</script> -->
+{%endfor%}
+{%endfor%}
+{% else %}
+  <h3>You don't have apply for any Internships.</h3>
+{% endif %}
+<script>
+
+function readMessage(id){
+  var btnmsg = "#btn-msg"+id;
+  var badge = "#badge"+id;
+  $.ajax({
+      url:'/intern/readmessages/'+id,
+      type:'GET',
+
+      success:function(response){
+        $(badge).remove();
+      },
+    });
+
+
+}
+
+  function showResult(id){
+    var btnresult = "#btn-result"+id;
+    var demo = ".demo"+id;
+    $.ajax({
+      url: '/intern/showresult/',
+      type: 'GET',
+      data: {
+        'upc_id' : id,
+      },
+      success:function(response){
+        // $(btnresult).html("your result is:-" + response.result);
+        $(demo).css("visibility","visible");
+        $(demo).css("text-align","center");
+        $(demo).html("Your Result is "+response.result+"%.");
+        // alert("Your Result is "+response.result);
+      },
+    });
+  }
+</script>
+</table>
+
+<div class="center" style="text-align: center;">
+
+          <nav>
+            <ul class="pagination">
+              {% if upc.has_previous %}
+              <li><a href="?page={{ upc.previous_page_number }}" class="waves-effect">
+                  <i class="material-icons">chevron_left</i>
+                </a></li>
+              {% endif %}
+
+              <li><a href="#" class="waves-effect">  {{ upc.number }} of {{ upc.paginator.num_pages }}</a></li>
+
+              {% if upc.has_next %}
+              <li>
+                <a href="?page={{ upc.next_page_number }}" class="waves-effect">
+                  <i class="material-icons">chevron_right</i>
+                </a>
+              </li>
+              {% endif %}
+
+            </ul>
+          </nav>
+        </div>
 {% endblock %}

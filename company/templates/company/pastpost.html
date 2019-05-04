@@ -11,47 +11,70 @@
 
 
 	<!-- <h2>NO post</h2> -->
-{% block existingpost %}
-{% if post_list %}
-<div class="container">
-<h1> List of Existing posts</h1>	
+	{% block existingpost %}
+	{% if post %}
 
- <table class="table">
- <thead>
- 	<tr>
- 		<th> Profile </th>
- 		<th> Technology </th>
- 		<th> No. of Interns </th>
- 		<th> Time duration(In Month) </th>
- 		<th> Stipend(per month) </th>
- 		<th> Start Date </th>
- 		<th> Application DeadLine </th>
- 		<th> Type of Internship </th>
- 		<th> Status</th>
- 	</tr>
- 	{% for i in post_list%}
- 	
- 	<tr>
- 		<td> {{ i.domain }} </td>
- 		<td> {{ i.technology }} </td>
- 		<td> {{ i.numberof_interns }} </td>
- 		<td> {{ i.time_duration }} </td>
- 		<td> {{ i.stipend }}/- </td>
- 		<td> {{ i.start_date|date }} </td>
- 		<td> {{ i.apply_by|date }} </td>
- 		<td> {{ i.typeof_internship }} </td>
- 		<td>{{ i.status}}</td>
- 		<td><a href="#"><button class="btn btn-primary" type="button" style="height: 25px;padding-top: 2px;">Test</button></a></td>
- 	</tr>
- 	
- 	{% endfor %}
- </thead>
- 
- {% else %}
- 	<h2> No posts are available</h2>
- {% endif %}
- </table>
-</div>
-{% endblock %}
+	<h3> List of Past posts</h3>	
+
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th> Profile </th>
+				<th> Technology </th>
+				<th> No. of Interns </th>
+				<th> Time duration(In Month) </th>
+				<th> Stipend(per month) </th>
+				<th> Start Date </th>
+				<th> Application DeadLine </th>
+				<th> Type of Internship </th>
+				<th> Status</th>
+			</tr>
+			{% for i in post%}
+			
+			<tr>
+				<td> {{ i.domain }} </td>
+				<td> {{ i.technology }} </td>
+				<td> {{ i.numberof_interns }} </td>
+				<td> {{ i.time_duration }} </td>
+				<td> {{ i.stipend }}/- </td>
+				<td> {{ i.start_date|date }} </td>
+				<td> {{ i.apply_by|date }} </td>
+				<td> {{ i.typeof_internship }} </td>
+				<td>{{ i.status}}</td>
+			</tr>
+			
+			{% endfor %}
+		</thead>
+		
+		
+	</table>
+
+	<div class="body center_div">
+
+		<nav>
+			<ul class="pagination">
+				{% if post.has_previous %}
+				<li><a href="?page={{ post.previous_page_number }}" class="waves-effect">
+					<i class="material-icons">chevron_left</i>
+				</a></li>
+				{% endif %}
+
+				<li><a href="#" class="waves-effect">Page {{ post.number }} </a></li>
+
+				{% if post.has_next %}
+				<li>
+					<a href="?page={{ post.next_page_number }}" class="waves-effect">
+						<i class="material-icons">chevron_right</i>
+					</a>
+				</li>
+				{% endif %}
+
+			</ul>
+		</nav>
+	</div>
+	{% else %}
+		<h2> No posts are available</h2>
+		{% endif %}
+	{% endblock %}
 <!-- </body>
 </html> -->

@@ -1,50 +1,97 @@
-{% extends "account/base.html" %}
+{%  extends 'intern/home.html'%}
 {% load crispy_forms_tags %}
 {% load i18n %}
-{% load static%}
-{% block head_title %}{% trans "Signup" %}{% endblock %}
+{% load static%} 
+{% block head_title %}{% endblock %}
 {% load account socialaccount %} 
-{% block content %}
 
+{% block content %}
 {% get_providers as socialaccount_providers %}
 
 {% if socialaccount_providers %}
-<!DOCTYPE html>
-<html>
-<head>
-	
-	<link rel="stylesheet" type="text/css" href="{% static 'intern/signup.css' %}" />
-</head>
-<body>
 
 
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'intern/signup.css'%}">
 <div class="socialaccount_ballot">
-  
+
   <ul class="socialaccount_providers">
-    <button class="btn"><i class="fa fa-google" aria-hidden="true" ></i>{% include "socialaccount/snippets/provider_list.html" with process="login" %}</button>
+    <button class="btn-margin"><i class="fa fa-google"></i>{% include "socialaccount/snippets/provider_list.html" with process="login" %}</button>
   </ul>
 
   <div class="login-or">{% trans 'or' %}</div>
 
 
 
-{% include "socialaccount/snippets/login_extra.html" %}
+  {% include "socialaccount/snippets/login_extra.html" %}
 
-{% else %}
-{% endif %}
-
-<!-- <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p> -->
-<div class="container center_div" >
-<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
-  {% csrf_token %}
-  {{ form|crispy }}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% else %}
   {% endif %}
-  <button class="btn-primary primaryAction right" type="submit">{% trans "Sign Up" %} </button>
-</form>
-</div>
+
+  <!-- <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p> -->
+  <div class="center_div" >
+   <!--  <form class="signup" id="signup" method="post" action="{% url 'account_signup' %}">
+      {% csrf_token %}
+      {{ form|crispy }}
+      {% if redirect_field_value %}
+      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+      {% endif %}
+      <button class="btn-primary  right" type="submit">{% trans "Sign Up" %} </button>
+    </form> -->
+    <div class="signup-box">
+        
+        <div class="card">
+            <div class="body">
+                <form id="sign_up" method="POST" action="{% url 'account_signup' %}">
+                  {% csrf_token %}
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">person</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="text" class="form-control" name="username" placeholder="Username" id="id_username" required autofocus>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">email</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="email" class="form-control" name="email" placeholder="Email Address" id="id_email" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">lock</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="password" class="form-control" name="password1" id="id_password1" minlength="6" placeholder="Password" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">lock</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="password" class="form-control" name="password2" id="password2" minlength="6" placeholder="Confirm Password" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" name="terms" id="terms" class="filled-in chk-col-pink">
+                        <label for="terms">I read and agree to the <a href="javascript:void(0);">terms of usage</a>.</label>
+                    </div>
+
+                    <button class="btn btn-block btn-lg bg-pink waves-effect" type="submit">SIGN UP</button>
+
+                    <div class="m-t-25 m-b--5 align-center">
+                        <a href="{% url 'account_login' %}">You already have a membership?</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
+
 </div>
 {% endblock %}
-</body>
-</html>

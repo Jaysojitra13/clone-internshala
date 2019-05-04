@@ -1,0 +1,114 @@
+{% extends 'company/index.html'%}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load company %}
+{% load static %}
+{% load intern%}
+
+{% block content %} 
+<link rel="stylesheet" type="text/css" href="{% static 'company/sidenav.css'%}">
+
+<div class="main">
+	<ul class="nav nav-tabs">
+		
+		<li><a href="{% url 'company:listofquestion' type=technology.technology_name %} ">Add Question for {{technology.technology_name}}</a></li>
+		
+	</li>
+</ul> 
+</div>
+
+
+{% block questions %}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+<script src="http://malsup.github.com/jquery.form.js"></script>
+<div class="main">
+	{% if questions %}
+	<div class="btn-delete">
+		<input type="checkbox" id="checkAll" class="filled-in chk-col-light-blue">
+		<label for="checkAll"> Select all questions</label>
+		<button id="preview" class="btn btn-info" type="button" style="float: right;" data-toggle="modal" data-target="#myModal" onclick="previewQuestion({{upc_id}})">Preview</button>
+	</div>	
+	<br><br>
+	<form id="listOfQuestionsForm" method="post" action="{% url 'company:create-test' %}">
+		{% csrf_token %}
+		<!-- <div class="checkboxes"> -->
+		<input type="hidden" name="upc_id" value={{upc_id}}>
+
+		<div class="col-md-11">
+
+			{% for i in questions%}
+			{% for j in i.id|answer_hr %}
+			<div class="row">
+				<div class="col-md-1">
+					<!-- <input class="checkBoxClass" type="checkbox" data-question_id="{{i.id}}" name="checkboxes" value="{{i.text}}"> -->
+					<input type="checkbox" id="check{{i.id}}" class="filled-in checkBoxClass chk-col-light-blue" data-question_id="{{i.id}}" name="checkboxes" value="{{i.text}}">
+					<label for="check{{i.id}}"> </label>
+				</div>
+				<div class="col-md-9" style="word-wrap: break-word;">
+					<label>Question:- {{i.text}}</label><br>
+					<label> Ans:-</label> {{j.text}}<br><br>
+				</div>
+				<div class="col-md-2">
+				</div>
+			</div>
+			{% endfor %}
+			{% endfor %}	
+
+		</div>
+
+		<!-- </div> -->
+
+		
+		<div id="myModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Selected Questions</h4>
+					</div>
+					<div id="modalBody" class="modal-body">
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Close</button>
+						<a href="{% url 'company:create-test' %}"><button type="submit" class="btn btn-default"  style="float: right;">Create Test</button></a>
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</form>
+
+	{% else%}
+	<h3>No questions available. First add question to the question Bank</h3>
+	{% endif %}
+
+</div>
+<script>
+	$("#checkAll").click(function () {
+		console.log("dsf");
+		$(".checkBoxClass").prop('checked', $(this).prop('checked'));
+	});
+	
+
+	function previewQuestion(id){
+		var questions = [];
+
+		$.each($("input[name='checkboxes']:checked"), function(){            
+			questions.push($(this).val());
+		});
+
+		if (questions == ''){
+			document.getElementById("modalBody").innerHTML = "First select questions.";	
+		}
+		else{
+			document.getElementById("modalBody").innerHTML = questions.join("<hr>");
+		}
+
+	}
+</script>
+
+
+{% endblock %}
+{% endblock %}

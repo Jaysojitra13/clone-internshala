@@ -1,0 +1,137 @@
+{% extends 'company/index.html'%}
+{% load company %}
+{% load static %}
+{% load intern%}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'company/sidenav.css'%}">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+<script src="http://malsup.github.com/jquery.form.js"></script>
+<div class="main">
+  
+		{% for i in questions%}
+		{% for l in i.id|answer_hr%}
+		{% for j in i.id|answer_intern:upc_id %}
+		{% if j.id|check_answer == True%}
+		<div class="frame{{i.id}}" style="background-color: #f1f1f1;border-style: solid; border-color: #2ECC71;">
+			<div class="questions">
+				<label>Question:- {{i.text}}</label>
+			</div>
+			<div class="answers">
+				<div class="col-md-6" >
+					<h5>Intern's Answer:- {{j.text}}</h5>
+				</div>
+				<div class="col-md-6" style="border-left: 5px solid #b3b6b7; height: 80px;">
+					Your answer:- {{l.text}}</h5>
+				</div>
+			</div>
+				<div class="button">
+					<button id="right{{i.id}}" type="button" ><i class="fa fa-check"></i></button>
+					<button id="wrong{{i.id}}" type="button"> <i class="fa fa-close"></i></button>
+				</div>
+			</div><br>
+
+			{% elif j.id|check_answer == False %}
+
+			<div class="frame{{i.id}}" style="background-color: #f1f1f1;border-style: solid; border-color: #F1948A;">
+				<div class="questions">
+					<label>Question:- {{i.text}}</label>
+				</div>
+				<div class="answers">
+					<div class="col-md-6" >
+						<h5>Intern's Answer:- {{j.text}}</h5>
+					</div>
+					<div class="col-md-6" style="border-left: 5px solid #b3b6b7; height: 80px;">
+						HR's answer:- {{l.text}}</h5>
+					</div>
+				</div>
+					<div class="button">
+						<button id="right{{i.id}}" type="button" ><i class="fa fa-check"></i></button>
+						<button id="wrong{{i.id}}" type="button"> <i class="fa fa-close"></i></button>
+					</div>
+				</div><br>
+				{% else %}
+				<div class="frame{{i.id}}" style="background-color: #f1f1f1;border-style: solid;">
+					<div class="questions">
+						<label>Question:- {{i.text}}</label>
+					</div>
+					<div class="answers">
+						<div class="col-md-6" >
+							<h5>Intern's Answer:- {{j.text}}</h5>
+						</div>
+						<div class="col-md-6" style="border-left: 5px solid #b3b6b7; height: 80px;">
+							HR's answer:- {{l.text}}</h5>
+						</div>
+					</div>
+						<div class="button">
+							<button id="right{{i.id}}" type="button" ><i class="fa fa-check"></i></button>
+							<button id="wrong{{i.id}}" type="button"> <i class="fa fa-close"></i></button>
+						</div>
+					</div><br>
+					{% endif %}
+
+					<script>
+						$('#right{{i.id}}').on('click', function(){
+							$('.frame{{i.id}}').css("border-style","groove");
+							$('.frame{{i.id}}').css("border-color","#2ECC71");
+							$.ajax({
+								url: "/company/checkanswer/",
+								typpe: "GET",
+								data:{
+									'question_id' : {{i.id}},
+									'right' : 'right',
+									'upc_id': {{upc_id}},
+								},
+								success:function(){
+
+								},
+							});
+						});
+
+						$('#wrong{{i.id}}').on('click', function(){
+							$('.frame{{i.id}}').css("border-style","solid");
+							$('.frame{{i.id}}').css("border-color","#F1948A");
+							$.ajax({
+								url: "/company/checkanswer/",
+								typpe: "GET",
+								data:{
+									'question_id' : {{i.id}},
+									'wrong': 'wrong',
+									'upc_id': {{upc_id}},
+								},
+							});
+						});
+					</script>
+					{% endfor %}
+					{% endfor%}
+					{% endfor %}
+
+					{% if upc_id|test_appmapping%}
+					<button id="grBtn" type="button" class="btn btn-info">Generate Result</button>&nbsp;&nbsp;&nbsp;&nbsp;	<label style="visibility: visible;">Result is:- <span id="result">{{upc_id|test_appmapping}}</span></label>
+					{% else %}
+					<button id="grBtn" type="button" class="btn btn-info">Generate Result</button>&nbsp;&nbsp;&nbsp;&nbsp;	<label style="visibility: hidden;">Result is:- <span id="result"></span></label>
+					{% endif %}
+					<script>
+
+						$('#grBtn').on('click',function(){
+							$.ajax({
+								url: "/company/countresult/",
+								type: "GET",
+								data:{
+									'upc_id': {{upc_id}},
+								},
+								success:function(response){
+									debugger;
+									$('label').css('visibility','visible');
+									$('#result').html(response.marks);
+								},
+							});
+						});
+
+					</script>
+
+
+				</div>
+
+
+				{% endblock%}

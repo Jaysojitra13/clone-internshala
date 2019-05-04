@@ -1,68 +1,85 @@
+{% extends "intern/home.html"%}
 {% load static%}
-<!DOCTYPE html>
-<html>
-<head>
 
-<link rel="stylesheet" type="text/css" href="{% static 'company/confirmintern.css'%}">
-<link rel="stylesheet" type="text/css" href="{% static 'company/index.css'%}">
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
-	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  
-</head>
-<body>
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-      <ul class="nav navbar-nav">
-
-{% if user.is_authenticated %}
-<li>
-<h2>Welcome {{ user.username }}</h2>
-</li>
-{% endif %}
-</ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-
-<a href="{% url 'company:all-post'%}"><button class="btn btn-primary" type="button" >POST
-
-</button></a>
-   <!--  <ul class="dropdown-menu">
-      <li><a href="{% url 'company:post-detail'%}">Create New Post</a></li>
-      <li><a href="{% url 'company:existing-post'%}">All posts</a></li>
-   
-    </ul> -->
+ <!--  
+  <link rel="stylesheet" type="text/css" href="{% static 'company/contactdetail.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'company/addquestion.css' %}" />
  
-  </li>
-<li>
-  {%  block navbar%}
+  <link rel="stylesheet" type="text/css" href="{% static 'company/confirmintern.css'%}">
+  <link rel="stylesheet" type="text/css" href="{% static 'company/index.css'%}">
+  <link rel="stylesheet" type="text/css" href="{% static 'company/test.css'%}">
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="{% static 'company/sidenav.css'%}">
+    
+     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
+  {% block navbar %}
+
+<div class="container-fluid"> 
+
+  <div class="navbar-header">
+    <a class="navbar-brand" href="index.html">Welcome {{user.username}}</a>
+
+  </div>
+  <div class="collapse navbar-collapse" id="navbar-collapse">
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="{% url 'account_logout' %}">Log Out</a></li>
+    </ul>
+  </div>
+</div>
+
+<section>
+  <aside id="leftsidebar" class="sidebar">
+    <div class="menu">
+      <ul class="list">
+      {% if check == "app"%}
+       <li style="background-color: #e9e9e9;"> <a href="{% url 'company:applications'%}"> Applications</a></li>
+      {% else %}
+       <li > <a href="{% url 'company:applications'%}"> Applications</a></li>
+      {% endif %}
+
+      {% if check == "all" or check == "existing" or check == "past"%}
+      <li style="background-color: #e9e9e9;"> <a href="{% url 'company:all-post'%}">Requirements   </a></li>
+      {% else %}
+      <li> <a href="{% url 'company:all-post'%}">Requirements   </a></li>
+      {% endif %}
+       
+       {% if check == "question" %}
+       <li style="background-color: #e9e9e9;"> <a href="{% url 'company:listofquestion' type='Python'%}">Question Bank </a></li>
+       {% else %}
+       <li> <a href="{% url 'company:listofquestion' type='Python'%}">Question Bank </a></li>
+       {% endif %}
+
+       {% if check == "confirm" or check == "reject"%}
+         <li style="background-color: #e9e9e9;"> <a href="{% url 'company:confirm-intern' pk=request.user.id%}">Interns</a></li>
+       {% else %}
+         <li> <a href="{% url 'company:confirm-intern' pk=request.user.id%}">Interns</a></li>
+       {% endif %}
+       
+        </ ul>
+      </div>
+      
+    </aside>
+    
+  </section>
   {% endblock %}
-</li> 
-<li>
-<a href="{% url 'company:applications'%}">
-<button class="btn btn-primary" type="button" >Applications
-</button>
-</a>
-</li>
-
-<li>
-
-<a href="{% url 'company:confirm-intern' pk=request.user.id%}"><button class="btn btn-primary " type="button" >Interns</button></a>
 
 
-</li>
-<li>
-	<a href="{% url 'account_logout'%}">
-<button class="btn btn-primary" type="button" >Log Out
-</button>
-</a>
-</li>
-</ul>
-</div>
-</nav>
-<div class="testcase">
-{% block content%}
-{% endblock %}
-</div>
-</body>
-</html>
+
+
+ <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                {% block content%}
+                
+                {% endblock %}
+            </div>
+
+            
+        </div>
+    </section>
+
+

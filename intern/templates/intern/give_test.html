@@ -1,0 +1,28 @@
+{% extends 'intern/index.html'%}
+{% load intern %}
+{% load company%}
+{% load static %}
+
+{% block content%}
+<link rel="stylesheet" type="text/css" href="{% static 'intern/test.css' %}" />
+<div class="container center_div">
+	
+	<form id="formTest" method="post" action="{% url 'intern:submit-test'%}">
+		{% csrf_token %}
+		<input type="hidden" name="upc_id" value={{upc_id}}>
+		<ul>
+			{% for i in questions %}
+			<li><label style="font-weight: bolder;" name="questions" id="questions">Question:- {{i.text}}</label></li>
+			<textarea id="answer" class="form-control" type="text" name="answers" placeholder="Give Your Answer" required="true"></textarea>
+			{% endfor %}
+		</ul>
+		<button class="btn btn-info right" type="submit">submit</button>
+	</form>
+</div>
+
+<script>
+	
+</script>
+
+
+{% endblock%}

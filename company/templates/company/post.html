@@ -2,31 +2,39 @@
 {% load company %}
 {% load static %}
 {% load intern%}
+{% load intern%}
 
-{% block navbar %}
-
-<a href="{% url 'company:post-detail'%}"><button class="btn btn-primary" type="button">Create New Post</button></a>
-<li>
-<div class="dropdown">
-	<button class="btn btn-primary dropdown-toggle drop" type="button" data-toggle="dropdown">Question Bank
-		<span class="caret"></span></button>
-		<ul class="dropdown-menu">
-		{% for i in post_list%}
-			<li><a href="#">{{i.technology}}</a></li>
-		{% endfor %}
-		</ul>
-	</div>
-</li>
-
-	{% endblock %}
 
 	{% block content %}
+    <link rel="stylesheet" type="text/css" href="{% static 'company/sidenav.css'%}">
+	
+	<div class="main">
+		<ul class="nav nav-tabs">
+			{% if check == "all"%}
+			<li id="all-post" class="active"><a href="{% url 'company:all-post' %}">All Posts</a></li>
+			{% else %}
+			<li id="all-post" ><a href="{% url 'company:all-post' %}">All Posts</a></li>
+			{% endif %}
+			{% if check == "existing"%}
+			<li id="existing-post" class="active"><a href="{% url 'company:existing-post' %}">Existing</a></li>
+			{% else %}
+			<li id="existing-post"><a href="{% url 'company:existing-post' %}">Existing</a></li>
+			{% endif %}
 
-	<ul class="nav nav-tabs">
-		<li><a href="{% url 'company:all-post' %}">All Posts</a></li>
-		<li><a href="{% url 'company:existing-post' %}">Existing</a></li>
-		<li><a href="{% url 'company:past-post'%}">History</a></li>
-	</ul>
-	{% block existingpost %}
-	{%  endblock %}
-	{% endblock%}
+			{% if check == "past" %}
+			<li id="past-post" class="active"><a href="{% url 'company:past-post'%}">History</a></li>
+			{% else %}
+			<li id="past-post"><a href="{% url 'company:past-post'%}">History</a></li>
+			{% endif %}
+			<li style="float: right;"><a href="{% url 'company:post-detail'%}">Create New Post</a>
+			</li>
+		</ul> 
+	</div>
+
+	
+	<div class="main"> 
+		{% block existingpost %}
+		{%  endblock %}
+	</div>
+
+	{% endblock%}	

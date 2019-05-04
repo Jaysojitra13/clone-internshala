@@ -1,6 +1,7 @@
+{% extends 'intern/home.html'%}
 {% load crispy_forms_tags %}
 {% load static%}
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html> 
 <head>
 <link rel="stylesheet" type="text/css" href="{% static 'intern/personaldetail.css' %}" />
@@ -9,20 +10,101 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-
-
-<h2 style="text-align: center;"> Personal Details</h2>
+-->
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'intern/personaldetail.css' %}" />
+<h3 style="text-align: center;font-weight: bolder;" > Personal Details</h3>
 <div class="container center_div" >
-<form action="" method="post">
-	{% csrf_token %}
+	<!-- <form action="" method="post">
+		{% csrf_token %}
+		{{  form|crispy }}
+		<input class="btn btn-info right" type="submit" name="submit">
+	</form> -->
+	<!-- <a href="{% url 'intern:index'%}"><button class="btn btn-info left">skip</button></a> -->
+	{% if form.name.value != None %}
+	<form action="" method="post">
+		{% csrf_token %}
+		
 
-	
-	<!-- {% crispy form %} -->
-	{{  form|crispy }}
-	
-	<input class="btn btn-info right" type="submit" name="submit">
-</form>
-<a href="{% url 'intern:index'%}"><button class="btn btn-info left">skip</button></a>
-</div>
-</body>
-</html>
+		<div id="div_id_name" class="form-group"> <label for="id_name" class="form-control-label  requiredField">
+			Name<span class="asteriskField">*</span> </label>
+			<div class="form-group form-line"> 
+				<input type="text" name="name" placeholder="Name" class="textinput textInput form-control" id="id_name" required="" value="{{form.name.value}}"> 
+			</div>
+		</div> 
+		<div id="div_id_email" class="form-group"> <label for="id_email" class="form-control-label  requiredField">
+			Email ID<span class="asteriskField">*</span> </label>
+
+			<div class="form-group form-line"> 
+				<input type="text" name="email" placeholder="Email-id" class="textinput textInput form-control" id="id_email" required="" value="{{form.email.value}}">
+			</div> 
+		</div> 
+		<div id="div_id_contact_number" class="form-group"> 
+			<label for="id_contact_number" class="form-control-label  requiredField">	Mobile Number<span class="asteriskField">*</span> </label> 
+			<div class="form-group form-line"> 
+				<input type="text" name="contact_number" placeholder="Contact Number" class="textinput textInput form-control" id="id_contact_number" required="" value="{{form.contact_number.value}}">
+			</div>
+		</div> 
+		<div id="div_id_current_city" class="form-group">
+			<label for="id_current_city" class="form-control-label  requiredField">	Current city<span class="asteriskField">*</span> </label> 
+			<div class="form-group form-line"> <input type="text" name="current_city" placeholder="Current City" class="textinput textInput form-control" id="id_current_city" required="" value="{{form.current_city.value}}"> 
+			</div> 
+		</div>
+		<div id="div_id_second_city" class="form-group"> 
+			<label for="id_second_city" class="form-control-label  requiredField">
+				2 city<span class="asteriskField">*</span> </label>
+				<div class="form-group form-line"> 
+					<input type="text" name="second_city" placeholder="Second city" class="textinput textInput form-control" id="id_second_city" required="" value="{{form.second_city.value}}">
+				</div>
+			</div>
+			
+			<input class="btn btn-info right" type="submit" name="submit">
+		</form>
+		<a href="{% url 'intern:index'%}"><button class="btn btn-info left">skip</button></a>
+		{% else %}
+		<form action="" method="post">
+			{% csrf_token %}
+
+
+			<div id="div_id_name" class="form-group"> <label for="id_name" class="form-control-label  requiredField">
+				Name<span class="asteriskField">*</span> </label>
+				<div class="form-group form-line"> 
+				<input type="text" name="name" placeholder="Name" class="textinput textInput form-control" id="id_name" required=""> 
+				</div>
+			</div> 
+			<div id="div_id_email" class="form-group"> <label for="id_email" class="form-control-label  requiredField">
+				Email ID<span class="asteriskField">*</span> </label>
+
+				<div class="form-group form-line"> 
+					<input type="text" name="email" placeholder="Email-id" class="textinput textInput form-control" id="id_email" required="">
+				</div> 
+			</div> 
+			<div id="div_id_contact_number" class="form-group"> 
+				<label for="id_contact_number" class="form-control-label  requiredField">	Mobile Number<span class="asteriskField">*</span> </label> 
+				<div class="form-group form-line"> 
+					<input type="text" name="contact_number" placeholder="Contact Number" class="textinput textInput form-control" id="id_contact_number" required="" >
+				</div>
+			</div> 
+			<div id="div_id_current_city" class="form-group">
+				<label for="id_current_city" class="form-control-label  requiredField">	Current city<span class="asteriskField">*</span> </label> 
+				<div class="form-group form-line"> <input type="text" name="current_city" placeholder="Current City" class="textinput textInput form-control" id="id_current_city" required="" > 
+				</div> 
+			</div>
+			<div id="div_id_second_city" class="form-group"> 
+				<label for="id_second_city" class="form-control-label  requiredField">
+					2 city<span class="asteriskField">*</span> </label>
+					<div class="form-group form-line"> 
+						<input type="text" name="second_city" placeholder="Second city" class="textinput textInput form-control" id="id_second_city" required="" >
+					</div>
+				</div>
+
+				<input class="btn btn-info right" type="submit" name="submit">
+			</form>
+			<a href="{% url 'intern:index'%}"><button class="btn btn-info left">skip</button></a>
+
+			{% endif %}
+
+		</div>
+		{% endblock%}
+<!-- </body>
+</html> -->

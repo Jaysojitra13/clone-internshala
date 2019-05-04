@@ -1,10 +1,21 @@
-.drop {
-	margin-top: 15px;
-}
+
 
 .carett {
 	color: #FFF;
 }
 .show-inputbtns .input-buttons {
     display: inline-block;
+}
+
+a:focus{
+	color:red;
+}
+
+.icon-msg{
+	font-size: 14px;
+	
+}
+
+.modal-dialog{
+	left: 0%;
 }
